@@ -5,4 +5,10 @@
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'ios' ">net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Assets\" />
+    <Folder Include="Scenes\" />
+    <Folder Include="Scripts\" />
+    <Folder Include="Shaders\" />
+  </ItemGroup>
 </Project>
