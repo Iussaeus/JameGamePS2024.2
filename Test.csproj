@@ -6,9 +6,9 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Assets\" />
-    <Folder Include="Scenes\" />
-    <Folder Include="Scripts\" />
-    <Folder Include="Shaders\" />
+    <Content Include="Assets\test.gd" />
+    <Content Include="Scenes\test.gd" />
+    <Content Include="Scripts\test.gd" />
+    <Content Include="Shaders\test.gd" />
   </ItemGroup>
 </Project>
