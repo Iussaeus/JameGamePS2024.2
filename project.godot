@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="Test"
-config/features=PackedStringArray("4.2", "Forward Plus")
+run/main_scene="res://Scenes/World.tscn"
+config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/per_pixel_transparency/allowed=true
 
 [dotnet]
 
