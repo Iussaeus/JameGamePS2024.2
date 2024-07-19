@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bwbewh6us3n4n"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_4ds7y"]
+size = Vector2(3, 3)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1v671"]
+
+[node name="Camera3D" type="Camera3D"]
+fov = 90.4931
+
+[node name="Postprocess" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, -1.49012e-08, -2.98023e-08, -4.47035e-08, 1, 3.72529e-08, -2.98023e-08, 1.49012e-08, 1, 0.019336, 0.00227797, -0.774809)
+visible = false
+mesh = SubResource("QuadMesh_4ds7y")
+surface_material_override/0 = SubResource("ShaderMaterial_1v671")
