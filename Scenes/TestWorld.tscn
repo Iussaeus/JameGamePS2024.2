@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://dogs51i3xfn7u"]
+
+[ext_resource type="PackedScene" uid="uid://dvfcd4vdt57gw" path="res://Scenes/PlayerBody.tscn" id="1_5a77m"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_no4hk"]
+size = Vector2(100, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7s4rh"]
+size = Vector3(100, 0.2, 100)
+
+[node name="World" type="Node3D"]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+texture_filter = 5
+custom_minimum_size = Vector2(1920, 1080)
+offset_right = 40.0
+offset_bottom = 40.0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(-1, -3.2466e-08, 8.11708e-08, 2.32407e-08, 0.79635, 0.604835, -8.4277e-08, 0.604835, -0.79635, 4.94803, 21.39, -15.9303)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="SubViewportContainer/SubViewport"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/StaticBody3D"]
+mesh = SubResource("PlaneMesh_no4hk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/StaticBody3D"]
+shape = SubResource("BoxShape3D_7s4rh")
+
+[node name="PlayerBody" parent="SubViewportContainer/SubViewport" instance=ExtResource("1_5a77m")]
+transform = Transform3D(-0.990234, 0, -0.139415, 0, 1, 0, 0.139415, 0, -0.990234, 2.27055, 5.85393, 0)
+floor_stop_on_slope = false
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.160674, 0.987008, 0, -0.987008, 0.160674, 0, 66.5205, -3.52873)
