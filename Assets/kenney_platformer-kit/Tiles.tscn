@@ -1,0 +1,19 @@
+[gd_scene load_steps=6 format=3 uid="uid://cnjxuv4cy63lg"]
+
+[ext_resource type="PackedScene" uid="uid://ds23645m8it6i" path="res://Assets/kenney_platformer-kit/Models/GLB format/block-grass-large-slope-narrow.glb" id="1_1ir5d"]
+[ext_resource type="PackedScene" uid="uid://cuglld05rjrrt" path="res://Assets/kenney_platformer-kit/Models/GLB format/block-grass-large-slope.glb" id="2_suj0j"]
+[ext_resource type="PackedScene" uid="uid://bp6wa3pgv0idc" path="res://Assets/kenney_platformer-kit/Models/GLB format/block-grass-low-large.glb" id="3_h4u2a"]
+[ext_resource type="PackedScene" uid="uid://dwidg4ax383gu" path="res://Assets/kenney_platformer-kit/Models/GLB format/block-grass.glb" id="4_nkm2t"]
+[ext_resource type="PackedScene" uid="uid://x2d6to6oujgy" path="res://Assets/kenney_platformer-kit/Models/GLB format/crate-item-strong.glb" id="5_h4sjh"]
+
+[node name="Tiles" type="Node3D"]
+
+[node name="block-grass-large-slope-narrow2" parent="." instance=ExtResource("1_1ir5d")]
+
+[node name="block-grass-large-slope2" parent="." instance=ExtResource("2_suj0j")]
+
+[node name="block-grass-low-large2" parent="." instance=ExtResource("3_h4u2a")]
+
+[node name="block-grass2" parent="." instance=ExtResource("4_nkm2t")]
+
+[node name="crate-item-strong2" parent="." instance=ExtResource("5_h4sjh")]
