@@ -52,7 +52,7 @@ public partial class PlayerBody : CharacterBody3D
         // Get the input direction and handle the movement/deceleration.
         // As good practice, you should replace UI actions with custom gameplay actions.
         var inputDir = Input.GetVector("left", "right", "forward", "backward");
-        var direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+        var direction = new Vector3(inputDir.X, 0, inputDir.Y).Normalized();
         if (direction != Vector3.Zero)
         {
             velocity.X = direction.X * Speed;
