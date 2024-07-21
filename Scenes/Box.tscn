@@ -27,4 +27,6 @@ mesh = SubResource("BoxMesh_a7htf")
 [node name="CollisionShape3D" parent="Interactable" index="0"]
 shape = SubResource("BoxShape3D_rekmj")
 
+[connection signal="Focused" from="Interactable" to="Interactable" method="_on_focused"]
+
 [editable path="Interactable"]

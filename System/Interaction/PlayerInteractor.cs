@@ -2,11 +2,11 @@ using Godot;
 
 public partial class PlayerInteractor : Area3D
 {
-    [Export] // PLayerInteractor needs reference to the player, that will be assigned to the controller
-    public CharacterBody3D player;
-
     private Interactable cachedClosest; // Always knowing the closest
     private Node3D controller;
+
+    [Export] // PLayerInteractor needs reference to the player, that will be assigned to the controller
+    public CharacterBody3D player;
 
     public override void _Ready()
     {
@@ -45,19 +45,25 @@ public partial class PlayerInteractor : Area3D
     private void Interact(Interactable interactable)
     {
         GD.Print("AYAYAY");
-        interactable.EmitSignal(nameof(Interactable.Interacted), this, nameof(Interactable.InteractedEventHandler));
+        var interactor = new Interactor();
+        AddChild(interactor);
+        interactable.EmitSignal(Interactable.SignalName.Interact, interactor);
     }
 
     private void Focus(Interactable interactable)
     {
         GD.Print("Focused1");
-        interactable.EmitSignal(nameof(Interactable.Focused), this, nameof(Interactable.FocusedEventHandler));
+        var interactor = new Interactor();
+        AddChild(interactor);
+        interactable.EmitSignal(Interactable.SignalName.Focused, interactor);
     }
 
     private void Unfocus(Interactable interactable)
     {
         GD.Print("Unfocused1");
-        interactable.EmitSignal(nameof(Interactable.Unfocused), this, nameof(Interactable.UnfocusedEventHandler));
+        var interactor = new Interactor();
+        AddChild(interactor);
+        interactable.EmitSignal(Interactable.SignalName.Unfocused, interactor);
     }
 
     private Interactable GetClosestInteractable()

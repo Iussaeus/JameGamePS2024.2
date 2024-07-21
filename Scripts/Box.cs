@@ -2,7 +2,8 @@ using Godot;
 
 public partial class Box : Node3D
 {
-    public bool isOpen = false;
+    public Interactable Interactable;
+    public bool isOpen = true;
 
     public void Open()
     {
@@ -11,28 +12,30 @@ public partial class Box : Node3D
 
     public override void _Ready()
     {
-        var interactable = GetNode<Interactable>("Interactable");
-        interactable.Connect(nameof(Interactable.Focused), new Callable(this, nameof(_OnInteractableFocused)));
-        interactable.Connect(nameof(Interactable.Interacted), new Callable(this, nameof(_OnInteractableInteracted)));
-        interactable.Connect(nameof(Interactable.Unfocused), new Callable(this, nameof(_OnInteractableUnfocused)));
+        Interactable = GetNode<Interactable>("Interactable");
+        Interactable.Interacted += _OnInteractableInteracted;
+        Interactable.Interact += _OnInteractableInteract;
+        Interactable.Focused += _OnInteractableFocused;
+        Interactable.Unfocused += _OnInteractableUnfocused;
+    }
+
+    private void _OnInteractableInteract()
+    {
+        GD.Print("WTF DIMA");
     }
 
     public void _OnInteractableFocused(Interactor interactor)
     {
-        if (!isOpen) GD.Print("Focused");
+        GD.Print("Box: Focused");
     }
 
     public void _OnInteractableInteracted(Interactor interactor)
     {
-        if (!isOpen)
-        {
-            GD.Print("Interacted");
-            QueueFree(); // $Interactable.queue_free() from gdscript
-        }
+        GD.Print("Box: Interacted");
     }
 
     public void _OnInteractableUnfocused(Interactor interactor)
     {
-        GD.Print("Unfocused");
+        GD.Print("Box: Unfocused");
     }
 }
