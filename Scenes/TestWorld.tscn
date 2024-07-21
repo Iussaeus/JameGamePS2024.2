@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://qy3qlfik0xw6"]
+[gd_scene load_steps=6 format=3 uid="uid://qy3qlfik0xw6"]
 
 [ext_resource type="PackedScene" uid="uid://fqvflhc3nymf" path="res://Scenes/PlayerBody.tscn" id="1_5a77m"]
 [ext_resource type="Script" path="res://Scripts/TestCamera.cs" id="2_tgo05"]
+[ext_resource type="PackedScene" uid="uid://bwdwhvg2b2wn5" path="res://Scenes/Box.tscn" id="3_x2yjo"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_no4hk"]
 size = Vector2(100, 100)
@@ -45,3 +46,6 @@ floor_stop_on_slope = false
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 0.160674, 0.987008, 0, -0.987008, 0.160674, 0, 66.5205, -3.52873)
+
+[node name="Box" parent="." instance=ExtResource("3_x2yjo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.138, 1.5, -9.081)
