@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bwdwhvg2b2wn5"]
 
-[ext_resource type="PackedScene" uid="uid://bybc1w3bwha5j" path="res://System/Interaction/Interactable.tscn" id="1_5p1gd"]
+[ext_resource type="PackedScene" uid="uid://bybc1w3bwha5j" path="res://Scenes/Interaction/Interactable.tscn" id="1_5p1gd"]
 [ext_resource type="Script" path="res://Scripts/Box.cs" id="1_nkrdg"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_utikt"]
