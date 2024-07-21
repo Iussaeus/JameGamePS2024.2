@@ -12,7 +12,7 @@ public partial class Box : Node3D
     public override void _Ready()
     {
         var interactable = GetNode<Interactable>("Interactable");
-        interactable.Connect(nameof(Interactable.Focused), this, nameof(_OnInteractableFocused));
+        interactable.Connect(nameof(Interactable.Focused), new Callable(this, nameof(_OnInteractableFocused)));
         interactable.Connect(nameof(Interactable.Interacted), new Callable(this, nameof(_OnInteractableInteracted)));
         interactable.Connect(nameof(Interactable.Unfocused), new Callable(this, nameof(_OnInteractableUnfocused)));
     }
