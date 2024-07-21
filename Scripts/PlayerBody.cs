@@ -15,13 +15,20 @@ public partial class PlayerBody : CharacterBody3D
 
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     private float _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
+    private RigidBody3D _gun;
+    private Marker3D _marker;
 
     [Export] public float JumpVelocity = 4.5f;
     [Export] public float Speed = 5.0f;
 
     public override void _Ready()
     {
+        // Var init
         _camera3D = GetNode<Camera3D>("%Camera3D");
+        _gun = GetNode<RigidBody3D>("Gun");
+        _marker = GetNode<Marker3D>("Marker3D");
+
+        // Dash shenanigans
         _dashTimer = new Timer();
         AddChild(_dashTimer);
         _dashTimer.OneShot = true;
@@ -30,6 +37,8 @@ public partial class PlayerBody : CharacterBody3D
 
     public override void _Process(double delta)
     {
+        _gun.GlobalPosition = _marker.GlobalPosition;
+
         var mousePos = GetViewport().GetMousePosition();
         var from = _camera3D.ProjectRayOrigin(mousePos);
         var to = from + _camera3D.ProjectRayNormal(mousePos) * RayLeN;
@@ -72,9 +81,8 @@ public partial class PlayerBody : CharacterBody3D
             velocity = direction * JumpVelocity;
         }
 
-        GD.Print(_dashTimer.TimeLeft);
-
         Velocity = velocity;
+
         MoveAndSlide();
     }
 }
