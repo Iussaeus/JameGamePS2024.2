@@ -10,4 +10,14 @@
         <Folder Include="Scenes\"/>
         <Folder Include="Shaders\"/>
     </ItemGroup>
+    <ItemGroup>
+        <Content Include="Scripts\Assert.gd"/>
+        <Content Include="Scripts\Box.gd"/>
+        <Content Include="Scripts\Gun.gd"/>
+        <Content Include="Scripts\Interaction\Interactable.gd"/>
+        <Content Include="Scripts\Interaction\Interactor.gd"/>
+        <Content Include="Scripts\Interaction\PlayerInteractor.gd"/>
+        <Content Include="Scripts\PlayerBody.gd"/>
+        <Content Include="Scripts\TestCamera.gd"/>
+    </ItemGroup>
 </Project>

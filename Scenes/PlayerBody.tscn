@@ -1,8 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://fqvflhc3nymf"]
+[gd_scene load_steps=9 format=3 uid="uid://fqvflhc3nymf"]
 
-[ext_resource type="Script" path="res://Scripts/PlayerBody.cs" id="1_51lkx"]
+[ext_resource type="Script" path="res://Scripts/PlayerBody.gd" id="1_3u0e5"]
 [ext_resource type="PackedScene" uid="uid://cdjsdledcwpj3" path="res://Scenes/Gun.tscn" id="2_sd1pr"]
+[ext_resource type="Script" path="res://Scripts/Gun.gd" id="3_3bote"]
 [ext_resource type="PackedScene" uid="uid://ch52pwl7x4b0p" path="res://Scenes/Interaction/PlayerInteractor.tscn" id="3_dxpcy"]
+[ext_resource type="PackedScene" uid="uid://wtytkh7f6fgl" path="res://Scenes/Projectile.tscn" id="4_mktup"]
+[ext_resource type="Script" path="res://Scripts/Interaction/PlayerInteractor.gd" id="6_jiast"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xw70a"]
 
@@ -10,7 +13,8 @@
 
 [node name="PlayerBody" type="CharacterBody3D"]
 disable_mode = 2
-script = ExtResource("1_51lkx")
+script = ExtResource("1_3u0e5")
+speed = 50.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_xw70a")
@@ -24,6 +28,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.664517)
 [node name="Gun" parent="." instance=ExtResource("2_sd1pr")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 1.38252)
 collision_layer = 2
+script = ExtResource("3_3bote")
+projectile = ExtResource("4_mktup")
+projectile_speed = 200.0
+shooting_interval = null
 
 [node name="PlayerInteractor" parent="." instance=ExtResource("3_dxpcy")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+script = ExtResource("6_jiast")
+
+[connection signal="area_exited" from="PlayerInteractor" to="PlayerInteractor" method="_on_area_exited"]
