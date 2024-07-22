@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bwdwhvg2b2wn5"]
+[gd_scene load_steps=6 format=3 uid="uid://bwdwhvg2b2wn5"]
 
 [ext_resource type="PackedScene" uid="uid://bybc1w3bwha5j" path="res://Scenes/Interaction/Interactable.tscn" id="1_5p1gd"]
 [ext_resource type="Script" path="res://Scripts/Box.gd" id="1_tx7t2"]
-[ext_resource type="Script" path="res://Scripts/Interaction/Interactable.gd" id="3_1xyxf"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_utikt"]
 size = Vector3(2, 2, 2)
@@ -24,7 +23,6 @@ shape = SubResource("BoxShape3D_utikt")
 mesh = SubResource("BoxMesh_a7htf")
 
 [node name="Interactable" parent="." instance=ExtResource("1_5p1gd")]
-script = ExtResource("3_1xyxf")
 
 [node name="CollisionShape3D" parent="Interactable" index="0"]
 shape = SubResource("BoxShape3D_rekmj")

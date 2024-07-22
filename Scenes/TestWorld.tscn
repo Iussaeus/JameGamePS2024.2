@@ -46,6 +46,8 @@ shape = SubResource("BoxShape3D_7s4rh")
 unique_name_in_owner = true
 transform = Transform3D(-0.990234, 0, -0.139415, 0, 1, 0, 0.139415, 0, -0.990234, 2.27055, 5.85393, 19.7699)
 floor_stop_on_slope = false
+dash_cooldown = 0.25
+speed = 25.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 0.160674, 0.987008, 0, -0.987008, 0.160674, 0, 66.5205, -3.52873)

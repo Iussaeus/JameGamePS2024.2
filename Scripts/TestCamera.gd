@@ -1,6 +1,6 @@
 extends Camera3D
 
-@onready var character: CharacterBody3D = $"%PlayerBody"
+@onready var character: CharacterBody3D = %PlayerBody
 
 @export var camera_offset: Vector3 = Vector3(5, -20, 5)
 

@@ -10,7 +10,7 @@ extends CharacterBody3D
 
 var dash_timer: Timer
 var ray_len: float = 1000
-var can_dash: bool = false
+var can_dash: bool = true
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 
@@ -27,13 +27,13 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	gun.global_position = marker.global_position
 
-	var mouse_pos          = get_viewport().get_mouse_position()
-	var from               = camera.project_ray_origin(mouse_pos)
-	var to                 = from + camera.project_ray_normal(mouse_pos) * ray_len
-	var query              = PhysicsRayQueryParameters3D.create(from, to)
-	var direct_space_state = get_world_3d().direct_space_state
+	var mouse_pos := get_viewport().get_mouse_position()
+	var from := camera.project_ray_origin(mouse_pos)
+	var to := from + camera.project_ray_normal(mouse_pos) * ray_len
+	var query := PhysicsRayQueryParameters3D.create(from, to)
+	var direct_space_state := get_world_3d().direct_space_state
 
-	var intersection = direct_space_state.intersect_ray(query)
+	var intersection := direct_space_state.intersect_ray(query)
 
 	if Input.get_last_mouse_velocity() != Vector2.ZERO and not intersection.is_empty():
 		look_at(intersection.position)
@@ -42,13 +42,13 @@ func _process(_delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	var vel = velocity
+	var vel := velocity
 
 	if not is_on_floor():
 		vel.y -= gravity * delta
 
-	var input_dir = Input.get_vector("left", "right", "forward", "backward")
-	var direction = Vector3(input_dir.x, 0, input_dir.y).normalized()
+	var input_dir := Input.get_vector("left", "right", "forward", "backward")
+	var direction := Vector3(input_dir.x, 0, input_dir.y).normalized()
 
 
 	if direction != Vector3.ZERO:
@@ -68,6 +68,5 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
-func _on_timer_timeout() -> void:
-	can_dash = true
+func _on_timer_timeout() -> void: can_dash = true
 	

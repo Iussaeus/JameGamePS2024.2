@@ -6,7 +6,7 @@ var cached_closest: Interactable
 
 
 func _process(_delta: float) -> void:
-	var new_closest = get_closest_interactable()
+	var new_closest := get_closest_interactable()
 
 	if new_closest != cached_closest:
 		if is_instance_valid(cached_closest):
@@ -43,14 +43,14 @@ func unfocus(interactable: Interactable) -> void:
 
 
 func get_closest_interactable() -> Interactable:
-	var list                  = get_overlapping_areas()
-	var closest_distance      = INF
+	var list := get_overlapping_areas()
+	var closest_distance := INF
 	var closest: Interactable = null
 
 	for area in list:
 		if area is Interactable:
-			var interactable = area as Interactable
-			var distance     = interactable.global_position.distance_to(global_position)
+			var interactable := area as Interactable
+			var distance := interactable.global_position.distance_to(global_position)
 
 			if distance < closest_distance:
 				closest = interactable

@@ -17,15 +17,14 @@ func unfocus(interactable: Interactable) -> void:
 
 
 func get_closest_interactalbe() -> Interactable:
-	var list = get_overlapping_areas()
-	assert(not list.is_empty(), "List is empty")
-	var closest_distance      = INF
+	var list := get_overlapping_areas()
+	var closest_distance := INF
 	var closest: Interactable = null
 
 	for area in list:
 		if area is Interactable:
-			var interactable = area as Interactable
-			var distance     = interactable.global_position.distance_to(global_position)
+			var interactable := area as Interactable
+			var distance := interactable.global_position.distance_to(global_position)
 
 			if distance < closest_distance:
 				closest = interactable
