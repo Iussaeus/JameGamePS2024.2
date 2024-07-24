@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://dmpj587f0puow" path="res://Scenes/HpComponent.tscn" id="3_iun0u"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_utikt"]
-size = Vector3(2, 2, 2)
 
 [sub_resource type="BoxMesh" id="BoxMesh_a7htf"]
 
@@ -28,7 +27,7 @@ mesh = SubResource("BoxMesh_a7htf")
 skeleton = NodePath("../..")
 
 [node name="Interactable" parent="RigidBody3D" instance=ExtResource("1_5p1gd")]
-collision_mask = 2
+collision_layer = 8
 
 [node name="CollisionShape3D" parent="RigidBody3D/Interactable" index="0"]
 shape = SubResource("BoxShape3D_rekmj")

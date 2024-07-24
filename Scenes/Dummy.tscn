@@ -1,10 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://bs5lss2iex8sv"]
+[gd_scene load_steps=5 format=3 uid="uid://bs5lss2iex8sv"]
 
 [ext_resource type="PackedScene" uid="uid://dmpj587f0puow" path="res://Scenes/HpComponent.tscn" id="1_0765u"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cbmbx"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pyesv"]
+albedo_color = Color(1, 0, 0, 1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_xyu76"]
+material = SubResource("StandardMaterial3D_pyesv")
 
 [node name="Dummy" type="Node3D"]
 
