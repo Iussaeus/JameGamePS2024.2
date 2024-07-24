@@ -11,9 +11,11 @@
 
 [node name="PlayerBody" type="CharacterBody3D"]
 disable_mode = 2
+collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_3u0e5")
-dash_cooldown = null
-dash_velocity = null
+dash_cooldown = 0.25
+dash_velocity = 100.0
 speed = 50.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -27,7 +29,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.664517)
 
 [node name="Gun" parent="." instance=ExtResource("2_sd1pr")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 1.38252)
-collision_layer = 2
+collision_layer = 0
 collision_mask = 0
 projectile = ExtResource("4_mktup")
 projectile_speed = 100.0

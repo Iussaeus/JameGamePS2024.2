@@ -1,6 +1,6 @@
 extends Node3D
 
-@onready var ineractable: Interactable = $Interactable
+@onready var ineractable: Interactable = $RigidBody3D/Interactable
 
 var is_open: bool = false
 
