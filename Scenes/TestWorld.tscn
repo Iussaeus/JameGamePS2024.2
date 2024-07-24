@@ -34,8 +34,7 @@ script = ExtResource("1_guvbc")
 camera_offset = Vector3(5, 30, 20)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="SubViewportContainer/SubViewport"]
-collision_layer = 13
-collision_mask = 13
+collision_mask = 22
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/StaticBody3D"]
 mesh = SubResource("PlaneMesh_no4hk")
@@ -47,7 +46,6 @@ shape = SubResource("BoxShape3D_7s4rh")
 unique_name_in_owner = true
 transform = Transform3D(-0.990234, 0, -0.139415, 0, 1, 0, 0.139415, 0, -0.990234, 2.27055, 5.85393, 19.7699)
 floor_stop_on_slope = false
-dash_cooldown = 0.25
 speed = 25.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport"]

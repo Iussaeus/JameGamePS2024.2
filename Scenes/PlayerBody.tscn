@@ -37,5 +37,6 @@ projectile_speed = 100.0
 [node name="PlayerInteractor" parent="." instance=ExtResource("3_dxpcy")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 collision_layer = 2
+collision_mask = 21
 
 [connection signal="area_exited" from="PlayerInteractor" to="PlayerInteractor" method="_on_area_exited"]
