@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://qy3qlfik0xw6"]
+[gd_scene load_steps=7 format=3 uid="uid://qy3qlfik0xw6"]
 
 [ext_resource type="PackedScene" uid="uid://fqvflhc3nymf" path="res://Scenes/PlayerBody.tscn" id="1_5a77m"]
 [ext_resource type="Script" path="res://Scripts/TestCamera.gd" id="1_guvbc"]
 [ext_resource type="PackedScene" uid="uid://bwdwhvg2b2wn5" path="res://Scenes/Box.tscn" id="3_x2yjo"]
+[ext_resource type="PackedScene" uid="uid://bs5lss2iex8sv" path="res://Scenes/Dummy.tscn" id="4_qvvdx"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_no4hk"]
 size = Vector2(100, 100)
@@ -33,8 +34,8 @@ script = ExtResource("1_guvbc")
 camera_offset = Vector3(5, 30, 20)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="SubViewportContainer/SubViewport"]
-collision_layer = 15
-collision_mask = 15
+collision_layer = 13
+collision_mask = 13
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/StaticBody3D"]
 mesh = SubResource("PlaneMesh_no4hk")
@@ -52,5 +53,8 @@ speed = 25.0
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 0.160674, 0.987008, 0, -0.987008, 0.160674, 0, 66.5205, -3.52873)
 
-[node name="Box" parent="." instance=ExtResource("3_x2yjo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.138, 1.5, -9.081)
+[node name="Box" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_x2yjo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.66265, 2.09465, 13.0976)
+
+[node name="Dummy" parent="SubViewportContainer/SubViewport" instance=ExtResource("4_qvvdx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.38, 0)

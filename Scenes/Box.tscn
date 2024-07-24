@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://bwdwhvg2b2wn5"]
+[gd_scene load_steps=7 format=3 uid="uid://bwdwhvg2b2wn5"]
 
 [ext_resource type="PackedScene" uid="uid://bybc1w3bwha5j" path="res://Scenes/Interaction/Interactable.tscn" id="1_5p1gd"]
 [ext_resource type="Script" path="res://Scripts/Box.gd" id="1_tx7t2"]
+[ext_resource type="PackedScene" uid="uid://dmpj587f0puow" path="res://Scenes/HpComponent.tscn" id="3_iun0u"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_utikt"]
 size = Vector3(2, 2, 2)
@@ -15,16 +16,22 @@ size = Vector3(2, 2, 2)
 script = ExtResource("1_tx7t2")
 
 [node name="RigidBody3D" type="RigidBody3D" parent="."]
+mass = 20.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
 shape = SubResource("BoxShape3D_utikt")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
 mesh = SubResource("BoxMesh_a7htf")
+skeleton = NodePath("../..")
 
 [node name="Interactable" parent="." instance=ExtResource("1_5p1gd")]
+collision_mask = 2
 
 [node name="CollisionShape3D" parent="Interactable" index="0"]
 shape = SubResource("BoxShape3D_rekmj")
+
+[node name="HpComponent" parent="." instance=ExtResource("3_iun0u")]
+unique_name_in_owner = true
 
 [editable path="Interactable"]

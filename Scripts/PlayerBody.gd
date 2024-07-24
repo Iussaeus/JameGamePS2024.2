@@ -34,7 +34,7 @@ func _process(_delta: float) -> void:
 	var direct_space_state := get_world_3d().direct_space_state
 
 	var intersection := direct_space_state.intersect_ray(query)
-
+	
 	if Input.get_last_mouse_velocity() != Vector2.ZERO and not intersection.is_empty():
 		look_at(intersection.position)
 
