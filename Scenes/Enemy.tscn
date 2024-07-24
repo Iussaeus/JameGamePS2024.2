@@ -23,6 +23,8 @@ mesh = SubResource("CapsuleMesh_3v57p")
 shape = SubResource("CapsuleShape3D_mb8m5")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+avoidance_enabled = true
+height = 2.0
 debug_enabled = true
 debug_path_custom_color = Color(1, 0, 1, 1)
 debug_path_custom_point_size = 10.8

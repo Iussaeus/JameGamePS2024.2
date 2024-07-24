@@ -71,4 +71,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.38, 0)
 
 [node name="Enemy" parent="SubViewportContainer/SubViewport" instance=ExtResource("2_4lv5d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.1982, 0.950208, 9.90142)
-movement_speed = 0.25
+movement_speed = 1.0
