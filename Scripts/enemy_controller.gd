@@ -2,7 +2,6 @@ extends CharacterBody3D
 
 
 @export var movement_speed: float = 20
-@export var dummy: PackedScene
 
 @onready var navigation_agent: NavigationAgent3D = get_node("NavigationAgent3D")
 
@@ -12,7 +11,6 @@ func _ready() -> void:
 	call_deferred("set_map")
 
 	navigation_agent.velocity_computed.connect(_on_velocity_computed)
-
 
 
 func _physics_process(_delta: float) -> void:

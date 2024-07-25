@@ -11,6 +11,7 @@ albedo_color = Color(1, 0, 0, 1)
 material = SubResource("StandardMaterial3D_pyesv")
 
 [node name="Dummy" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="RigidBody3D" type="RigidBody3D" parent="."]
 collision_layer = 18

@@ -3,6 +3,7 @@ class_name Bullet extends RigidBody3D
 @export var damage: float = 20
 @export var speed: float = 20
 @export var life_time: float = 2
+@export var debug_on: bool = false
 var _life_timer: Timer
 
 
@@ -20,7 +21,7 @@ func _ready() -> void:
 	
 
 func _on_body_entered(body: Node) -> void:
-	print("hit target ", body)
+	if debug_on: print("hit target ", body)
 	if body.has_node("%HpComponent"):
 		var hp_component: HpComponent = body.get_node("%HpComponent")
 		hp_component.take_damage(damage)

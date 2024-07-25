@@ -10,6 +10,7 @@
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_qyjp2"]
 
 [node name="PlayerBody" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 disable_mode = 2
 collision_layer = 2
 collision_mask = 21
@@ -29,8 +30,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.664517)
 
 [node name="Gun" parent="." instance=ExtResource("2_sd1pr")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 1.38252)
-collision_layer = 0
-collision_mask = 0
 projectile = ExtResource("4_mktup")
 projectile_speed = 100.0
 
