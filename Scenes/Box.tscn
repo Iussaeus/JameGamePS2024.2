@@ -2,9 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://bybc1w3bwha5j" path="res://Scenes/Interaction/Interactable.tscn" id="1_5p1gd"]
 [ext_resource type="Script" path="res://Scripts/Box.gd" id="1_tx7t2"]
-[ext_resource type="PackedScene" uid="uid://dmpj587f0puow" path="res://Scenes/HpComponent.tscn" id="3_iun0u"]
+[ext_resource type="PackedScene" path="res://Scenes/HpComponent.tscn" id="3_iun0u"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_utikt"]
+size = Vector3(2, 2, 2)
 
 [sub_resource type="BoxMesh" id="BoxMesh_a7htf"]
 
