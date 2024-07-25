@@ -43,6 +43,7 @@ func unfocus(interactable: Interactable) -> void:
 
 
 func get_closest_interactable() -> Interactable:
+	ProjectSettings.get_setting("physics")
 	var list := get_overlapping_areas()
 	var closest_distance := INF
 	var closest: Interactable = null

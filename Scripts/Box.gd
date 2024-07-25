@@ -1,6 +1,7 @@
 extends Node3D
 
-@onready var ineractable: Interactable = $Interactable
+@export var debug_on: bool = false
+@onready var ineractable: Interactable = $RigidBody3D/Interactable
 
 var is_open: bool = false
 
@@ -18,16 +19,16 @@ func _process(_delta: float) -> void:
 
 
 func open() -> void:
-	print("Opening Now")
+	if debug_on: print("Opening Now")
 
 
 func _on_interactable_focused() -> void:
-	print("Box: Focused")
+	if debug_on: print("Box: Focused")
 
 
 func _on_interactable_unfocused() -> void:
-	print("Box: Unfocused")
+	if debug_on: print("Box: Unfocused")
 
 
 func _on_interactable_interacted() -> void:
-	print("Box: Interacted")
+	if debug_on: print("Box: Interacted")

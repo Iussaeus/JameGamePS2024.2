@@ -2,14 +2,12 @@
 /shelf/
 /workspace.xml
 # Rider ignored files
-/modules.xml
 /contentModel.xml
-/.idea.test.iml
 /projectSettingsUpdater.xml
+/modules.xml
+/.idea.Scripts.iml
 # Editor-based HTTP Client requests
 /httpRequests/
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-# Harpooner
-Harpooner Menu

@@ -20,7 +20,7 @@ func _ready() -> void:
 	add_child(dash_timer)
 
 	dash_timer.one_shot = true
-	dash_timer.timeout.connect(_on_timer_timeout)
+	dash_timer.timeout.connect(func() -> void: can_dash = true)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -34,7 +34,7 @@ func _process(_delta: float) -> void:
 	var direct_space_state := get_world_3d().direct_space_state
 
 	var intersection := direct_space_state.intersect_ray(query)
-
+	
 	if Input.get_last_mouse_velocity() != Vector2.ZERO and not intersection.is_empty():
 		look_at(intersection.position)
 
@@ -42,13 +42,17 @@ func _process(_delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	var input_dir := Input.get_vector("left", "right", "forward", "backward")
+	move(input_dir, delta)
+	
+	
+func move(input_direction: Vector2, delta: float) -> void:
 	var vel := velocity
 
 	if not is_on_floor():
 		vel.y -= gravity * delta
 
-	var input_dir := Input.get_vector("left", "right", "forward", "backward")
-	var direction := Vector3(input_dir.x, 0, input_dir.y).normalized()
+	var direction := Vector3(input_direction.x, 0, input_direction.y).normalized()
 
 
 	if direction != Vector3.ZERO:
@@ -66,7 +70,3 @@ func _physics_process(delta: float) -> void:
 	velocity = vel
 
 	move_and_slide()
-
-
-func _on_timer_timeout() -> void: can_dash = true
-	

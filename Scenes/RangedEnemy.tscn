@@ -1,0 +1,60 @@
+[gd_scene load_steps=9 format=3 uid="uid://dptga1c1w08x8"]
+
+[ext_resource type="Script" path="res://Scripts/ranged_enemy_controller.gd" id="1_y1iel"]
+[ext_resource type="PackedScene" uid="uid://cdjsdledcwpj3" path="res://Scenes/Gun.tscn" id="2_3d5so"]
+[ext_resource type="PackedScene" uid="uid://wtytkh7f6fgl" path="res://Scenes/Projectile.tscn" id="3_4fwhc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b2hq3"]
+albedo_color = Color(1, 0.933333, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3v57p"]
+material = SubResource("StandardMaterial3D_b2hq3")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mb8m5"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_etfwy"]
+radius = 10.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3gjnn"]
+radius = 15.0
+
+[node name="RangedEnemy" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+disable_mode = 2
+collision_layer = 4
+collision_mask = 7
+script = ExtResource("1_y1iel")
+
+[node name="Gun" parent="." instance=ExtResource("2_3d5so")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.945543)
+projectile = ExtResource("3_4fwhc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_3v57p")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_mb8m5")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+avoidance_enabled = true
+height = 2.0
+radius = 1.5
+avoidance_mask = 3
+debug_enabled = true
+debug_path_custom_color = Color(1, 0, 1, 1)
+debug_path_custom_point_size = 10.8
+
+[node name="DangerArea3D" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DangerArea3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("SphereShape3D_etfwy")
+
+[node name="SafeArea3D" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SafeArea3D"]
+shape = SubResource("SphereShape3D_3gjnn")
