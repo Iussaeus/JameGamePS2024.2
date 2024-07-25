@@ -2,13 +2,15 @@ extends CharacterBody3D
 
 
 @export var movement_speed: float = 20
+@export var dummy: PackedScene
+
 @onready var navigation_agent: NavigationAgent3D = get_node("NavigationAgent3D")
+
 
 func _ready() -> void:
 	set_physics_process(false)
 	call_deferred("set_map")
 
-	set_movement_target(Global.player.global_position)
 	navigation_agent.velocity_computed.connect(_on_velocity_computed)
 
 
@@ -16,8 +18,10 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 
 	var next_path_position: Vector3 = navigation_agent.get_next_path_position()
-	var new_velocity: Vector3 = global_position.direction_to(next_path_position) * movement_speed
-	print("next_point %v, velocity %v" % [next_path_position, new_velocity])
+	var new_velocity := global_position.direction_to(next_path_position) * movement_speed
+
+	# print("next_point %v, velocity %v" % [next_path_position, new_velocity])
+
 	if navigation_agent.avoidance_enabled:
 		navigation_agent.set_velocity(new_velocity)
 	else:
@@ -33,6 +37,6 @@ func set_map() -> void:
 
 
 func _on_velocity_computed(safe_velocity: Vector3) -> void:
-	set_movement_target(Global.player.position)
+	set_movement_target(Global.player.global_position)
 	velocity = safe_velocity
 	move_and_slide()

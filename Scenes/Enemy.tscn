@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://rwbu6ubjvlch"]
+[gd_scene load_steps=6 format=3 uid="uid://rwbu6ubjvlch"]
 
 [ext_resource type="Script" path="res://Scripts/enemy_controller.gd" id="1_se7fd"]
+[ext_resource type="PackedScene" uid="uid://bs5lss2iex8sv" path="res://Scenes/Dummy.tscn" id="2_sfhnl"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b2hq3"]
 albedo_color = Color(0, 1, 1, 1)
@@ -11,10 +12,12 @@ material = SubResource("StandardMaterial3D_b2hq3")
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mb8m5"]
 
 [node name="Enemy" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 disable_mode = 2
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_se7fd")
+dummy = ExtResource("2_sfhnl")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_3v57p")
@@ -25,6 +28,7 @@ shape = SubResource("CapsuleShape3D_mb8m5")
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 avoidance_enabled = true
 height = 2.0
+radius = 1.5
 debug_enabled = true
 debug_path_custom_color = Color(1, 0, 1, 1)
 debug_path_custom_point_size = 10.8

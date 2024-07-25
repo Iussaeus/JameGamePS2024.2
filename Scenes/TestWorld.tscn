@@ -8,12 +8,13 @@
 [ext_resource type="PackedScene" uid="uid://bs5lss2iex8sv" path="res://Scenes/Dummy.tscn" id="4_qvvdx"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_r8cni"]
-vertices = PackedVector3Array(-49.5, 0.5, -49.5, -49.5, 0.5, 49.5, 49.5, 0.5, 49.5, 49.5, 0.5, -49.5)
+vertices = PackedVector3Array(-49.5, 1, -49.5, -49.5, 1, 49.5, 49.5, 1, 49.5, 49.5, 1, -49.5)
 polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 agent_height = 2.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_no4hk"]
 size = Vector2(100, 100)
+center_offset = Vector3(0, 0.5, 0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7s4rh"]
 size = Vector3(100, 1, 100)
@@ -64,11 +65,11 @@ speed = 25.0
 transform = Transform3D(1, 0, 0, 0, 0.160674, 0.987008, 0, -0.987008, 0.160674, 0, 66.5205, -3.52873)
 
 [node name="Box" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_x2yjo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.66265, 2.09465, 13.0976)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.66265, 2.59623, 13.0976)
 
 [node name="Dummy" parent="SubViewportContainer/SubViewport" instance=ExtResource("4_qvvdx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.38, 0)
 
 [node name="Enemy" parent="SubViewportContainer/SubViewport" instance=ExtResource("2_4lv5d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.1982, 0.950208, 9.90142)
-movement_speed = 1.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.1982, 2.03313, 9.90142)
+movement_speed = 2.0
