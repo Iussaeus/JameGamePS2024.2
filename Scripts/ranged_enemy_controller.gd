@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 
 @export var movement_speed: float = 20
+@export var debug_on: bool = false
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var danger_area: Area3D = $DangerArea3D
@@ -31,7 +32,7 @@ func _physics_process(_delta: float) -> void:
 	var next_path_position: Vector3 = navigation_agent.get_next_path_position()
 	var new_velocity: Vector3
 
-	# print("next_point %v, velocity %v" % [next_path_position, new_velocity])
+	if debug_on: print("next_point %v, velocity %v" % [next_path_position, new_velocity])
 
 	if _player_visible and _player_in_safe_area:
 		gun.shoot()
@@ -70,14 +71,14 @@ func _on_danger_area_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		_player_in_danger_area = true
 		_player_in_safe_area = false
-		print("player in danger_area")
+		if debug_on: print("player in danger_area")
 	
 
 func _on_danger_area_body_exited(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		_player_in_danger_area = false
 		_player_in_safe_area = true
-		print("player exited danger_area")
+		if debug_on: print("player exited danger_area")
 
 
 func _on_safe_area_body_entered(body: Node3D) -> void:
@@ -85,7 +86,7 @@ func _on_safe_area_body_entered(body: Node3D) -> void:
 		_player_visible = true
 		_player_in_safe_area = true
 		var character_body := body as CharacterBody3D
-		print("I see: ", character_body)
+		if debug_on: print("I see: ", character_body)
 
 
 
@@ -94,6 +95,6 @@ func _on_safe_area_body_exited(body: Node3D) -> void:
 		_player_visible = false
 		_player_in_safe_area = false
 		var character_body := body as CharacterBody3D
-		print(character_body, "is too far")
+		if debug_on: print(character_body, "is too far")
 	
 

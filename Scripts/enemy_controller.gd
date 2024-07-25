@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 
+@export var debug_on: bool = false
 @export var movement_speed: float = 20
 
 @onready var navigation_agent: NavigationAgent3D = get_node("NavigationAgent3D")
@@ -18,7 +19,7 @@ func _physics_process(_delta: float) -> void:
 	var next_path_position: Vector3 = navigation_agent.get_next_path_position()
 	var new_velocity := global_position.direction_to(next_path_position) * movement_speed
 
-	# print("next_point %v, velocity %v" % [next_path_position, new_velocity])
+	if debug_on: print("next_point %v, velocity %v" % [next_path_position, new_velocity])
 
 	if navigation_agent.avoidance_enabled:
 		navigation_agent.set_velocity(new_velocity)

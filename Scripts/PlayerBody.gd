@@ -20,7 +20,7 @@ func _ready() -> void:
 	add_child(dash_timer)
 
 	dash_timer.one_shot = true
-	dash_timer.timeout.connect(func() -> void: can_dash = false)
+	dash_timer.timeout.connect(func() -> void: can_dash = true)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

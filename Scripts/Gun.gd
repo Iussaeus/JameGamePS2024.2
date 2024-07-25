@@ -6,23 +6,28 @@ class_name Gun extends RigidBody3D
 
 @export var projectile: PackedScene
 @export var projectile_speed: float = 20
-@export var shooting_interval: float
+@export var shooting_interval: float = 0.1 
+
+@onready var _shoot_timer: Timer = Timer.new()
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	add_child(_shoot_timer)
+	_shoot_timer.wait_time = shooting_interval
+	_shoot_timer.one_shot = true
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+
 func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("left_click") and _parent.collision_layer == 2:
+	if Input.is_action_pressed("left_click") and _parent.collision_layer == 2:
 		shoot()
 
 
 func shoot() -> void:
-	var bullet: RigidBody3D = projectile.instantiate()
-	viewport.add_child(bullet)
+	if  _shoot_timer.is_stopped():
+		_shoot_timer.start()
+		var bullet: RigidBody3D = projectile.instantiate()
+		viewport.add_child(bullet)
 
-	bullet.global_position = marker.global_position
-	bullet.apply_central_impulse(marker.global_basis.y * projectile_speed)
+		bullet.global_position = marker.global_position
+		bullet.apply_central_impulse(marker.global_basis.y * projectile_speed)
