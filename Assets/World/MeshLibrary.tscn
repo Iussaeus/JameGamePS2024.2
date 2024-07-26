@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://cq8r6khmpgrer"]
+
+[ext_resource type="PackedScene" uid="uid://vy3wcod1yoyk" path="res://Assets/World/Asphalt.tscn" id="1_mp5fe"]
+[ext_resource type="PackedScene" uid="uid://b6diq5s12it3y" path="res://Assets/World/Building.tscn" id="2_5s4ja"]
+[ext_resource type="PackedScene" uid="uid://22wdj0hmagh0" path="res://Assets/World/Pavement.tscn" id="3_unkx2"]
+
+[node name="tiles" type="Node3D"]
+
+[node name="Asphalt" parent="." instance=ExtResource("1_mp5fe")]
+
+[node name="Building" parent="." instance=ExtResource("2_5s4ja")]
+
+[node name="Pavement" parent="." instance=ExtResource("3_unkx2")]
