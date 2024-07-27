@@ -1,6 +1,6 @@
 extends Node
 
-@onready var character: CharacterBody3D = %PlayerBody/CharacterBody3D
+#@onready var character: CharacterBody3D = %PlayerBody/CharacterBody3D
 
 func _ready() -> void:
 	pass
