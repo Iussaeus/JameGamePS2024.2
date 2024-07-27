@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://uihqlie4b18d"]
+
+[node name="Garbage" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+skeleton = NodePath("")

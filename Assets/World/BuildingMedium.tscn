@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://cqa4s2u8hfq1e"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ka52e"]
+albedo_color = Color(0.32, 0.32, 0.32, 1)
+metallic = 0.6
+roughness = 0.22
+
+[sub_resource type="BoxMesh" id="BoxMesh_xnyva"]
+material = SubResource("StandardMaterial3D_ka52e")
+size = Vector3(2, 3, 2)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_nbmew"]
+points = PackedVector3Array(1, 1.48808, 1, -1, -1.48808, -1, 1, -1.48808, -1, -1, -1.48808, 1, -1, 1.48808, -1, 1, -1.48808, 1, 1, 1.48808, -1, -1, 1.48808, 1)
+
+[node name="Building" type="Node3D"]
+
+[node name="building_medium" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+mesh = SubResource("BoxMesh_xnyva")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="building_medium"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="building_medium/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("ConvexPolygonShape3D_nbmew")

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dmpj587f0puow"]
+
+[ext_resource type="Script" path="res://Scripts/Components/HpComponent.gd" id="1_2k73s"]
+
+[node name="HpComponent" type="Node3D"]
+script = ExtResource("1_2k73s")
