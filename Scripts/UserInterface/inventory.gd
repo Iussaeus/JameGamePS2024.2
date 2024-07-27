@@ -45,6 +45,12 @@ func _ready() -> void:
 	close()
 	
 	# Onready ColorRect, Sprite2D, Area2D
+	InventoryPanel.size = Vector2(TileSize.x * InventoryDimensions.x, TileSize.y * InventoryDimensions.y)
+	InventoryGrids.region_enabled = true
+	InventoryGrids.region_rect = Rect2(0, 0, InventoryDimensions.x * TileSize.x, InventoryDimensions.y * TileSize.y)
+	
+	Inventory.connect("area_entered", Callable(self, "item_inside_inventory"))
+	Inventory.connect("area_exited", Callable(self, "item_goes_outside_inventory"))
 	
 	# Adding signal connections to items
 	for item in get_tree().get_nodes_in_group("item"):
@@ -70,6 +76,7 @@ func cursor_in_item(event: InputEvent, item: Control) -> void:
 		isItemSelected = true
 		selectedItem = item
 		selectedItem.get_node("NinePatchRect/Sprite2D").z_index = SelectedItemZIndex
+		selectedItem.get_node("NinePatchRect").z_index = SelectedItemZIndex
 		ItemPrevPosition = selectedItem.position
 		
 	if event is InputEventMouseMotion:
@@ -78,9 +85,13 @@ func cursor_in_item(event: InputEvent, item: Control) -> void:
 			
 	if event.is_action_released("select_item"):
 		selectedItem.get_node("NinePatchRect/Sprite2D").z_index = 0
+		# (currently sprite is null, but after adding the sprite, ninepatch will be obsolete/removed)
+		selectedItem.get_node("NinePatchRect").z_index = 0
 		if OverlappingWithItems.size() > 0:
 			selectedItem.position = ItemPrevPosition
 			selectedItem.get_node("NinePatchRect/Sprite2D").modulate = ValidColor
+			# (currently sprite is null, but after adding the sprite, ninepatch will be obsolete/removed)
+			selectedItem.get_node("NinePatchRect").modulate = ValidColor
 		else:
 			if IsSelectedItemInsideInventory:
 				if not add_item_to_inventory(selectedItem):
@@ -98,6 +109,8 @@ func overlapping_with_other_item(area: Area2D, item: Control) -> void:
 	OverlappingWithItems.append(item)
 	if selectedItem:
 		selectedItem.get_node("NinePatchRect/Sprite2D").modulate = InvalidColor
+		# (currently sprite is null, but after adding the sprite, ninepatch will be obsolete/removed)
+		selectedItem.get_node("NinePatchRect").modulate = InvalidColor
 		
 func not_overlapping_with_other_item(area: Area2D, item: Control) -> void:
 	print("not_overlap")
@@ -108,11 +121,15 @@ func not_overlapping_with_other_item(area: Area2D, item: Control) -> void:
 	OverlappingWithItems.erase(item)
 	if OverlappingWithItems.size() == 0 and isItemSelected:
 		selectedItem.get_node("NinePatchRect/Sprite2D").modulate = ValidColor
+		# (currently sprite is null, but after adding the sprite, ninepatch will be obsolete/removed)
+		selectedItem.get_node("NinePatchRect").modulate = ValidColor
 		
 func item_inside_inventory(area: Area2D) -> void:
+	print("inside")
 	IsSelectedItemInsideInventory = true
 	
 func item_goes_outside_inventory(area: Area2D) -> void:
+	print("outside")
 	IsSelectedItemInsideInventory = false
 	
 func add_item_to_inventory(item: Control) -> bool:

@@ -180,29 +180,24 @@ shape = SubResource("RectangleShape2D_wt1vr")
 
 [node name="UITestItem1x1(size=sprite_size)" parent="." instance=ExtResource("2_x73k8")]
 layout_mode = 1
-offset_top = 8.0
-offset_right = 0.0
-offset_bottom = 8.0
 
 [node name="UITestItem1x4(size=sprite_size)" parent="." instance=ExtResource("3_fvlml")]
 layout_mode = 1
-offset_left = 296.0
-offset_top = 440.0
-offset_right = 296.0
-offset_bottom = 440.0
+offset_left = 148.0
+offset_top = 444.0
+offset_right = -428.0
+offset_bottom = -60.0
 
 [node name="UITestItem2x2(size=sprite_size)" parent="." instance=ExtResource("4_4ew7r")]
 layout_mode = 1
-offset_left = 292.0
+offset_left = 296.0
 offset_top = 8.0
-offset_right = 292.0
-offset_bottom = 8.0
+offset_right = -568.0
+offset_bottom = -352.0
 
 [node name="UITestItem2x4(size=sprite_size)" parent="." instance=ExtResource("5_dhncg")]
 layout_mode = 1
 offset_left = 888.0
 offset_top = 8.0
-offset_right = 888.0
-offset_bottom = 8.0
-
-[editable path="UITestItem1x1(size=sprite_size)"]
+offset_right = 24.0
+offset_bottom = -64.0
