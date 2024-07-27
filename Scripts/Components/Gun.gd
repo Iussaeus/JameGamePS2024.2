@@ -19,7 +19,6 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	var input_map: Array[StringName] =  InputMap.get_actions()
-	print(input_map)
 	for input in input_map:
 		match input:
 			&"left_click" when Input.is_action_pressed(input): shoot()
