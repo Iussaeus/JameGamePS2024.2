@@ -83,18 +83,18 @@ func _on_danger_area_body_exited(body: Node3D) -> void:
 
 func _on_safe_area_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
+		var character_body := body as CharacterBody3D
 		_player_visible = true
 		_player_in_safe_area = true
-		var character_body := body as CharacterBody3D
 		if debug_on: print("I see: ", character_body)
 
 
 
 func _on_safe_area_body_exited(body: Node3D) -> void:
 	if body is CharacterBody3D:
+		var character_body := body as CharacterBody3D
 		_player_visible = false
 		_player_in_safe_area = false
-		var character_body := body as CharacterBody3D
 		if debug_on: print(character_body, "is too far")
 	
 

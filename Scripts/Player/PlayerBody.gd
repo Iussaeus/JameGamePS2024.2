@@ -4,7 +4,7 @@ extends CharacterBody3D
 @export var dash_velocity: float = 200
 @export var speed: float = 5
 
-@onready var camera: Camera3D = %Camera3D
+@onready var camera: Camera3D = Global.camera
 @onready var gun: RigidBody3D = $Gun
 @onready var marker: Marker3D = $Marker3D
 
