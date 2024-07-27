@@ -1,0 +1,54 @@
+[gd_scene load_steps=9 format=3 uid="uid://ci6bd1n5bh8ir"]
+
+[ext_resource type="PackedScene" uid="uid://bwdwhvg2b2wn5" path="res://Scenes/Interaction/Box.tscn" id="1_s1hdy"]
+[ext_resource type="PackedScene" uid="uid://bs5lss2iex8sv" path="res://Scenes/Enemy/Dummy.tscn" id="2_evgit"]
+[ext_resource type="PackedScene" uid="uid://rwbu6ubjvlch" path="res://Scenes/Enemy/Enemy.tscn" id="3_3ysy5"]
+[ext_resource type="PackedScene" uid="uid://dptga1c1w08x8" path="res://Scenes/Enemy/RangedEnemy.tscn" id="4_fldqr"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_no4hk"]
+size = Vector2(100, 100)
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7s4rh"]
+size = Vector3(100, 1, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_33xwi"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ou7kq"]
+size = Vector3(1, 3, 6)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_mask = 22
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("PlaneMesh_no4hk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_7s4rh")
+
+[node name="Obstacle" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Obstacle"]
+shape = SubResource("BoxShape3D_33xwi")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Obstacle"]
+transform = Transform3D(0.876811, 0, -0.480836, 0, 1, 0, 0.480836, 0, 0.876811, 7.96593, 2, 0)
+mesh = SubResource("BoxMesh_ou7kq")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.160674, 0.987008, 0, -0.987008, 0.160674, 0, 66.5205, -3.52873)
+
+[node name="Box" parent="." instance=ExtResource("1_s1hdy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.66265, 4.60412, 13.0976)
+
+[node name="Dummy" parent="." instance=ExtResource("2_evgit")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.7517, 4.38, 0)
+
+[node name="Enemy" parent="." instance=ExtResource("3_3ysy5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.1982, 5.07864, 9.90142)
+movement_speed = 2.0
+
+[node name="RangedEnemy" parent="." instance=ExtResource("4_fldqr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.94106, -21.2326)
