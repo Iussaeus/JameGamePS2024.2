@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://qy3qlfik0xw6"]
+[gd_scene load_steps=7 format=3 uid="uid://qy3qlfik0xw6"]
 
 [ext_resource type="Script" path="res://Scripts/Components/global.gd" id="1_qvrjv"]
 [ext_resource type="PackedScene" uid="uid://fqvflhc3nymf" path="res://Scenes/Player/PlayerBody.tscn" id="2_6fyja"]
 [ext_resource type="Script" path="res://Scripts/World/Navigation.gd" id="2_f1pk8"]
 [ext_resource type="PackedScene" uid="uid://btnredj8yyckn" path="res://Scenes/World/TestCamera.tscn" id="3_e8bvu"]
+[ext_resource type="PackedScene" uid="uid://b3do2hejwuvds" path="res://Scenes/UserInterface/ui.tscn" id="5_34n5m"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_cpi6k"]
 agent_max_climb = 0.5
@@ -34,3 +35,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.41351, 0)
 
 [node name="Camera3D" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_e8bvu")]
 unique_name_in_owner = true
+
+[node name="UI" parent="." instance=ExtResource("5_34n5m")]
