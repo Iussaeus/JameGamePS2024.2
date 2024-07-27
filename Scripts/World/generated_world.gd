@@ -12,18 +12,14 @@ extends Node3D
 @export var start: bool = false:
 	set(value):
 		if Engine.is_editor_hint():
-			print("Startuem")
-			make_border()
 			generate()
 
 # Actual properties
 @export var points: int = 5
-@export var road_length: int = 5
-
 @export var road_width: int = 3
-@export var pavement_width: int = 6
-
 @export var box_size: int = 20
+@export var pavement_width: int = 6
+@export var road_length: int = 5
 
 @onready var grid_map: GridMap = $"GridMap"
 
@@ -39,6 +35,13 @@ func _ready() -> void:
 
 
 func generate() -> void:
+	grid_map.clear()
+	if Engine.is_editor_hint():
+		print("Startuem")
+		_rpp3d = []
+		_rpp2d = []
+		make_border()
+
 	make_base()
 	make_points()
 
@@ -183,16 +186,9 @@ func add_buildings() -> void:
 	pass
 				
 
-func make_border() -> void :
-	#print(width, height)
-
-	grid_map.clear()
+func make_border() -> void:
 	for i in box_size:
 		for j in box_size:
 			if i == 0 or j == 0 or i == box_size - 1 or j == box_size - 1:
 				
 				grid_map.set_cell_item(Vector3i(i, 0, j), 5)
-
-	#print( grid_map.get_used_cells_by_item(5) )
-
-
