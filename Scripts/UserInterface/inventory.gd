@@ -94,7 +94,7 @@ func cursor_in_item(event: InputEvent, item: Control) -> void:
 			selectedItem.get_node("NinePatchRect").modulate = ValidColor
 		else:
 			if IsSelectedItemInsideInventory:
-				if not add_item_to_inventory(selectedItem):
+				if not add_item_to_inventory(selectedItem): # surelly works
 					selectedItem.position = ItemPrevPosition
 		isItemSelected = false
 		IsDraggingItem = false
@@ -135,7 +135,8 @@ func item_goes_outside_inventory(area: Area2D) -> void:
 func add_item_to_inventory(item: Control) -> bool:
 	var slotID: Vector2 = item.position / TileSize
 	var ItemSlotSize: Vector2 = item.size / TileSize
-	
+	print("SlotID: " + str(slotID))
+	print("SlotSize: " + str(ItemSlotSize))
 	var ItemMaxSlotID: Vector2 = slotID + ItemSlotSize - Vector2(1, 1)
 	var InventorySlotBounds: Vector2 = InventoryDimensions - Vector2(1, 1)
 	
@@ -152,10 +153,12 @@ func add_item_to_inventory(item: Control) -> bool:
 			InventoryItemslots[Vector2(slotID.x + x_ctr, slotID.y + y_ctr)] = item
 			
 	InventoryItems[item] = slotID
+	print("item added")
 	return true
 
 func remove_item_in_inventory_slot(item: Control, ExistingSlotID: Vector2) -> void:
 	var ItemSlotSize: Vector2 = item.size / TileSize
+	print("item removed")
 	
 	for y_Ctr in range(ItemSlotSize.y):
 		for x_Ctr in range(ItemSlotSize.x):
