@@ -1,9 +1,9 @@
 extends Camera3D
 
+
+@export var camera_offset := Vector3(30, 60, 40)
+
 @onready var character: CharacterBody3D = %PlayerBody/CharacterBody3D
-
-@export var camera_offset: Vector3 = Vector3(5, -20, 5)
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
