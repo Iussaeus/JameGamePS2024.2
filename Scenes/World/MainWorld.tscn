@@ -18,11 +18,11 @@ custom_minimum_size = Vector2(1920, 1080)
 offset_right = 40.0
 offset_bottom = 40.0
 stretch = true
-stretch_shrink = 3
+stretch_shrink = 2
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
 handle_input_locally = false
-size = Vector2i(640, 360)
+size = Vector2i(960, 540)
 render_target_update_mode = 4
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport"]
@@ -30,13 +30,14 @@ navigation_mesh = SubResource("NavigationMesh_cpi6k")
 script = ExtResource("2_f1pk8")
 
 [node name="World" parent="SubViewportContainer/SubViewport/NavigationRegion3D" instance=ExtResource("3_ph8hq")]
-margin_offset_edge = 20
 
 [node name="PlayerBody" parent="SubViewportContainer/SubViewport" instance=ExtResource("2_6fyja")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9993, 12.3753, 20.8463)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9993, 42.6398, 44.0877)
 
 [node name="Camera3D" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_e8bvu")]
 unique_name_in_owner = true
-size = 100.0
-camera_offset = Vector3(120, 360, 160)
+size = 75.0
+near = 0.001
+far = 2000.0
+camera_offset = Vector3(30, 60, 40)

@@ -26,7 +26,7 @@ extends Node3D
 @export_range(1, 500, 1) var radius: int = 100
 
 @onready var grid_map: GridMap = $"GridMap"
-@onready var size_offseted: int = box_size - margin_offset_inside * 2
+@onready var size_offseted: int
 
 
 var _rpp3d: PackedVector3Array = []
@@ -39,6 +39,7 @@ func _ready() -> void:
 
 
 func generate() -> void:
+	size_offseted = box_size - (margin_offset_inside * 2)
 	grid_map.clear()
 	if Engine.is_editor_hint():
 		print("Startuem")
@@ -119,7 +120,7 @@ func make_base() -> void:
 	for i in box_size:
 		for j in box_size:
 			if not is_on_map_edge(i, j):
-				grid_map.set_cell_item(Vector3i(i, 0, j), 3)
+				grid_map.set_cell_item(Vector3i(i, 0, j), 6)
 
 
 func make_points() -> void:
@@ -134,16 +135,16 @@ func make_points() -> void:
 		point_position = Vector3i(randi() % size_offseted + margin_offset_inside, 0, randi() % size_offseted + margin_offset_inside)
 
 		if not is_on_map_edge(point_position.x, point_position.z):
-			grid_map.set_cell_item(point_position, 2)
+			grid_map.set_cell_item(point_position, 0)
 			placed_points_inside += 1
 					
 	while placed_points_edge <= points_edge - 1:
 		point_position = Vector3i(randi() % box_size, 0 , randi() % box_size)
 		if is_on_map_edge(point_position.x, point_position.z) and is_alone_on_map_edge(point_position, placed_in_each_direction):
-			grid_map.set_cell_item(point_position, 2)
+			grid_map.set_cell_item(point_position, 0)
 			placed_points_edge += 1
 
-	_rpp3d = grid_map.get_used_cells_by_item(2)
+	_rpp3d = grid_map.get_used_cells_by_item(0)
 	for point in _rpp3d:
 		_rpp2d.append(Vector2i(point.x, point.z))
 
@@ -186,7 +187,6 @@ func connect_road_points(mst_graph: AStar2D) -> void:
 	var a_star_grid := AStarGrid2D.new()
 	a_star_grid.region = Rect2i(0, 0, box_size, box_size)
 
-	# TODO: Change heuristics during the generations so the roads in diferent regions of the map have different strucuture
 
 	a_star_grid.update()
 	a_star_grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_AT_LEAST_ONE_WALKABLE
@@ -200,6 +200,21 @@ func connect_road_points(mst_graph: AStar2D) -> void:
 
 		for point in road_path:
 			var point_position := Vector3i(point.x, 0, point.y) 
+			for i in road_width + pavement_width:
+				for j in road_width + pavement_width:
+					var p_xp_zp := Vector3i(point_position.x + i, point_position.y, point_position.z + j) 
+					var p_xp_zm := Vector3i(point_position.x + i, point_position.y, point_position.z - j)
+					var p_xm_zp	:= Vector3i(point_position.x - i, point_position.y, point_position.z + j)
+					var p_xm_zm := Vector3i(point_position.x - i, point_position.y, point_position.z - j)
+
+					if grid_map.get_cell_item(p_xp_zp): grid_map.set_cell_item(p_xp_zp, 1)
+					if grid_map.get_cell_item(p_xp_zm): grid_map.set_cell_item(p_xp_zm, 1)
+
+					if grid_map.get_cell_item(p_xm_zp): grid_map.set_cell_item(p_xm_zp, 1)
+					if grid_map.get_cell_item(p_xm_zm): grid_map.set_cell_item(p_xm_zm, 1)
+
+		for point in road_path:
+			var point_position := Vector3i(point.x, 0, point.y) 
 			for i in road_width:
 				for j in road_width:
 					var p_xp_zp := Vector3i(point_position.x + i, point_position.y, point_position.z + j) 
@@ -207,14 +222,12 @@ func connect_road_points(mst_graph: AStar2D) -> void:
 					var p_xm_zp	:= Vector3i(point_position.x - i, point_position.y, point_position.z + j)
 					var p_xm_zm := Vector3i(point_position.x - i, point_position.y, point_position.z - j)
 
-					if grid_map.get_cell_item(p_xp_zp): grid_map.set_cell_item(p_xp_zp, 2)
-					if grid_map.get_cell_item(p_xp_zm): grid_map.set_cell_item(p_xp_zm, 2)
+					if grid_map.get_cell_item(p_xp_zp): grid_map.set_cell_item(p_xp_zp, 0)
+					if grid_map.get_cell_item(p_xp_zm): grid_map.set_cell_item(p_xp_zm, 0)
 
-					if grid_map.get_cell_item(p_xm_zp): grid_map.set_cell_item(p_xm_zp, 2)
-					if grid_map.get_cell_item(p_xm_zm): grid_map.set_cell_item(p_xm_zm, 2)
-			if Engine.is_editor_hint(): grid_map.set_cell_item(point_position, 5)
+					if grid_map.get_cell_item(p_xm_zp): grid_map.set_cell_item(p_xm_zp, 0)
+					if grid_map.get_cell_item(p_xm_zm): grid_map.set_cell_item(p_xm_zm, 0)
 
-			
 			# Print the points_inside in a road after connectig the roads in the editor
 
 
