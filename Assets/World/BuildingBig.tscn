@@ -7,10 +7,10 @@ roughness = 0.22
 
 [sub_resource type="BoxMesh" id="BoxMesh_oxbrr"]
 material = SubResource("StandardMaterial3D_ka52e")
-size = Vector3(2, 4, 2)
+size = Vector3(1, 4, 1)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_k4c0p"]
-points = PackedVector3Array(-0.999842, -1.97018, -1, 0.999957, 1.90861, 1, 1, 1.90869, -0.968297, -0.999842, 1.97018, -1, -0.968099, -1.90861, 1, 1, -1.90869, -0.968297, -0.968099, 1.90861, 1, 0.999957, -1.90861, 1)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_mra5n"]
+points = PackedVector3Array(-0.5, -2, -0.5, -0.5, -2, 0.5, -0.5, 2, -0.5, 0.5, -2, -0.5, 0.5, -2, 0.5, -0.5, 2, 0.5, 0.5, 2, -0.5, 0.5, 2, 0.5)
 
 [node name="Building" type="Node3D"]
 
@@ -24,4 +24,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="building_big/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-shape = SubResource("ConvexPolygonShape3D_k4c0p")
+shape = SubResource("ConvexPolygonShape3D_mra5n")
