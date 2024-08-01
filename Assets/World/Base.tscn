@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://cheovog808lj8"]
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_evber"]
+albedo_color = Color(0.28, 0.1204, 0.16296, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_xcn85"]
+material = SubResource("ORMMaterial3D_evber")
+size = Vector2(1, 1)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_pgsqo"]
+points = PackedVector3Array(-0.5, -0.375, -0.5, -0.5, 0.375, -0.5, 0.5, -0.375, -0.5, -0.5, -0.375, 0.5, -0.5, 0.375, 0.5, 0.5, 0.375, -0.5, 0.5, -0.375, 0.5, 0.5, 0.375, 0.5)
+
+[node name="Pavement" type="Node3D"]
+
+[node name="base" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("PlaneMesh_xcn85")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="base"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.875, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="base/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("ConvexPolygonShape3D_pgsqo")

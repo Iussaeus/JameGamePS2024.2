@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://cjlt37c0hobco"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wwtxt"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6g6io"]
+material = SubResource("StandardMaterial3D_wwtxt")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_txpch"]
+points = PackedVector3Array(0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5)
+
+[node name="Pavement" type="Node3D"]
+
+[node name="border" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_6g6io")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="border"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="border/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("ConvexPolygonShape3D_txpch")
