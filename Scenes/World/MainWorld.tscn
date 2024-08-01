@@ -35,7 +35,6 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9993, 42.6398, 157.945)
 
 [node name="Camera3D" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_e8bvu")]
-unique_name_in_owner = true
 fov = 60.0
 size = 40.0
 near = 0.001
