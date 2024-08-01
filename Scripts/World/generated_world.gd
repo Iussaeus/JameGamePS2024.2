@@ -15,15 +15,16 @@ extends Node3D
 			generate()
 
 # Actual properties
-@export_range(1, 1000, 1) var points_inside: int = 5
+@export_range(2, 1000, 1) var points_inside: int = 5
 @export_range(1, 4, 1) var points_edge: int = 5
 @export_range(1, 1000, 1) var road_width: int = 3
 @export_range(1, 1000, 1) var box_size: int = 20
 @export_range(0, 500, 1) var margin_offset_edge: int = 20
 @export_range(0, 500, 1) var margin_offset_inside: int = 20
 @export_range(1, 1000, 1) var pavement_width: int = 6
+
 @export_range(1, 1000, 1) var road_length: int = 5
-@export_range(1, 500, 1) var radius: int = 100
+@export_range(1, 1000, 1) var building_density: int = 5
 
 @onready var grid_map: GridMap = $"GridMap"
 @onready var size_offseted: int
@@ -34,7 +35,7 @@ var _rpp2d: PackedVector2Array = []
 
 
 func _ready() -> void:
-	if not Engine.is_editor_hint(): generate()
+	# if not Engine.is_editor_hint(): generate()
 	pass
 
 
@@ -131,7 +132,7 @@ func make_points() -> void:
 	var placed_points_edge: int = 0
 	var placed_in_each_direction: Array[bool] = [false, false, false, false]
 
-	while placed_points_inside <= points_inside:
+	while placed_points_inside <= points_inside - 1:
 		point_position = Vector3i(randi() % size_offseted + margin_offset_inside, 0, randi() % size_offseted + margin_offset_inside)
 
 		if not is_on_map_edge(point_position.x, point_position.z):
@@ -189,7 +190,7 @@ func connect_road_points(mst_graph: AStar2D) -> void:
 
 
 	a_star_grid.update()
-	a_star_grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_AT_LEAST_ONE_WALKABLE
+	a_star_grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
 	a_star_grid.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 
 	for road in roads:

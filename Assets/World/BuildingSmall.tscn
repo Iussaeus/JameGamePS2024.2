@@ -5,9 +5,9 @@ albedo_color = Color(0.32, 0.32, 0.32, 1)
 metallic = 0.6
 roughness = 0.22
 
-[sub_resource type="BoxMesh" id="BoxMesh_nb1r3"]
+[sub_resource type="BoxMesh" id="BoxMesh_hmde3"]
 material = SubResource("StandardMaterial3D_xjmgt")
-size = Vector3(1, 2, 1)
+size = Vector3(6, 4, 6)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_p3k1a"]
 points = PackedVector3Array(-0.5, -1, -0.5, -0.5, -1, 0.5, -0.5, 1, -0.5, 0.5, -1, -0.5, 0.5, -1, 0.5, -0.5, 1, 0.5, 0.5, 1, -0.5, 0.5, 1, 0.5)
@@ -15,8 +15,8 @@ points = PackedVector3Array(-0.5, -1, -0.5, -0.5, -1, 0.5, -0.5, 1, -0.5, 0.5, -
 [node name="Building" type="Node3D"]
 
 [node name="building_small" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh = SubResource("BoxMesh_nb1r3")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("BoxMesh_hmde3")
 skeleton = NodePath("")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="building_small"]
