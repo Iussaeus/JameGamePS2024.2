@@ -5,18 +5,18 @@ albedo_color = Color(0.32, 0.32, 0.32, 1)
 metallic = 0.6
 roughness = 0.22
 
-[sub_resource type="BoxMesh" id="BoxMesh_oxbrr"]
+[sub_resource type="BoxMesh" id="BoxMesh_63cbg"]
 material = SubResource("StandardMaterial3D_ka52e")
-size = Vector3(2, 4, 2)
+size = Vector3(6, 20, 6)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_k4c0p"]
-points = PackedVector3Array(-0.999842, -1.97018, -1, 0.999957, 1.90861, 1, 1, 1.90869, -0.968297, -0.999842, 1.97018, -1, -0.968099, -1.90861, 1, 1, -1.90869, -0.968297, -0.968099, 1.90861, 1, 0.999957, -1.90861, 1)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_a3hbf"]
+points = PackedVector3Array(-3, -10, -3, -3, -10, 3, -3, 10, -3, 3, -10, -3, 3, -10, 3, -3, 10, 3, 3, 10, -3, 3, 10, 3)
 
 [node name="Building" type="Node3D"]
 
 [node name="building_big" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-mesh = SubResource("BoxMesh_oxbrr")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+mesh = SubResource("BoxMesh_63cbg")
 skeleton = NodePath("")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="building_big"]
@@ -24,4 +24,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="building_big/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-shape = SubResource("ConvexPolygonShape3D_k4c0p")
+shape = SubResource("ConvexPolygonShape3D_a3hbf")
