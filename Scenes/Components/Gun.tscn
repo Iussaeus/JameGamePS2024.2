@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cdjsdledcwpj3"]
+[gd_scene load_steps=5 format=3 uid="uid://cdjsdledcwpj3"]
 
-[ext_resource type="Script" path="res://Scripts/Components/Gun.gd" id="1_qkkpn"]
+[ext_resource type="Script" path="res://Scripts/Components/Gun.cs" id="1_s8ljh"]
+[ext_resource type="PackedScene" uid="uid://wtytkh7f6fgl" path="res://Scenes/Components/Projectile.tscn" id="2_uyw61"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_kej4l"]
 height = 1.0
@@ -15,7 +16,8 @@ height = 1.0
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 collision_layer = 0
 collision_mask = 0
-script = ExtResource("1_qkkpn")
+script = ExtResource("1_s8ljh")
+Projectile = ExtResource("2_uyw61")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CylinderShape3D_kej4l")

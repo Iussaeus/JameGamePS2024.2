@@ -1,6 +1,5 @@
 extends CharacterBody3D
 
-
 @export var movement_speed: float = 20
 @export var debug_on: bool = false
 

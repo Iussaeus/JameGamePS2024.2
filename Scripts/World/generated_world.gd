@@ -35,27 +35,29 @@ var _rpp2d: PackedVector2Array = []
 
 
 func _ready() -> void:
-	# if not Engine.is_editor_hint(): generate()
-	pass
+	var camera: Camera3D  = $Camera3D
+	if not Engine.is_editor_hint(): generate()
 
 
 func generate() -> void:
 	size_offseted = box_size - (margin_offset_inside * 2)
-	grid_map.clear()
+	# grid_map.clear()
 	if Engine.is_editor_hint():
 		print("Startuem")
 		_rpp3d = []
 		_rpp2d = []
 		make_border()
 
-	make_base()
+	print("Startuem")
+	# make_base()
 
-	make_points()
+	# make_points()
 
-	connect_road_points(find_mst())
+	# connect_road_points(find_mst())
 
 
 func find_mst() -> AStar2D:	
+	print("startuem mst")
 	var del_graph := AStar2D.new()
 	var mst_graph := AStar2D.new()
 
@@ -85,7 +87,8 @@ func find_mst() -> AStar2D:
 	# print("rpp2d", _rpp2d)
 
 	while visited_points.size() != mst_graph.get_point_count():
-		# print("while iteration")
+		print("while iteration")
+		print("inital %d , %d" % [visited_points.size(), mst_graph.get_point_count()])	
 		var possible_connections: Array[PackedInt32Array] = []
 		
 		for point in visited_points:
@@ -114,10 +117,12 @@ func find_mst() -> AStar2D:
 			# print(del_graph.get_point_count())
 
 		# print("finished iteration", iterator)
+		print("Final %d , %d" % [visited_points.size(), mst_graph.get_point_count()])	
 	return mst_graph
 
 
 func make_base() -> void:
+	print("start base")
 	for i in box_size:
 		for j in box_size:
 			if not is_on_map_edge(i, j):
@@ -125,6 +130,7 @@ func make_base() -> void:
 
 
 func make_points() -> void:
+	print("start points")
 	# TODO: min_length of road
 
 	var point_position: Vector3i
@@ -148,6 +154,7 @@ func make_points() -> void:
 	_rpp3d = grid_map.get_used_cells_by_item(0)
 	for point in _rpp3d:
 		_rpp2d.append(Vector2i(point.x, point.z))
+	print("end points")
 
 
 func is_alone_on_map_edge(point: Vector3i, found: Array[bool]) -> bool:

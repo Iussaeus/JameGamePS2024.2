@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://rwbu6ubjvlch"]
 
-[ext_resource type="Script" path="res://Scripts/Enemy/enemy_controller.gd" id="1_se7fd"]
+[ext_resource type="Script" path="res://Scripts/Enemy/MeleeEnemy.cs" id="1_f6pvh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b2hq3"]
 albedo_color = Color(0, 1, 1, 1)
@@ -15,8 +15,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 disable_mode = 2
 collision_layer = 4
 collision_mask = 7
-script = ExtResource("1_se7fd")
-movement_speed = 50.0
+script = ExtResource("1_f6pvh")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_3v57p")

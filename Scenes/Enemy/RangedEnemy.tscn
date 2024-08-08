@@ -1,8 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://dptga1c1w08x8"]
+[gd_scene load_steps=8 format=3 uid="uid://dptga1c1w08x8"]
 
-[ext_resource type="Script" path="res://Scripts/Enemy/ranged_enemy_controller.gd" id="1_y1iel"]
+[ext_resource type="Script" path="res://Scripts/Enemy/RangedEnemy.cs" id="1_i6fl3"]
 [ext_resource type="PackedScene" uid="uid://cdjsdledcwpj3" path="res://Scenes/Components/Gun.tscn" id="2_3d5so"]
-[ext_resource type="PackedScene" uid="uid://wtytkh7f6fgl" path="res://Scenes/Components/Projectile.tscn" id="3_4fwhc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b2hq3"]
 albedo_color = Color(1, 0.933333, 0, 1)
@@ -23,11 +22,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 disable_mode = 2
 collision_layer = 4
 collision_mask = 7
-script = ExtResource("1_y1iel")
+script = ExtResource("1_i6fl3")
 
 [node name="Gun" parent="." instance=ExtResource("2_3d5so")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.945543)
-projectile = ExtResource("3_4fwhc")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_3v57p")

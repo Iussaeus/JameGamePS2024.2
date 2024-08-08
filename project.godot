@@ -12,14 +12,13 @@ config_version=5
 
 config/name="Test"
 run/main_scene="res://Scenes/World/MainWorld.tscn"
-config/features=PackedStringArray("4.2", "Forward Plus")
+config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-Global="*res://Scripts/Components/global.gd"
+Globals="*res://Scripts/Components/Globals.cs"
 Signal_Debugger="*res://addons/SignalVisualizer/Debugger/SignalDebugger.gd"
-InputHandler="*res://Scripts/Player/input_handler.gd"
 
 [debug]
 

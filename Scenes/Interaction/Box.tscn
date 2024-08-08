@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://bwdwhvg2b2wn5"]
 
 [ext_resource type="PackedScene" uid="uid://bybc1w3bwha5j" path="res://Scenes/Interaction/Interactable.tscn" id="1_5p1gd"]
-[ext_resource type="Script" path="res://Scripts/Interaction/Box.gd" id="1_tx7t2"]
+[ext_resource type="Script" path="res://Scripts/Interaction/Box.cs" id="1_rnw8y"]
 [ext_resource type="PackedScene" uid="uid://dmpj587f0puow" path="res://Scenes/Components/HpComponent.tscn" id="3_iun0u"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_utikt"]
@@ -13,7 +13,8 @@ size = Vector3(2, 2, 2)
 
 [node name="Box" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-script = ExtResource("1_tx7t2")
+script = ExtResource("1_rnw8y")
+_isDebugOn = true
 
 [node name="RigidBody3D" type="RigidBody3D" parent="."]
 collision_layer = 18

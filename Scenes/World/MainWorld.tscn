@@ -1,16 +1,30 @@
 [gd_scene load_steps=7 format=3 uid="uid://qy3qlfik0xw6"]
 
-[ext_resource type="Script" path="res://Scripts/Components/global.gd" id="1_qvrjv"]
 [ext_resource type="PackedScene" uid="uid://fqvflhc3nymf" path="res://Scenes/Player/PlayerBody.tscn" id="2_6fyja"]
-[ext_resource type="Script" path="res://Scripts/World/Navigation.gd" id="2_f1pk8"]
+[ext_resource type="PackedScene" uid="uid://b601nupwwifub" path="res://Scenes/World/GeneratedWorld.tscn" id="3_b1bwb"]
 [ext_resource type="PackedScene" uid="uid://btnredj8yyckn" path="res://Scenes/World/TestCamera.tscn" id="3_e8bvu"]
-[ext_resource type="PackedScene" uid="uid://o2x8bawawkmh" path="res://Scenes/World/GeneratedWorld.tscn" id="3_ph8hq"]
+
+[sub_resource type="GDScript" id="GDScript_txtuv"]
+script/source = "extends Node3D
+
+@onready var player: CharacterBody3D = $\"/root/World/SubViewportContainer/SubViewport/PlayerBody/CharacterBody3D\"
+@onready var camera: Camera3D = $\"/root/World/SubViewportContainer/SubViewport/Camera3D\"
+
+"
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_cpi6k"]
 agent_max_climb = 0.5
 
+[sub_resource type="GDScript" id="GDScript_cn5vi"]
+script/source = "extends NavigationRegion3D
+
+
+func _ready() -> void:
+	bake_navigation_mesh()
+"
+
 [node name="World" type="Node3D"]
-script = ExtResource("1_qvrjv")
+script = SubResource("GDScript_txtuv")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 texture_filter = 5
@@ -26,17 +40,17 @@ render_target_update_mode = 4
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport"]
 navigation_mesh = SubResource("NavigationMesh_cpi6k")
-script = ExtResource("2_f1pk8")
+script = SubResource("GDScript_cn5vi")
 
-[node name="World" parent="SubViewportContainer/SubViewport/NavigationRegion3D" instance=ExtResource("3_ph8hq")]
+[node name="World" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_b1bwb")]
 
 [node name="PlayerBody" parent="SubViewportContainer/SubViewport" instance=ExtResource("2_6fyja")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9993, 42.6398, 157.945)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.4451, 46.3568, 175.168)
 
 [node name="Camera3D" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_e8bvu")]
 fov = 60.0
-size = 40.0
+size = 200.0
 near = 0.001
 far = 1000.0
-camera_offset = Vector3(-40, 50, 40)
+CameraOffset = Vector3(300, 300, 300)
