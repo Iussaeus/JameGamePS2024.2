@@ -17,7 +17,9 @@ collision_mask = 23
 script = ExtResource("1_512hh")
 DashCooldown = 0.2
 DashVelocity = 300.0
-Speed = 25.0
+DashAcceleration = 50.0
+Speed = 50.0
+HorizontalAcceleration = 20.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 shape = SubResource("CapsuleShape3D_xw70a")
@@ -31,6 +33,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.664517)
 
 [node name="Gun" parent="CharacterBody3D" instance=ExtResource("2_sd1pr")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 1.38252)
+ProjectileSpeed = 300.0
 
 [node name="PlayerInteractor" parent="CharacterBody3D" instance=ExtResource("3_dxpcy")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
