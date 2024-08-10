@@ -1,16 +1,24 @@
 using Godot;
-using Test.Scripts.Helpers;
 
 namespace Test.Scripts.Components;
 
 public partial class Globals : Node3D
 {
-	public static Camera3D Camera;
-	public static CharacterBody3D Player;
+    [Signal]
+    public delegate void PlayerSpawnedEventHandler(CharacterBody3D player);
+    [Signal]
+    public delegate void CameraSpawnedEventHandler(Camera3D camera);
 
-	public override void _Ready()
-	{
-		Camera = GetNode<Camera3D>("/root/World/SubViewportContainer/SubViewport/Camera3D");
-		Player = GetNode<CharacterBody3D>("/root/World/SubViewportContainer/SubViewport/PlayerBody/CharacterBody3D");
-	}
+	public static Globals Instance {get; private set;}
+
+    public static CharacterBody3D Player { get; set; }
+    public static Camera3D Camera { get; set; }
+
+    public override void _Ready()
+    {
+		Instance = this;
+
+        PlayerSpawned += (player => Player = player);
+        CameraSpawned += (camera => Camera = camera);
+    }
 }

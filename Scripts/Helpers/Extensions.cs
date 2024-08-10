@@ -14,13 +14,4 @@ public static class Extensions
 		}
 
 	}
-
-	public static void Assert(this CharacterBody3D node, bool truthy, string message)
-	{
-		if (!truthy)
-		{
-			PushError("Assert Failed: " + message);
-			node.GetTree().Paused = true;
-		}
-	}
 }

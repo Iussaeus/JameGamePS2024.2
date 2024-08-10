@@ -1,86 +1,97 @@
 using Godot;
 using Test.Scripts.Components;
+using Test.Scripts.Helpers;
 
 namespace Test.Scripts.Player;
 
 public partial class PlayerController : CharacterBody3D
 {
-	private readonly Timer _dashTimer = new();
+    private readonly Timer _dashTimer = new();
 
-	private readonly float _rayLen = 1000;
-	private Camera3D _camera3D;
-	private Gun _gun;
-	private Marker3D _marker3D;
-	public bool CanDash = true;
-	[Export] public float DashCooldown = 2;
-	[Export] public float DashVelocity = 200;
-	public float Gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
-	[Export] public float Speed = 5;
+    private readonly float _rayLen = 1000;
+    private Camera3D _camera3D;
+    private Gun _gun;
+    private Marker3D _marker3D;
+    public bool CanDash = true;
+    [Export] public float DashCooldown = 2;
+    [Export] public float DashVelocity = 200;
+    public float Gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
+    [Export] public float Speed = 5;
 
-	public override void _Ready()
-	{
-		_marker3D = GetNode<Marker3D>("Marker3D");
-		_gun = GetNode<Gun>("Gun");
-		_camera3D = Globals.Camera;
+    public override void _Ready()
+    {
+        Globals.Instance.EmitSignal(Globals.SignalName.PlayerSpawned, this);
 
-		_dashTimer.OneShot = true;
-		_dashTimer.Timeout += () => CanDash = false;
-		AddChild(_dashTimer);
-	}
+        _marker3D = GetNode<Marker3D>("Marker3D");
+        _gun = GetNode<Gun>("Gun");
+		AwaitCamera();
+        this.Assert(_camera3D != null, "Player Don't got no camera");
 
-	public override void _Process(double delta)
-	{
-		_gun.GlobalPosition = _marker3D.GlobalPosition;
+        _dashTimer.OneShot = true;
+        _dashTimer.Timeout += () => CanDash = false;
+        AddChild(_dashTimer);
+    }
 
-		var mousePos = GetViewport().GetMousePosition();
-		var from = _camera3D.ProjectRayOrigin(mousePos);
-		var to = from + _camera3D.ProjectRayNormal(mousePos) * _rayLen;
-		var query = PhysicsRayQueryParameters3D.Create(from, to);
-		var directSpaceState = GetWorld3D().DirectSpaceState;
+    public async void AwaitCamera()
+    {
+		await ToSignal(Globals.Instance, Globals.SignalName.CameraSpawned);
+        _camera3D = Globals.Camera;
+    }
 
-		var intersection = directSpaceState.IntersectRay(query);
+    public override void _Process(double delta)
+    {
+        _gun.GlobalPosition = _marker3D.GlobalPosition;
 
-		if (Input.GetLastMouseVelocity() != Vector2.Zero && intersection.TryGetValue("position", out var position))
-			LookAt((Vector3)position);
+        var mousePos = GetViewport().GetMousePosition();
+        var from = _camera3D.ProjectRayOrigin(mousePos);
+        var to = from + _camera3D.ProjectRayNormal(mousePos) * _rayLen;
+        var query = PhysicsRayQueryParameters3D.Create(from, to);
+        var directSpaceState = GetWorld3D().DirectSpaceState;
 
-		GlobalRotation = GlobalRotation with { X = 0, Y = GlobalRotation.Y, Z = 0 };
-	}
+        var intersection = directSpaceState.IntersectRay(query);
 
-	public override void _PhysicsProcess(double delta)
-	{
-		var inputDir = Input.GetVector("left", "right", "forward", "backward");
+        if (Input.GetLastMouseVelocity() != Vector2.Zero &&
+                intersection.TryGetValue("position", out var position))
+            LookAt((Vector3)position);
 
-		Move(inputDir, (float)delta);
-	}
+        GlobalRotation = GlobalRotation with { X = 0, Y = GlobalRotation.Y, Z = 0 };
+    }
 
-	public void Move(Vector2 inputDir, float delta)
-	{
-		var newVelocity = Velocity;
+    public override void _PhysicsProcess(double delta)
+    {
+        var inputDir = Input.GetVector("left", "right", "forward", "backward");
 
-		if (!IsOnFloor()) newVelocity.Y -= Gravity * delta;
+        Move(inputDir, (float)delta);
+    }
 
-		var direction = new Vector3(inputDir.X, 0, inputDir.Y).Normalized();
+    public void Move(Vector2 inputDir, float delta)
+    {
+        var newVelocity = Velocity;
 
-		if (direction != Vector3.Zero)
-		{
-			newVelocity.X = direction.X * Speed;
-			newVelocity.Z = direction.Z * Speed;
-		}
-		else
-		{
-			newVelocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-			newVelocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
-		}
+        if (!IsOnFloor()) newVelocity.Y -= Gravity * delta;
 
-		if (Input.IsActionJustPressed("space") && CanDash)
-		{
-			CanDash = false;
-			_dashTimer.Start();
-			newVelocity = direction * DashVelocity;
-		}
+        var direction = new Vector3(inputDir.X, 0, inputDir.Y).Normalized();
 
-		Velocity = newVelocity;
+        if (direction != Vector3.Zero)
+        {
+            newVelocity.X = direction.X * Speed;
+            newVelocity.Z = direction.Z * Speed;
+        }
+        else
+        {
+            newVelocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
+            newVelocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
+        }
 
-		MoveAndSlide();
-	}
+        if (Input.IsActionJustPressed("space") && CanDash)
+        {
+            CanDash = false;
+            _dashTimer.Start();
+            newVelocity = direction * DashVelocity;
+        }
+
+        Velocity = newVelocity;
+
+        MoveAndSlide();
+    }
 }
