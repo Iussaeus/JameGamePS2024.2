@@ -17,7 +17,7 @@ collision_mask = 23
 script = ExtResource("1_512hh")
 DashCooldown = 0.2
 DashVelocity = 300.0
-DashAcceleration = 50.0
+DashAcceleration = 75.0
 Speed = 50.0
 HorizontalAcceleration = 20.0
 
