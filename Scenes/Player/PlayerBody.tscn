@@ -31,8 +31,9 @@ skeleton = NodePath("../..")
 [node name="Marker3D" type="Marker3D" parent="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.664517)
 
-[node name="Gun" parent="CharacterBody3D" instance=ExtResource("2_sd1pr")]
+[node name="Gun" parent="CharacterBody3D" node_paths=PackedStringArray("_reloadTimer") instance=ExtResource("2_sd1pr")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 1.38252)
+_reloadTimer = NodePath("")
 ProjectileSpeed = 300.0
 
 [node name="PlayerInteractor" parent="CharacterBody3D" instance=ExtResource("3_dxpcy")]
