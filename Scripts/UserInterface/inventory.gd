@@ -1,10 +1,10 @@
 extends Control
 
-@export var TileSize: Vector2 = Vector2(144, 144)
+@export var TileSize: Vector2 = Vector2(64, 64)
 @export var InventoryDimensions: Vector2 = Vector2(8, 4) # 1152/144, 576/144
 @export var SelectedItemZIndex: int = 1000
 
-@onready var InventoryPanel: ColorRect = $BackGround
+@onready var InventoryPanel: ColorRect = $Background
 @onready var InventoryGrids: Sprite2D = $InventoryGrid
 @onready var Inventory: Area2D = $InventoryGrid/InventoryArea
 
@@ -39,7 +39,7 @@ func _process(delta: float) -> void:
 			open()
 			
 	if IsDraggingItem:
-		selectedItem.position = (self.get_global_mouse_position() + CursorItemDragOffset).snapped(TileSize)
+		selectedItem.global_position = (self.get_global_mouse_position()).snapped(TileSize)
 
 func _ready() -> void:
 	close()

@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://qy3qlfik0xw6"]
+[gd_scene load_steps=8 format=3 uid="uid://qy3qlfik0xw6"]
 
+[ext_resource type="PackedScene" uid="uid://b3do2hejwuvds" path="res://Scenes/UI/ui.tscn" id="1_dlh8q"]
 [ext_resource type="PackedScene" uid="uid://fqvflhc3nymf" path="res://Scenes/Player/PlayerBody.tscn" id="2_6fyja"]
 [ext_resource type="PackedScene" uid="uid://b601nupwwifub" path="res://Scenes/World/GeneratedWorld.tscn" id="3_b1bwb"]
 [ext_resource type="PackedScene" uid="uid://btnredj8yyckn" path="res://Scenes/World/TestCamera.tscn" id="3_e8bvu"]
@@ -32,6 +33,9 @@ custom_minimum_size = Vector2(1920, 1080)
 offset_right = 40.0
 offset_bottom = 40.0
 stretch = true
+
+[node name="UI" parent="SubViewportContainer" instance=ExtResource("1_dlh8q")]
+layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
 handle_input_locally = false
