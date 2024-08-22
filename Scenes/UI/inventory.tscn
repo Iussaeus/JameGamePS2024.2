@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://88fawh7t22lb"]
+[gd_scene load_steps=10 format=3 uid="uid://88fawh7t22lb"]
 
 [ext_resource type="Script" path="res://Scripts/UserInterface/Inventory.cs" id="1_mhxht"]
 [ext_resource type="Script" path="res://Scripts/UserInterface/InventoryGrid.cs" id="2_gg54r"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dhvcmuxgx4pkt" path="res://Scenes/UI/Tile.tscn" id="3_d80qi"]
 [ext_resource type="PackedScene" uid="uid://bop1pn1ups3nd" path="res://Scenes/Items/ui_test_item_1x_4.tscn" id="3_fvlml"]
 [ext_resource type="PackedScene" uid="uid://dibr447femyft" path="res://Scenes/Items/ui_test_item_2x_2.tscn" id="4_4ew7r"]
+[ext_resource type="PackedScene" uid="uid://1sq22wh4f02r" path="res://Scenes/UI/InventoryItem.tscn" id="4_d7hiq"]
 [ext_resource type="PackedScene" uid="uid://darkwo262n3sj" path="res://Scenes/Items/ui_test_item_2x_4.tscn" id="5_dhncg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wt1vr"]
@@ -80,3 +81,10 @@ offset_left = 872.0
 offset_top = -1.0
 offset_right = 8.0
 offset_bottom = -1.0
+
+[node name="InventoryItem" parent="." instance=ExtResource("4_d7hiq")]
+layout_mode = 1
+offset_left = 174.0
+offset_top = 633.0
+offset_right = -946.0
+offset_bottom = 89.0
