@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://ch52pwl7x4b0p"]
+
+[ext_resource type="PackedScene" uid="uid://bo3ocatklvvb3" path="res://Entities/Interaction/Scenes/Interactor.tscn" id="1_o7l1p"]
+[ext_resource type="Script" path="res://Entities/Interaction/Scripts/PlayerInteractor.cs" id="2_ifebl"]
+
+[node name="PlayerInteractor" instance=ExtResource("1_o7l1p")]
+script = ExtResource("2_ifebl")
+IsDebugOn = true

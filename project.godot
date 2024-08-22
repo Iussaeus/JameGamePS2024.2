@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="Test"
-run/main_scene="res://Scenes/World/MainWorld.tscn"
+run/main_scene="res://Entities/World/Scenes/MainWorld.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-Globals="*res://Scripts/Components/Globals.cs"
-Signal_Debugger="*res://addons/SignalVisualizer/Debugger/SignalDebugger.gd"
+Globals="*res://Entities/Components/Globals/Globals.cs"
+SignalBus="*res://Entities/Components/Globals/SignalBus.cs"
 
 [debug]
 

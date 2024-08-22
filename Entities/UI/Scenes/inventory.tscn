@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=3 uid="uid://88fawh7t22lb"]
+
+[ext_resource type="Script" path="res://Entities/UI/Scripts/Inventory.cs" id="1_bbxp6"]
+[ext_resource type="Script" path="res://Entities/UI/Scripts/InventoryGrid.cs" id="2_w8bj3"]
+[ext_resource type="PackedScene" uid="uid://dhvcmuxgx4pkt" path="res://Entities/UI/Scenes/Tile.tscn" id="3_d80qi"]
+[ext_resource type="PackedScene" uid="uid://1sq22wh4f02r" path="res://Entities/UI/Scenes/InventoryItem.tscn" id="4_d7hiq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wt1vr"]
+size = Vector2(1184, 592)
+
+[node name="Inventory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -72.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bbxp6")
+
+[node name="Background" type="ColorRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.490196)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.572549, 0.572549, 0.572549, 1)
+
+[node name="InventoryGrid" type="CenterContainer" parent="."]
+layout_mode = 0
+script = ExtResource("2_w8bj3")
+Tile = ExtResource("3_d80qi")
+
+[node name="GridContainer" type="GridContainer" parent="InventoryGrid"]
+layout_direction = 2
+layout_mode = 2
+columns = 8
+
+[node name="InventoryArea" type="Area2D" parent="InventoryGrid"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InventoryGrid/InventoryArea"]
+position = Vector2(592, 296)
+shape = SubResource("RectangleShape2D_wt1vr")
+
+[node name="InventoryItem" parent="." instance=ExtResource("4_d7hiq")]
+layout_mode = 1
+offset_left = 1227.0
+offset_top = 610.0
+offset_right = 107.0
+offset_bottom = 66.0
+ItemSize = Vector2(6, 5)
