@@ -17,6 +17,8 @@ public partial class Globals : Node3D
     public static Camera3D Camera { get; set; }
 	public static Vector2 TileSize { get; set; }
 	public static Vector2 InventorySize { get; set; }
+	
+	public const int GridPadding = 4;
 
     public override void _Ready()
     {

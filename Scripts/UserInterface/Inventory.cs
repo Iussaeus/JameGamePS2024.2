@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Test.Scripts.Components;
 
 public partial class Inventory : Control
 {
@@ -14,10 +15,6 @@ public partial class Inventory : Control
 
 	public Dictionary<Vector2, Control> InventoryItemSlots;
 	public Dictionary<Control, Vector2> InventoryItems;
-
-	private Vector2 _previousMousePos = new();
-	private Vector2 _currentMouse;
-	private Vector2 _posDelta;
 
 	private bool _isItemSelected;
 	private bool _isSelectedItemInInventory;
@@ -34,20 +31,20 @@ public partial class Inventory : Control
 	public override void _Ready()
 	{
 		Close();
+
+		Globals.Instance.EmitSignal(Globals.SignalName.InventorySpawned, TileSize, InventorySize);
+
 		Backgroud = GetNode<ColorRect>("Background");
 		Grid = GetNode<InventoryGrid>("InventoryGrid");
 		InventoryArea = GetNode<Area2D>("InventoryGrid/InventoryArea");
 
 		Grid.PlaceTiles(InventorySize, TileSize);
 
-		// TODO: fix the paddig in between tiles in the grid
-		Backgroud.SetDeferred(ColorRect.PropertyName.Size, TileSize * InventorySize + new Vector2(BackgroundPadding * (InventorySize.X + 1), BackgroundPadding * (InventorySize.Y + 1)));
-		Backgroud.GlobalPosition -= new Vector2(BackgroundPadding, BackgroundPadding);
+		var sizeWithPadding = new Vector2(Globals.GridPadding * (InventorySize.X + 1), Globals.GridPadding * (InventorySize.Y + 1));
 
-		// Grid.RegionEnabled = true;
-		// Grid.RegionRect = new(0, 0,
-		// 		InventorySize.X * TileSize.X,
-		// 		TileSize.Y * InventorySize.Y);
+		Backgroud.SetDeferred(ColorRect.PropertyName.Size, TileSize * InventorySize + sizeWithPadding);
+		Backgroud.GlobalPosition -= new Vector2(Globals.GridPadding, Globals.GridPadding);
+
 		InventoryArea.AreaEntered += OnItemInsideInventory;
 		InventoryArea.AreaExited += OnItemOutsideInventory;
 
@@ -55,7 +52,6 @@ public partial class Inventory : Control
 		{
 			if (node is Control i) ConnectSignals(i);
 		}
-		_previousMousePos = this.GetGlobalMousePosition();
 	}
 
 	public override void _Process(double delta)
@@ -65,18 +61,11 @@ public partial class Inventory : Control
 			if (_isOpen) Close();
 			else Open();
 		}
-		if (_posDelta != Vector2.Zero || _previousMousePos != _currentMouse) _previousMousePos = _currentMouse;  
 
-		_currentMouse = this.GetGlobalMousePosition();
-		_posDelta = _currentMouse - _previousMousePos;
-
-		// TODO: fix the x weirdness
 		if (_isDraggingItem)
 		{
-			var globalPos = (_currentMouse - (SelectedItem.Size / 2)).Snapped(TileSize + new Vector2I(4, 4));
+			var globalPos = (this.GetGlobalMousePosition() - (SelectedItem.Size / 2)).Snapped(TileSize + new Vector2I(4, 4));
 			SelectedItem.GlobalPosition = globalPos;
-			if (_posDelta != Vector2.Zero)
-				GD.Print($"curr {_currentMouse}\n prev {_previousMousePos}\n delta {_posDelta}\n actual {SelectedItem.GlobalPosition}\n xDelta {_currentMouse.X - _previousMousePos.X}");
 		}
 	}
 
