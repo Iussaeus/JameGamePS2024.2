@@ -7,7 +7,7 @@ namespace Test.Scripts.Helpers;
 
 public static class Extensions
 {
-	public static void Assert(this Node3D node, bool truthy, string message)
+	public static void Assert(this Node node, bool truthy, string message)
 	{
 		if (!truthy)
 		{

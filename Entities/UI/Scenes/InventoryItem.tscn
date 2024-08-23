@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://1sq22wh4f02r"]
 
+[ext_resource type="Script" path="res://Entities/UI/Scripts/InventoryItem.cs" id="1_3uq7t"]
 [ext_resource type="Texture2D" uid="uid://dwl0icnnqpdfa" path="res://icon.svg" id="1_7srlk"]
-[ext_resource type="Script" path="res://Entities/UI/Scripts/InventoryItem.cs" id="1_lok87"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mxhu"]
 size = Vector2(32, 32)
@@ -11,11 +11,11 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1120.0
-offset_bottom = -616.0
+offset_right = 32.0
+offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_lok87")
+script = ExtResource("1_3uq7t")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 layout_mode = 0
@@ -26,6 +26,8 @@ texture = ExtResource("1_7srlk")
 [node name="Sprite2D" type="Sprite2D" parent="NinePatchRect"]
 
 [node name="Area2D" type="Area2D" parent="NinePatchRect/Sprite2D"]
+collision_layer = 2
+collision_mask = 3
 
 [node name="colision(-1pixel_all_margins)" type="CollisionShape2D" parent="NinePatchRect/Sprite2D/Area2D"]
 editor_description = "dima loh

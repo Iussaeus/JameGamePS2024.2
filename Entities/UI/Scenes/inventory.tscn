@@ -39,15 +39,34 @@ layout_mode = 2
 columns = 8
 
 [node name="InventoryArea" type="Area2D" parent="InventoryGrid"]
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InventoryGrid/InventoryArea"]
 position = Vector2(592, 296)
 shape = SubResource("RectangleShape2D_wt1vr")
 
+[node name="InventoryItem2" parent="." instance=ExtResource("4_d7hiq")]
+layout_mode = 1
+offset_left = 1243.0
+offset_top = 451.0
+offset_right = 123.0
+offset_bottom = -93.0
+ItemSize = Vector2(8, 4)
+
+[node name="NinePatchRect" parent="InventoryItem2" index="0"]
+offset_right = 68.0
+
 [node name="InventoryItem" parent="." instance=ExtResource("4_d7hiq")]
 layout_mode = 1
-offset_left = 1227.0
-offset_top = 610.0
-offset_right = 107.0
-offset_bottom = 66.0
-ItemSize = Vector2(6, 5)
+offset_left = 1258.0
+offset_top = 537.0
+offset_right = 138.0
+offset_bottom = -7.0
+ItemSize = Vector2(3, 6)
+
+[node name="NinePatchRect" parent="InventoryItem" index="0"]
+offset_right = 68.0
+offset_bottom = 104.0
+
+[editable path="InventoryItem2"]
+[editable path="InventoryItem"]
