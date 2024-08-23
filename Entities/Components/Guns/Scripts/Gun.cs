@@ -6,7 +6,7 @@ namespace Test.Scripts.Components;
 public partial class Gun : RigidBody3D
 {
 	private Marker3D _marker;
-	private Node3D _grandParent;
+	private Node _grandParent;
 
 	[Export] private bool _isFullAuto;
 	[Export] private int _magazineCapacity = 10;
@@ -24,7 +24,7 @@ public partial class Gun : RigidBody3D
 
 	public override void _Ready()
 	{
-		_grandParent = GetParent<Node3D>().GetParent<Node3D>();
+		_grandParent = GetParent<Node>().GetParent<Node>();
 		_marker = GetNode<Marker3D>("Marker3D");
 
 		_reloadTimer = new();

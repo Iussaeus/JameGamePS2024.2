@@ -194,7 +194,7 @@ public partial class Inventory : Control
 
         var itemMaxSlotId = (Vector2I)(itemMinSlotId + itemSlotSize - Vector2.One);
         var minInventorySlotBounds = (Vector2I)((Grid.GlobalPosition / TileSize ) - Vector2.One);
-        var maxInventorySlotBounds = (Vector2I)(InventorySize + ((InventorySize * Globals.GridPadding) / TileSize) + Vector2.One);
+        var maxInventorySlotBounds = (Vector2I)(InventorySize + ((InventorySize * Globals.GridPadding) / TileSize) + new Vector2(2, 2));
 
         GD.Print($"SlotSize: {itemSlotSize}");
 		GD.Print($"MinSlotId: {itemMinSlotId}");

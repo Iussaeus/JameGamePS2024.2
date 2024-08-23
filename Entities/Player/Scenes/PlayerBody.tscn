@@ -8,36 +8,27 @@
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_qyjp2"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
-collision_layer = 2
-collision_mask = 23
 script = ExtResource("1_512hh")
-DashCooldown = 0.2
-DashVelocity = 300.0
-DashAcceleration = 75.0
-Speed = 50.0
-HorizontalAcceleration = 20.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_xw70a")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_qyjp2")
-skeleton = NodePath("../..")
 
-[node name="Marker3D" type="Marker3D" parent="CharacterBody3D"]
+[node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.664517)
 
-[node name="Gun" parent="CharacterBody3D" instance=ExtResource("2_sd1pr")]
+[node name="Gun" parent="." instance=ExtResource("2_sd1pr")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 1.38252)
+_isFullAuto = true
 ProjectileSpeed = 300.0
 
-[node name="PlayerInteractor" parent="CharacterBody3D" instance=ExtResource("3_dxpcy")]
+[node name="PlayerInteractor" parent="." instance=ExtResource("3_dxpcy")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 collision_layer = 8
 collision_mask = 8
 
-[connection signal="area_exited" from="CharacterBody3D/PlayerInteractor" to="CharacterBody3D/PlayerInteractor" method="_on_area_exited"]
+[connection signal="area_exited" from="PlayerInteractor" to="PlayerInteractor" method="_on_area_exited"]

@@ -34,6 +34,9 @@ script = ExtResource("2_ympxj")
 
 [node name="PlayerBody" parent="SubViewportContainer/SubViewport" instance=ExtResource("2_6fyja")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.4451, 46.3568, 175.168)
+DashAcceleration = 50.0
+Speed = 50.0
+HorizontalAcceleration = 20.0
 
 [node name="Camera3D" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_e8bvu")]
 transform = Transform3D(-0.95183, 0.172621, -0.253418, 0.115687, 0.967568, 0.224562, 0.283964, 0.184428, -0.940931, 60.7085, 8.54481, -9.37233)
