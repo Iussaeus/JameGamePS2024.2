@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://ci6bd1n5bh8ir"]
+[gd_scene load_steps=9 format=3 uid="uid://ci6bd1n5bh8ir"]
 
 [ext_resource type="PackedScene" uid="uid://bwdwhvg2b2wn5" path="res://Entities/Interaction/Scenes/Box.tscn" id="1_s1hdy"]
+[ext_resource type="Script" path="res://Entities/World/Scripts/NavigationTest.cs" id="1_uj4oa"]
 [ext_resource type="PackedScene" uid="uid://rwbu6ubjvlch" path="res://Entities/Enemy/MeleeEnemy/Scenes/MeleeEnemy.tscn" id="2_mp8m0"]
 [ext_resource type="PackedScene" uid="uid://dptga1c1w08x8" path="res://Entities/Enemy/RangedEnemy/Scenes/RangedEnemy.tscn" id="3_hloqi"]
 
@@ -12,31 +13,35 @@ center_offset = Vector3(0, 0.5, 0)
 size = Vector3(100, 1, 100)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_33xwi"]
+size = Vector3(1, 3, 6)
 
 [sub_resource type="BoxMesh" id="BoxMesh_ou7kq"]
 size = Vector3(1, 3, 6)
 
-[node name="Node3D" type="Node3D"]
+[node name="NavigationTest" type="Node3D"]
+script = ExtResource("1_uj4oa")
 
 [node name="Box" parent="." instance=ExtResource("1_s1hdy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4252, 3.24886, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.33087, 3.24886, 0)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="Floor" type="StaticBody3D" parent="."]
 collision_mask = 22
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
 mesh = SubResource("PlaneMesh_no4hk")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
 shape = SubResource("BoxShape3D_7s4rh")
 
 [node name="Obstacle" type="StaticBody3D" parent="."]
+collision_mask = 7
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Obstacle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_33xwi")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Obstacle"]
-transform = Transform3D(0.876811, 0, -0.480836, 0, 1, 0, 0.480836, 0, 0.876811, 7.96593, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 mesh = SubResource("BoxMesh_ou7kq")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]

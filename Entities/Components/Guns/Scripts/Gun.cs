@@ -1,7 +1,7 @@
 using Godot;
 
 namespace Test.Scripts.Components;
-
+// TODO: fix the gun
 [GlobalClass]
 public partial class Gun : RigidBody3D
 {
@@ -48,9 +48,9 @@ public partial class Gun : RigidBody3D
 		var inputMap = InputMap.GetActions();
 		foreach (var input in inputMap)
 		{
-			if (input.Equals("left_click") && Input.IsActionPressed("left_click"))
+			if (input.Equals("left_click") && Input.IsActionPressed(input))
 				Shoot();
-			if (input.Equals("reload") && Input.IsActionJustPressed("reload"))
+			if (input.Equals("reload") && Input.IsActionJustPressed(input))
 				Reload();
 		}
 		if (Input.IsActionJustReleased("left_click")) _isMouseHeld = false;
@@ -76,7 +76,7 @@ public partial class Gun : RigidBody3D
 
 	public void Reload()
 	{
-		if (_reloadTimer.IsStopped() && _currentAmmo == 0 && !_canShoot)
+		if (_reloadTimer.IsStopped())
 		{
 			GD.Print($"{this.Name} reloading");
 			_reloadTimer.Start();

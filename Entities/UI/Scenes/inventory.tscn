@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://88fawh7t22lb"]
+[gd_scene load_steps=7 format=3 uid="uid://88fawh7t22lb"]
 
 [ext_resource type="Script" path="res://Entities/UI/Scripts/Inventory.cs" id="1_bbxp6"]
 [ext_resource type="Script" path="res://Entities/UI/Scripts/InventoryGrid.cs" id="2_w8bj3"]
 [ext_resource type="PackedScene" uid="uid://dhvcmuxgx4pkt" path="res://Entities/UI/Scenes/Tile.tscn" id="3_d80qi"]
-[ext_resource type="PackedScene" uid="uid://1sq22wh4f02r" path="res://Entities/UI/Scenes/InventoryItem.tscn" id="4_d7hiq"]
+[ext_resource type="PackedScene" uid="uid://1sq22wh4f02r" path="res://Entities/Items/Scenes/InventoryItem.tscn" id="4_nmhr2"]
+[ext_resource type="PackedScene" uid="uid://chcafvk7lx4ho" path="res://Entities/Items/Scenes/InventoryItem2.tscn" id="5_k2f2j"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wt1vr"]
 size = Vector2(1184, 592)
@@ -47,26 +48,17 @@ collision_mask = 2
 position = Vector2(592, 296)
 shape = SubResource("RectangleShape2D_wt1vr")
 
-[node name="InventoryItem2" parent="." instance=ExtResource("4_d7hiq")]
+[node name="InventoryItem" parent="." instance=ExtResource("4_nmhr2")]
 layout_mode = 1
-offset_left = 1243.0
-offset_top = 451.0
-offset_right = 1275.0
-offset_bottom = 483.0
+offset_left = 1213.0
+offset_top = 449.0
+offset_right = 273.0
+offset_bottom = 13.0
+ItemSize = Vector2i(6, 4)
 
-[node name="NinePatchRect" parent="InventoryItem2" index="0"]
-offset_right = 68.0
-
-[node name="InventoryItem" parent="." instance=ExtResource("4_d7hiq")]
+[node name="InventoryItem2" parent="." instance=ExtResource("5_k2f2j")]
 layout_mode = 1
-offset_left = 1258.0
-offset_top = 537.0
-offset_right = 1290.0
-offset_bottom = 569.0
-
-[node name="NinePatchRect" parent="InventoryItem" index="0"]
-offset_right = 68.0
-offset_bottom = 104.0
-
-[editable path="InventoryItem2"]
-[editable path="InventoryItem"]
+offset_left = 1214.0
+offset_top = 225.0
+offset_right = 166.0
+offset_bottom = -139.0

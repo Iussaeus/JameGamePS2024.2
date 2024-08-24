@@ -17,8 +17,8 @@ script = ExtResource("1_rnw8y")
 _isDebugOn = true
 
 [node name="RigidBody3D" type="RigidBody3D" parent="."]
-collision_layer = 18
-collision_mask = 19
+collision_layer = 8
+collision_mask = 31
 mass = 20.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
