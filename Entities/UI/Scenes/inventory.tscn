@@ -19,7 +19,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bbxp6")
 TileSize = Vector2(32, 32)
-InventorySize = Vector2(5, 15)
 
 [node name="Background" type="ColorRect" parent="."]
 self_modulate = Color(1, 1, 1, 0.490196)

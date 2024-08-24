@@ -100,8 +100,8 @@ public partial class Inventory : Control
 	public void ConnectSignals(Control item)
 	{
 		item.GuiInput += @event => OnCursorOnItem(@event, item);
-		item.GetNode<Area2D>("NinePatchRect/Sprite2D/Area2D").AreaEntered += area => OnOverlapping(area, item);
-		item.GetNode<Area2D>("NinePatchRect/Sprite2D/Area2D").AreaExited += area => OnNotOverlapping(area, item);
+		item.GetNode<Area2D>("Area2D").AreaEntered += area => OnOverlapping(area, item);
+		item.GetNode<Area2D>("Area2D").AreaExited += area => OnNotOverlapping(area, item);
 	}
 
 	public void DisconnectSignals(Control item)
@@ -109,13 +109,13 @@ public partial class Inventory : Control
 		if (item.IsConnected(Control.SignalName.GuiInput, new Callable(this, MethodName.OnCursorOnItem)))
 			item.GuiInput -= @event => OnCursorOnItem(@event, item);
 
-		if (item.GetNode<Area2D>("NinePakktchRect/Sprite2D/Area2D")
+		if (item.GetNode<Area2D>("Area2D")
 				.IsConnected(Area2D.SignalName.AreaEntered, new Callable(this, MethodName.OnOverlapping)))
-			item.GetNode<Area2D>("NinePatchRect/Sprite2D/Area2D").AreaEntered -= area => OnOverlapping(area, item);
+			item.GetNode<Area2D>("Area2D").AreaEntered -= area => OnOverlapping(area, item);
 
-		if (item.GetNode<Area2D>("NinePatchRect/Sprite2D/Area2D")
+		if (item.GetNode<Area2D>("Area2D")
 				.IsConnected(Area2D.SignalName.AreaExited, new Callable(this, MethodName.OnNotOverlapping)))
-			item.GetNode<Area2D>("NinePatchRect/Sprite2D/Area2D").AreaExited -= area => OnNotOverlapping(area, item);
+			item.GetNode<Area2D>("Area2D").AreaExited -= area => OnNotOverlapping(area, item);
 	}
 
 	private void OnOverlapping(Area2D area, Control item)
@@ -132,7 +132,7 @@ public partial class Inventory : Control
 
 		if (SelectedItem != null)
 		{
-			SelectedItem.GetNode<Sprite2D>("NinePatchRect/Sprite2D").Modulate = InvalidColor;
+			SelectedItem.GetNode<Sprite2D>("Sprite2D").Modulate = InvalidColor;
 			SelectedItem.GetNode<NinePatchRect>("NinePatchRect").Modulate = InvalidColor;
 		}
 	}
@@ -151,7 +151,7 @@ public partial class Inventory : Control
 
 		if (OverlappingItems.Count == 0 && _isItemSelected)
 		{
-			SelectedItem.GetNode<Sprite2D>("NinePatchRect/Sprite2D").Modulate = ValidColor;
+			SelectedItem.GetNode<Sprite2D>("Sprite2D").Modulate = ValidColor;
 			SelectedItem.GetNode<NinePatchRect>("NinePatchRect").Modulate = ValidColor;
 		}
 	}
@@ -162,7 +162,7 @@ public partial class Inventory : Control
 		{
 			_isItemSelected = true;
 			SelectedItem = item;
-			SelectedItem.GetNode<Sprite2D>("NinePatchRect/Sprite2D").ZIndex = SelectedItemZIndex;
+			SelectedItem.GetNode<Sprite2D>("Sprite2D").ZIndex = SelectedItemZIndex;
 			SelectedItem.GetNode<NinePatchRect>("NinePatchRect").ZIndex = SelectedItemZIndex;
 			ItemPreviewPosition = SelectedItem.GlobalPosition;
 			_dragTimer.Start(0.1);
@@ -224,7 +224,7 @@ public partial class Inventory : Control
 
 		InventoryItems[item] = itemMinSlotId;
 
-		SelectedItem.GetNode<Sprite2D>("NinePatchRect/Sprite2D").ZIndex = 0;
+		SelectedItem.GetNode<Sprite2D>("Sprite2D").ZIndex = 0;
 		SelectedItem.GetNode<NinePatchRect>("NinePatchRect").ZIndex = 0;
 		_isItemSelected = false;
 		_isDraggingItem = false;

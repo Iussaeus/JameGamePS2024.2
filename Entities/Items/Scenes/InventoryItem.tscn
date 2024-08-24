@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://1sq22wh4f02r"]
 
-[ext_resource type="Texture2D" uid="uid://dwl0icnnqpdfa" path="res://icon.svg" id="1_7srlk"]
-[ext_resource type="Script" path="res://Entities/Items/Scripts/InventoryItemUI.cs" id="1_qqnoi"]
+[ext_resource type="Script" path="res://Entities/Items/Scripts/InventoryItemUI.cs" id="1_i3nps"]
+[ext_resource type="Texture2D" uid="uid://dwl0icnnqpdfa" path="res://icon.svg" id="2_lmxxv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mxhu"]
-size = Vector2(212, 104)
+size = Vector2(212, 140)
 
 [node name="InventoryItem" type="Control" groups=["item"]]
 layout_mode = 3
@@ -15,22 +15,20 @@ offset_right = -940.0
 offset_bottom = -544.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_qqnoi")
-ItemSize = Vector2i(6, 3)
+script = ExtResource("1_i3nps")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
-layout_mode = 0
 offset_right = 212.0
 offset_bottom = 104.0
-texture = ExtResource("1_7srlk")
+texture = ExtResource("2_lmxxv")
 
-[node name="Sprite2D" type="Sprite2D" parent="NinePatchRect"]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 
-[node name="Area2D" type="Area2D" parent="NinePatchRect/Sprite2D"]
+[node name="Area2D" type="Area2D" parent="."]
 collision_layer = 2
 collision_mask = 3
 
-[node name="colision(-1pixel_all_margins)" type="CollisionShape2D" parent="NinePatchRect/Sprite2D/Area2D"]
+[node name="colision(-1pixel_all_margins)" type="CollisionShape2D" parent="Area2D"]
 editor_description = "dima loh
 "
 position = Vector2(106, 52)

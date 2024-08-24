@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dwl0icnnqpdfa" path="res://icon.svg" id="2_5mgww"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mxhu"]
-size = Vector2(104, 212)
+size = Vector2(104, 68)
 
 [node name="InventoryItem" type="Control" groups=["item"]]
 layout_mode = 3
@@ -12,26 +12,25 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -1048.0
-offset_bottom = -436.0
+offset_bottom = -580.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_q7ovf")
-ItemSize = Vector2i(3, 6)
+ItemSize = Vector2i(3, 2)
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
-layout_mode = 0
 offset_right = 104.0
-offset_bottom = 212.0
+offset_bottom = 68.0
 texture = ExtResource("2_5mgww")
 
-[node name="Sprite2D" type="Sprite2D" parent="NinePatchRect"]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 
-[node name="Area2D" type="Area2D" parent="NinePatchRect/Sprite2D"]
+[node name="Area2D" type="Area2D" parent="."]
 collision_layer = 2
 collision_mask = 3
 
-[node name="colision(-1pixel_all_margins)" type="CollisionShape2D" parent="NinePatchRect/Sprite2D/Area2D"]
+[node name="colision(-1pixel_all_margins)" type="CollisionShape2D" parent="Area2D"]
 editor_description = "dima loh
 "
-position = Vector2(52, 106)
+position = Vector2(52, 34)
 shape = SubResource("RectangleShape2D_6mxhu")
