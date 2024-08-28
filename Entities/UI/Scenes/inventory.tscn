@@ -47,17 +47,17 @@ collision_mask = 2
 position = Vector2(592, 296)
 shape = SubResource("RectangleShape2D_wt1vr")
 
-[node name="InventoryItem" parent="." instance=ExtResource("4_nmhr2")]
-layout_mode = 1
-offset_left = 1213.0
-offset_top = 449.0
-offset_right = 273.0
-offset_bottom = 13.0
-ItemSize = Vector2i(6, 4)
-
 [node name="InventoryItem2" parent="." instance=ExtResource("5_k2f2j")]
 layout_mode = 1
 offset_left = 1214.0
 offset_top = 225.0
-offset_right = 166.0
-offset_bottom = -139.0
+offset_right = 130.0
+offset_bottom = -31.0
+
+[node name="InventoryItem" parent="." instance=ExtResource("4_nmhr2")]
+layout_mode = 1
+offset_left = 1294.0
+offset_top = 404.0
+offset_right = 354.0
+offset_bottom = -32.0
+ItemSize = Vector2i(6, 4)

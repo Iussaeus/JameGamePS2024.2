@@ -64,24 +64,33 @@ public partial class PlayerController : CharacterBody3D
 
     public override void _PhysicsProcess(double delta)
     {
+        Fall((float)delta);
+
         if (!Globals.Inventory.IsOpen)
         {
             if (Input.IsActionJustPressed("space") && CanDash) Dash();
-            Move();
+            Move((float)delta);
         }
     }
 
-    public void Move()
+    public void Fall(float delta)
     {
         var newVelocity = Velocity;
-        var delta = (float)GetPhysicsProcessDeltaTime();
 
         if (!IsOnFloor()) newVelocity.Y -= Gravity * delta;
+
+        Velocity = newVelocity;
+
+        MoveAndSlide();
+    }
+
+    public void Move(float delta)
+    {
+        var newVelocity = Velocity;
 
         HorizontalVelocity = HorizontalVelocity.Lerp(GetDirection() * Speed, HorizontalAcceleration * delta);
         newVelocity.Z = HorizontalVelocity.Z;
         newVelocity.X = HorizontalVelocity.X;
-
 
         Velocity = newVelocity;
 
@@ -109,26 +118,30 @@ public partial class PlayerController : CharacterBody3D
         var inputDir = Input.GetVector("left", "right", "forward", "backward");
         var direction = new Vector3(0, 0, 0);
 
-        if (inputDir.X > 0)
-        {
-            direction.X += -_camera3D.GlobalBasis.Y.X;
-            direction.Z += -_camera3D.GlobalBasis.Y.Y;
-        }
-        if (inputDir.X < 0)
-        {
-            direction.X += _camera3D.GlobalBasis.Y.X;
-            direction.Z += _camera3D.GlobalBasis.Y.Y;
-        }
-        if (inputDir.Y > 0)
-        {
-            direction.X += _camera3D.GlobalBasis.Z.X;
-            direction.Z += _camera3D.GlobalBasis.Z.Y;
-        }
-        if (inputDir.Y < 0)
-        {
-            direction.X += -_camera3D.GlobalBasis.Z.X;
-            direction.Z += -_camera3D.GlobalBasis.Z.Y;
-        }
+		var upMarker = _camera3D.GetNode<Marker3D>("Marker3DUp");
+		var rightMarker = _camera3D.GetNode<Marker3D>("Marker3DRight");
+        var upDirection = _camera3D.GlobalPosition.DirectionTo(upMarker.GlobalPosition).Normalized();
+		var rightDirection = _camera3D.GlobalPosition.DirectionTo(rightMarker.GlobalPosition).Normalized();
+
+        if (inputDir != Vector2.Zero)
+		{
+			if (inputDir.Y > 0)
+			{
+				direction += -upDirection;
+			}
+			if (inputDir.Y < 0)
+			{
+				direction += upDirection;
+			}
+			if (inputDir.X > 0)
+			{
+				direction += rightDirection;
+			}
+			if (inputDir.X < 0)
+			{
+				direction += -rightDirection;
+			}
+		}
 
         return direction.Normalized();
     }
