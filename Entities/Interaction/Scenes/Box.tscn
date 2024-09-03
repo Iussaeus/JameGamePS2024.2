@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bwdwhvg2b2wn5"]
+[gd_scene load_steps=6 format=3 uid="uid://bwdwhvg2b2wn5"]
 
 [ext_resource type="PackedScene" uid="uid://bybc1w3bwha5j" path="res://Entities/Interaction/Scenes/Interactable.tscn" id="1_5p1gd"]
 [ext_resource type="Script" path="res://Entities/Interaction/Scripts/Box.cs" id="1_rnw8y"]
@@ -7,9 +7,6 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_utikt"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_a7htf"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_rekmj"]
-size = Vector3(2, 2, 2)
 
 [node name="Box" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -31,13 +28,8 @@ skeleton = NodePath("../..")
 [node name="Interactable" parent="RigidBody3D" instance=ExtResource("1_5p1gd")]
 collision_layer = 8
 
-[node name="CollisionShape3D" parent="RigidBody3D/Interactable" index="0"]
-shape = SubResource("BoxShape3D_rekmj")
-
 [node name="HpComponent" parent="." instance=ExtResource("3_iun0u")]
 unique_name_in_owner = true
 
 [node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="."]
 radius = 1.0
-
-[editable path="RigidBody3D/Interactable"]

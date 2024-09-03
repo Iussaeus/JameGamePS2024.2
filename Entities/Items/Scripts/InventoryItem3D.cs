@@ -1,5 +1,6 @@
 using Godot;
 
-public partial class InventoryItem3D : Node3D
+[GlobalClass]
+public partial class InventoryItem3D : RigidBody3D
 {
 }

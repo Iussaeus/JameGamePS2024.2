@@ -6,6 +6,7 @@ public partial class PlayerInteractor : Area3D
 {
     private Interactable _closestInteractable;
     private CharacterBody3D _controller;
+
     [Export] public bool IsDebugOn;
 
     public override void _Ready()

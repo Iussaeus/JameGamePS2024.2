@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://b3do2hejwuvds"]
+[gd_scene load_steps=3 format=3 uid="uid://b3do2hejwuvds"]
 
 [ext_resource type="PackedScene" uid="uid://88fawh7t22lb" path="res://Entities/UI/Scenes/inventory.tscn" id="1_7vw24"]
+[ext_resource type="PackedScene" uid="uid://1sq22wh4f02r" path="res://Entities/Items/Scenes/InventoryItem.tscn" id="2_nw7lw"]
 
 [node name="UI" type="Control"]
 layout_direction = 2
@@ -16,13 +17,14 @@ layout_mode = 1
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
-offset_left = 72.0
+offset_left = 71.0
 offset_top = 72.0
-offset_right = 72.0
+offset_right = 71.0
 offset_bottom = 72.0
 grow_horizontal = 1
 grow_vertical = 1
-InventorySize = Vector2(16, 24)
+InventorySize = Vector2i(20, 25)
+DummyItem = ExtResource("2_nw7lw")
 
 [node name="Placeholder" type="Panel" parent="."]
 layout_mode = 1

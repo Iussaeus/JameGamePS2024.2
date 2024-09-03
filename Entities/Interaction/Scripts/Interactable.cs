@@ -1,6 +1,7 @@
 using Godot;
 using Test.Scripts.Interaction;
 
+[GlobalClass]
 public partial class Interactable : Area3D
 {
 	[Signal]

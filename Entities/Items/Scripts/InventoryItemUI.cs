@@ -2,6 +2,7 @@ using Godot;
 using System.Collections.Generic;
 
 [Tool]
+[GlobalClass]
 public partial class InventoryItemUI : Control
 {
 	[Export] public Vector2I ItemSize = new(1, 1);
@@ -17,6 +18,8 @@ public partial class InventoryItemUI : Control
 	public override void _Ready()
 	{
 		ChildOrderChanged += CheckChildren;
+		CheckChildren();
+
 		_collisionShape = GetNode<CollisionShape2D>("Area2D/colision(-1pixel_all_margins)");
 		_ninePatchRect = GetNode<NinePatchRect>("NinePatchRect");
 		_sprite = GetNode<Sprite2D>("Sprite2D");
@@ -24,8 +27,10 @@ public partial class InventoryItemUI : Control
 		if (!Engine.IsEditorHint())
 		{
 			SetSize();
+			EmitSignal(SignalName.Ready);
 		}
 	}
+
 	public override void _Process(double delta)
 	{
 		if (Engine.IsEditorHint())
@@ -41,6 +46,11 @@ public partial class InventoryItemUI : Control
 				SetSize();
 			else _ninePatchRect = GetNode<NinePatchRect>("NinePatchRect");
 		}
+	}
+
+	public Texture2D GetNPRTexture()
+	{
+		return _ninePatchRect.Texture;
 	}
 
 	public void CheckChildren()
@@ -65,7 +75,7 @@ public partial class InventoryItemUI : Control
 			}
 		}
 
-		if (!hasArea || !hasSprite || hasNinePatch)
+		if (!hasArea || !hasSprite || !hasNinePatch)
 			UpdateConfigurationWarnings();
 	}
 

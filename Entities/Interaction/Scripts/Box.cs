@@ -21,16 +21,16 @@ public partial class Box : Node3D
 
     private void OnInteractableInteracted(Interactor interactor)
     {
-        if (_isDebugOn) Print("Box: Interacted");
+        if (_isDebugOn) Print(Name, ": Interacted");
     }
 
     private void OnInteractableUnfocused(Interactor interactor)
     {
-        if (_isDebugOn) Print("Box: Unfocused");
+        if (_isDebugOn) Print(Name, ": Unfocused");
     }
 
     private void OnInteractableFocused(Interactor interactor)
     {
-        if (_isDebugOn) Print("Box: Focused");
+        if (_isDebugOn) Print(Name, ": Focused");
     }
 }
