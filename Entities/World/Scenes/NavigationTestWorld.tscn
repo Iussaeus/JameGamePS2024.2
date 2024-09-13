@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://ci6bd1n5bh8ir"]
+[gd_scene load_steps=10 format=3 uid="uid://ci6bd1n5bh8ir"]
 
 [ext_resource type="PackedScene" uid="uid://bwdwhvg2b2wn5" path="res://Entities/Interaction/Scenes/Box.tscn" id="1_s1hdy"]
 [ext_resource type="Script" path="res://Entities/World/Scripts/NavigationTest.cs" id="1_uj4oa"]
 [ext_resource type="PackedScene" uid="uid://rwbu6ubjvlch" path="res://Entities/Enemy/MeleeEnemy/Scenes/MeleeEnemy.tscn" id="2_mp8m0"]
 [ext_resource type="PackedScene" uid="uid://dptga1c1w08x8" path="res://Entities/Enemy/RangedEnemy/Scenes/RangedEnemy.tscn" id="3_hloqi"]
+[ext_resource type="PackedScene" uid="uid://bw4ippdi20xrg" path="res://Entities/Items/Scenes/NewItem.tscn" id="5_krn1q"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_no4hk"]
 size = Vector2(100, 100)
@@ -55,3 +56,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.44355, -6.31675)
 
 [node name="RangedEnemy" parent="." instance=ExtResource("3_hloqi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.44067, 10.6612)
+
+[node name="NewItem" parent="." instance=ExtResource("5_krn1q")]
+pivot_offset = Vector2(286, 16)
+
+[node name="InventoryItem3d" parent="NewItem" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.19289, 2.35427, 0)
+
+[editable path="NewItem"]

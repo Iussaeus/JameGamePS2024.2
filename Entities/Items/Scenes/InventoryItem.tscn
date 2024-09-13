@@ -6,7 +6,7 @@
 load_path = "res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e870x"]
-size = Vector2(176, 248)
+size = Vector2(32, 32)
 
 [node name="InventoryItem" type="Control" groups=["item"]]
 layout_mode = 3

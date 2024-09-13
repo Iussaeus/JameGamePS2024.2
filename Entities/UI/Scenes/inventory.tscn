@@ -37,6 +37,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bbxp6")
 TileSize = Vector2i(32, 32)
+DummyItem = ExtResource("4_nmhr2")
 
 [node name="Background" type="ColorRect" parent="."]
 self_modulate = Color(1, 1, 1, 0.490196)
@@ -71,6 +72,7 @@ offset_top = 72.0
 offset_right = 140.0
 offset_bottom = 140.0
 scale = Vector2(1.00163, 1)
+pivot_offset = Vector2(34, 34)
 ItemSize = Vector2i(2, 2)
 
 [node name="NinePatchRect" parent="InventoryItem" index="0"]
@@ -81,10 +83,11 @@ position = Vector2(34, 34)
 shape = SubResource("RectangleShape2D_7wsqo")
 
 [node name="InventoryItem3" parent="." instance=ExtResource("5_k2f2j")]
-offset_left = 72.0
-offset_top = 140.0
-offset_right = 212.0
-offset_bottom = 172.0
+offset_left = 70.0
+offset_top = 144.0
+offset_right = 210.0
+offset_bottom = 176.0
+pivot_offset = Vector2(70, 16)
 ItemSize = Vector2i(4, 1)
 
 [node name="NinePatchRect" parent="InventoryItem3" index="0"]
@@ -101,7 +104,7 @@ offset_left = 820.0
 offset_top = 268.0
 offset_right = -300.0
 offset_bottom = -168.0
-pivot_offset = Vector2(0, 0)
+pivot_offset = Vector2(16, 70)
 ItemSize = Vector2i(1, 4)
 
 [node name="NinePatchRect" parent="InventoryItem2" index="0"]

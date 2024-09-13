@@ -10,15 +10,18 @@ public partial class Globals : Node
     [Signal]
     public delegate void CameraSpawnedEventHandler(Camera3D camera);
     [Signal]
-    public delegate void InventorySpawnedEventHandler(Vector2 tileSize, Vector2 inventorySize, Inventory inventory);
+    public delegate void InventorySpawnedEventHandler(Vector2I tileSize, Vector2I inventorySize, Inventory inventory);
+	[Signal]
+	public delegate void WorldSpawnedEventHandler(Node3D world);
 
     public static Globals Instance;
 
     public static CharacterBody3D Player;
     public static Camera3D Camera;
-    public static Vector2 TileSize;
-    public static Vector2 InventorySize;
+    public static Vector2I TileSize;
+    public static Vector2I InventorySize;
     public static Inventory Inventory;
+	public static Node3D World;
 
     public const int GridPadding = 4;
 
@@ -29,6 +32,7 @@ public partial class Globals : Node
 
     public override void _Ready()
     {
+		WorldSpawned += world => { World = world; };
         PlayerSpawned += player => { Player = player; };
         CameraSpawned += camera => { Camera = camera; };
         InventorySpawned += (tileSize, inventorySize, inventory) =>
@@ -40,6 +44,7 @@ public partial class Globals : Node
             Inventory = inventory;
         };
     }
+
 
     public override string ToString()
     {

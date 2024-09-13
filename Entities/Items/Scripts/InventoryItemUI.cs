@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 [Tool]
 [GlobalClass]
-public partial class InventoryItemUI : Control
-{
+public partial class InventoryItemUI : Control {
 	[Export] public Vector2I ItemSize = new(1, 1);
 
 	private CollisionShape2D _collisionShape;
@@ -15,8 +14,8 @@ public partial class InventoryItemUI : Control
 	private bool hasSprite;
 	private bool hasNinePatch;
 
-	public override void _Ready()
-	{
+	public override void _Ready() {
+		PivotOffset = Size / 2;
 		ChildOrderChanged += CheckChildren;
 		CheckChildren();
 
@@ -24,17 +23,14 @@ public partial class InventoryItemUI : Control
 		_ninePatchRect = GetNode<NinePatchRect>("NinePatchRect");
 		_sprite = GetNode<Sprite2D>("Sprite2D");
 
-		if (!Engine.IsEditorHint())
-		{
+		if (!Engine.IsEditorHint()) {
 			SetSize();
 			EmitSignal(SignalName.Ready);
 		}
 	}
 
-	public override void _Process(double delta)
-	{
-		if (Engine.IsEditorHint())
-		{
+	public override void _Process(double delta) {
+		if (Engine.IsEditorHint()) {
 			if (ItemSize < Vector2I.One)
 				ItemSize = new(1, 1);
 			if (ItemSize.X > 64)
@@ -48,29 +44,25 @@ public partial class InventoryItemUI : Control
 		}
 	}
 
-	public Texture2D GetNPRTexture()
-	{
+	public Texture2D GetNPRTexture() {
 		return _ninePatchRect.Texture;
 	}
 
-	public void CheckChildren()
-	{
+	public void CheckChildren() {
 		hasNinePatch = false;
 		hasSprite = false;
 		hasArea = false;
 
-		foreach (var child in GetChildren())
-		{
-			switch (child)
-			{
+		foreach (var child in GetChildren()) {
+			switch (child) {
 				case Area2D:
 					hasArea = true;
 					break;
 				case Sprite2D:
-					hasSprite= true;
+					hasSprite = true;
 					break;
 				case NinePatchRect:
-					hasNinePatch= true;
+					hasNinePatch = true;
 					break;
 			}
 		}
@@ -79,28 +71,23 @@ public partial class InventoryItemUI : Control
 			UpdateConfigurationWarnings();
 	}
 
-	public override string[] _GetConfigurationWarnings()
-	{
+	public override string[] _GetConfigurationWarnings() {
 		var warnings = new List<string>();
 
-		if (!hasArea)
-		{
+		if (!hasArea) {
 			warnings.Add(new string("There is no Area2D"));
 		}
-		if (!hasSprite)
-		{
+		if (!hasSprite) {
 			warnings.Add(new string("There is no Sprite2D"));
 		}
-		if (!hasNinePatch)
-		{
+		if (!hasNinePatch) {
 			warnings.Add(new string("There is no NinePatchRect"));
 		}
 
 		return warnings.ToArray();
 	}
 
-	public void SetSize()
-	{
+	public void SetSize() {
 		var paddingCount = ItemSize - new Vector2(1, 1);
 		var paddingAmount = paddingCount * 4;
 

@@ -68,8 +68,8 @@ public partial class Gun : RigidBody3D
             _grandParent.AddChild(bullet);
             _currentAmmo--;
 
-            if (GetParent().Equals(Globals.Player))
-                GD.Print($"{this.Name}, current ammo: {_currentAmmo}");
+            // if (GetParent().Equals(Globals.Player))
+            //     GD.Print($"{this.Name}, current ammo: {_currentAmmo}");
 
 
             bullet.GlobalPosition = _marker.GlobalPosition;
@@ -84,8 +84,8 @@ public partial class Gun : RigidBody3D
         if (_reloadTimer.IsStopped())
         {
             _canShoot = false;
-            if (GetParent().Equals(Globals.Player))
-                GD.Print($"{this.Name} reloading");
+            // if (GetParent().Equals(Globals.Player))
+            //     GD.Print($"{this.Name} reloading");
             _reloadTimer.Start();
         }
     }

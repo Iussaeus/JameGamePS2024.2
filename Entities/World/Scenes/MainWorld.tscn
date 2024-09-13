@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://qy3qlfik0xw6"]
+[gd_scene load_steps=8 format=3 uid="uid://qy3qlfik0xw6"]
 
 [ext_resource type="PackedScene" uid="uid://b3do2hejwuvds" path="res://Entities/UI/Scenes/ui.tscn" id="1_dlh8q"]
 [ext_resource type="PackedScene" uid="uid://fqvflhc3nymf" path="res://Entities/Player/Scenes/PlayerBody.tscn" id="2_6fyja"]
+[ext_resource type="Script" path="res://Entities/World/Scripts/World.cs" id="2_a4x57"]
 [ext_resource type="PackedScene" uid="uid://ci6bd1n5bh8ir" path="res://Entities/World/Scenes/NavigationTestWorld.tscn" id="2_ql6wj"]
 [ext_resource type="Script" path="res://Entities/World/Scripts/Navigation.cs" id="2_ympxj"]
 [ext_resource type="PackedScene" uid="uid://btnredj8yyckn" path="res://Entities/Player/Scenes/TestCamera.tscn" id="3_e8bvu"]
@@ -20,6 +21,7 @@ size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="World" type="Node3D" parent="SubViewport"]
+script = ExtResource("2_a4x57")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewport/World"]
 navigation_mesh = SubResource("NavigationMesh_cpi6k")
@@ -28,7 +30,7 @@ script = ExtResource("2_ympxj")
 [node name="NavigationTest" parent="SubViewport/World/NavigationRegion3D" instance=ExtResource("2_ql6wj")]
 
 [node name="PlayerBody" parent="SubViewport/World" instance=ExtResource("2_6fyja")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.5225, 11.1307, 24.1755)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.23579, 21.5326, 20.0168)
 collision_layer = 2
 collision_mask = 29
 DashVelocity = 400.0
