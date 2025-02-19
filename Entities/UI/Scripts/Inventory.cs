@@ -190,8 +190,7 @@ public partial class Inventory : Control {
 		if (_isItemSelected || _isDraggingItem) {
 			var globalPos = new Vector2();
 			if (_isSelectedItemInInventory)
-				globalPos =
-					(this.GetGlobalMousePosition() - (_selectedItem.Size / 2)).Snapped(TileSize + new Vector2I(4, 4));
+				globalPos = (this.GetGlobalMousePosition() - (_selectedItem.Size / 2)).Snapped(TileSize + new Vector2I(4, 4));
 			else
 				globalPos = (this.GetGlobalMousePosition() - (_selectedItem.Size / 2));
 

@@ -1,6 +1,5 @@
 using Godot;
 using System;
 
-public partial class SignalBus : Node
-{
+public partial class SignalBus : Node {
 }

@@ -1,12 +1,10 @@
 using Godot;
-using Test.Scripts.Player;
 
 namespace Test.Scripts.Components;
 
 // TODO: fix the gun
 [GlobalClass]
-public partial class Gun : RigidBody3D
-{
+public partial class Gun : RigidBody3D {
     private Marker3D _marker;
     private Node _grandParent;
 
@@ -24,16 +22,14 @@ public partial class Gun : RigidBody3D
     [Export] public float ShootingInterval = 0.1f;
     private Timer _shootTimer = new();
 
-    public override void _Ready()
-    {
+    public override void _Ready() {
         _grandParent = GetParent<Node>().GetParent<Node>();
         _marker = GetNode<Marker3D>("Marker3D");
 
         _reloadTimer = new();
         _currentAmmo = _magazineCapacity;
         _reloadTimer.WaitTime = _reloadInterval;
-        _reloadTimer.Timeout += () =>
-        {
+        _reloadTimer.Timeout += () => {
             _currentAmmo = _magazineCapacity;
             _canShoot = true;
         };
@@ -45,11 +41,9 @@ public partial class Gun : RigidBody3D
         AddChild(_shootTimer);
     }
 
-    public override void _Process(double delta)
-    {
+    public override void _Process(double delta) {
         var inputMap = InputMap.GetActions();
-        foreach (var input in inputMap)
-        {
+        foreach (var input in inputMap) {
             if (input.Equals("left_click") && Input.IsActionPressed(input))
                 Shoot();
             if (input.Equals("reload") && Input.IsActionJustPressed(input))
@@ -58,11 +52,9 @@ public partial class Gun : RigidBody3D
         if (Input.IsActionJustReleased("left_click")) _isMouseHeld = false;
     }
 
-    public void Shoot()
-    {
+    public void Shoot() {
         if (_currentAmmo == 0) _canShoot = false;
-        if (_shootTimer.IsStopped() && _canShoot && _currentAmmo != 0 && !_isMouseHeld)
-        {
+        if (_shootTimer.IsStopped() && _canShoot && _currentAmmo != 0 && !_isMouseHeld) {
             _shootTimer.Start();
             var bullet = Projectile.Instantiate<RigidBody3D>();
             _grandParent.AddChild(bullet);
@@ -79,10 +71,8 @@ public partial class Gun : RigidBody3D
 
     }
 
-    public void Reload()
-    {
-        if (_reloadTimer.IsStopped())
-        {
+    public void Reload() {
+        if (_reloadTimer.IsStopped()) {
             _canShoot = false;
             // if (GetParent().Equals(Globals.Player))
             //     GD.Print($"{this.Name} reloading");
