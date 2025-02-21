@@ -8,23 +8,26 @@ public partial class PlayerController : CharacterBody3D {
 
     [ExportCategory("Dash")]
     [Export] public float DashCooldown = 2;
-    [Export] public float DashTime = 1;
-    [Export] public float DashVelocity = 200;
-    [Export] public float DashHorizontalAcceleration = 10;
-    [Export] public EasingFunctions Easing { get; set; }
+    [Export] public float RandomFloat = 0.5f;
+    [Export] public float DashAcceleration = 5;
+    [Export] public float DashLength = 100;
+    [Export] public EasingFunctions DashEasing;
     [ExportCategory("Movement")]
     [Export] public float Speed = 5;
     [Export] public float HorizontalAcceleration = 10;
-    [Export(PropertyHint.Enum, "Linear:0, OutExp:1, InExp:2, InOutExp:3")] public int MoveEasing;
+    [Export] public EasingFunctions MoveEasing;
 
     private Vector3 HorizontalVelocity = new();
     private Vector3 DashHorizontalVelocity = new();
 
+    public float DashTime = 5;
     public bool CanDash = true;
     private readonly Timer _dashCooldown = new();
-
     public bool IsDashing = false;
     private readonly Timer _dashing = new();
+    private Vector3 _dashStart = new();
+    private Vector3 _dashEnd = new();
+    private Vector3 DashDirection = new();
 
     public float Gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
 
@@ -77,6 +80,12 @@ public partial class PlayerController : CharacterBody3D {
 
     public override void _PhysicsProcess(double delta) {
         if (Input.IsActionJustPressed("space") && CanDash /* && GetDirection() != Vector3.Zero */) {
+            DashHorizontalVelocity = HorizontalVelocity + Velocity;
+
+            DashDirection = GetDirection() == Vector3.Zero ? Vector3.Right : GetDirection();
+            _dashStart = GlobalPosition;
+            _dashEnd = GlobalPosition + (DashDirection * DashLength);
+
             DashHorizontalVelocity = new();
             _dashing.Start(DashTime);
         }
@@ -85,73 +94,72 @@ public partial class PlayerController : CharacterBody3D {
         else Move((float)delta);
 
         MoveAndSlide();
+        if (!_dashing.IsStopped()) GD.PrintS("start:", _dashStart, "end:", _dashEnd, "current:", GlobalPosition);
     }
 
     public void Move(float delta) {
-        var newVelocity = Velocity;
-        var newPos = GetDirection() * Speed;
+        var newVelocity = GetDirection() * Speed;
 
         // if (!IsOnFloor()) newVelocity.Y -= Gravity * delta;
 
-        var ease = new Vector3();
-        switch (MoveEasing) {
-            case 0:
-                ease = HorizontalVelocity.Ease(newPos, HorizontalAcceleration * delta, Ease.Linear);
-                break;
-            case 1:
-                ease = HorizontalVelocity.Ease(newPos, HorizontalAcceleration * delta, Ease.OutExponential);
-                break;
-            case 2:
-                ease = HorizontalVelocity.Ease(newPos, HorizontalAcceleration * delta, Ease.InExponential);
-                break;
-            case 3:
-                ease = HorizontalVelocity.Ease(newPos, HorizontalAcceleration * delta, Ease.InOutExponential);
-                break;
-        }
-
-        HorizontalVelocity = ease;
-
-        newVelocity.Z = HorizontalVelocity.Z;
-        newVelocity.X = HorizontalVelocity.X;
-
-        Velocity = newVelocity;
-    }
-
-    public void Dash(float delta) {
-        var newVelocity = Velocity;
-
-        var direction = GetDirection() == Vector3.Zero ? Vector3.Right : GetDirection();
-        var newPos = direction * DashVelocity;
-
-        CanDash = false;
-        _dashCooldown.Start(DashCooldown);
-
-        var weight = _dashing.TimeLeft.MinMax(0, DashTime);
-
-        var ease = new Vector3();
-
-        System.Func<float, float> easingFunc = (Easing) switch {
+        System.Func<float, float> easingFunc = (MoveEasing) switch {
             EasingFunctions.Linear => Ease.Linear,
             EasingFunctions.OutExponential => Ease.OutExponential,
             EasingFunctions.InExponential => Ease.InExponential,
-            EasingFunctions.InOutExponential => Ease.InOutExponential,
             EasingFunctions.InBack => Ease.InBack,
             EasingFunctions.OutBounce => Ease.OutBounce,
+            _ => Ease.Linear,
         };
 
-        ease = DashHorizontalVelocity.Ease(newPos, weight, easingFunc);
+        HorizontalVelocity = HorizontalVelocity.Ease(newVelocity, HorizontalAcceleration * delta, easingFunc);
 
-        GD.PrintS(_dashing.TimeLeft, _dashing.TimeLeft.MinMax(0, DashTime).RoundToOne(), "t:", easingFunc(weight), "v:", DashHorizontalVelocity, "ease:", ease, "newP:", newPos);
+        Velocity = Velocity with {
+            Z = HorizontalVelocity.Z,
+            X = HorizontalVelocity.X,
+        };
+    }
 
-        if (easingFunc == Ease.InBack)
-            DashHorizontalVelocity = ease * direction;
-        else DashHorizontalVelocity = ease;
+    public void Dash(float delta) {
+        CanDash = false;
+        _dashCooldown.Start(DashCooldown);
 
-        newVelocity.Z = DashHorizontalVelocity.Z;
-        newVelocity.X = DashHorizontalVelocity.X;
+        var progress = GlobalPosition.Progress(_dashStart, _dashEnd);
+        var dashVector = _dashEnd - _dashStart;
 
+        System.Func<float, float> easingFunc = (DashEasing) switch {
+            EasingFunctions.Linear => Ease.Linear,
+            EasingFunctions.OutExponential => Ease.OutExponential,
+            EasingFunctions.InExponential => Ease.InExponential,
+            EasingFunctions.InBack => Ease.InBack,
+            EasingFunctions.OutBounce => Ease.OutBounce,
+            _ => Ease.Linear,
+        };
+        var ease = new Vector3();
+        var weight = _dashing.TimeLeft.MinMax(0, DashTime);
+        var acceleration = RandomFloat + DashAcceleration * delta;
 
-        Velocity = newVelocity;
+        if (progress <= 0)
+            progress = GlobalPosition.Lerp(dashVector, acceleration - RandomFloat).Progress(_dashStart, _dashEnd);
+
+        ease = DashHorizontalVelocity.Ease(dashVector, progress, easingFunc) * acceleration;
+
+        DashHorizontalVelocity = ease;
+
+        if ((GlobalPosition - _dashStart).LengthSquared() >= dashVector.LengthSquared()) {
+            Velocity = Vector3.Zero;
+            DashHorizontalVelocity = Vector3.Zero;
+            HorizontalVelocity = Vector3.Zero;
+            _dashing.Stop();
+
+            // GD.PrintS("p: ", GlobalPosition.Progress(_dashStart, _dashEnd));
+            // GD.PrintS("start:", _dashStart, "end:", _dashEnd, "current:", GlobalPosition);
+        }
+        // GD.PrintS("p: ", GlobalPosition.Progress(_dashStart, _dashEnd));
+        // GD.PrintS("t:", easingFunc((float)weight), "v:", DashHorizontalVelocity, "ease:", ease, "newP:", newVelocity);
+        Velocity = Velocity with {
+            Z = DashHorizontalVelocity.Z,
+            X = DashHorizontalVelocity.X,
+        };
     }
 
     public Vector3 GetDirection() {
