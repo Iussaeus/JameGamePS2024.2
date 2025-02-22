@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://btnredj8yyckn"]
-
-[ext_resource type="Script" path="res://Scripts/Player/Camera.cs" id="1_usi54"]
-
-[node name="Camera3D" type="Camera3D"]
-projection = 1
-size = 28.619
-script = ExtResource("1_usi54")
