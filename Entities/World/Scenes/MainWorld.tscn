@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://Entities/World/Scripts/World.cs" id="2_a4x57"]
 [ext_resource type="Script" path="res://Entities/World/Scripts/Navigation.cs" id="2_ympxj"]
 [ext_resource type="PackedScene" uid="uid://btnredj8yyckn" path="res://Entities/Player/Scenes/TestCamera.tscn" id="3_e8bvu"]
-[ext_resource type="PackedScene" uid="uid://b601nupwwifub" path="res://Entities/World/Scenes/GeneratedWorld.tscn" id="4_m25x2"]
+[ext_resource type="PackedScene" uid="uid://ci6bd1n5bh8ir" path="res://Entities/World/Scenes/NavigationTestWorld.tscn" id="4_7im7c"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_cpi6k"]
 agent_max_climb = 0.5
@@ -27,21 +27,16 @@ script = ExtResource("2_a4x57")
 navigation_mesh = SubResource("NavigationMesh_cpi6k")
 script = ExtResource("2_ympxj")
 
-[node name="World" parent="SubViewport/World/NavigationRegion3D" instance=ExtResource("4_m25x2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -2, 136)
-PointsInside = 5
-PointsEdge = 4
-BoxSize = 200
-MarginOffsetInside = 0
+[node name="NavigationTest" parent="SubViewport/World/NavigationRegion3D" instance=ExtResource("4_7im7c")]
 
 [node name="PlayerBody" parent="SubViewport/World" instance=ExtResource("2_6fyja")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 105.236, 21.5326, 120.017)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.764, 21.5326, -6.983)
 collision_layer = 2
 collision_mask = 29
 DashCooldown = 0.5
 RandomFloat = 0.7
 DashAcceleration = 50.0
-DashLength = 70.0
+DashLength = 20.0
 DashEasing = 2
 Speed = 50.0
 HorizontalAcceleration = 20.0

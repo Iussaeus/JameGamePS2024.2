@@ -94,13 +94,11 @@ public partial class PlayerController : CharacterBody3D {
         else Move((float)delta);
 
         MoveAndSlide();
-        if (!_dashing.IsStopped()) GD.PrintS("start:", _dashStart, "end:", _dashEnd, "current:", GlobalPosition);
+        // if (!_dashing.IsStopped()) GD.PrintS("start:", _dashStart, "end:", _dashEnd, "current:", GlobalPosition);
     }
 
     public void Move(float delta) {
         var newVelocity = GetDirection() * Speed;
-
-        // if (!IsOnFloor()) newVelocity.Y -= Gravity * delta;
 
         System.Func<float, float> easingFunc = (MoveEasing) switch {
             EasingFunctions.Linear => Ease.Linear,
@@ -113,9 +111,12 @@ public partial class PlayerController : CharacterBody3D {
 
         HorizontalVelocity = HorizontalVelocity.Ease(newVelocity, HorizontalAcceleration * delta, easingFunc);
 
+        if (!IsOnFloor()) Velocity = Velocity with { Y = Velocity.Y - Gravity * (float)delta };
+
         Velocity = Velocity with {
             Z = HorizontalVelocity.Z,
             X = HorizontalVelocity.X,
+
         };
     }
 
