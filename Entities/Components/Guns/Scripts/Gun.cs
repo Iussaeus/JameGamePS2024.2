@@ -45,17 +45,6 @@ public partial class Gun : RigidBody3D {
         AddChild(_shootTimer);
     }
 
-    public override void _Process(double delta) {
-        var inputMap = InputMap.GetActions();
-        foreach (var input in inputMap) {
-            if (input.Equals("left_click") && Input.IsActionPressed(input))
-                Shoot();
-            if (input.Equals("reload") && Input.IsActionJustPressed(input))
-                Reload();
-        }
-        if (Input.IsActionJustReleased("left_click")) IsMouseHeld = false;
-    }
-
     public void Shoot() {
         if (_currentAmmo == 0) _canShoot = false;
         if (_shootTimer.IsStopped() && _canShoot && _currentAmmo != 0 && !IsMouseHeld) {
