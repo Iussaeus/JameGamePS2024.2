@@ -1,8 +1,9 @@
 using Godot;
 using Test.Entities.Helpers;
-using Test.Scripts.Components;
+using Test.Entities.Components;
+using Test.Entities.Interaction;
 
-namespace Test.Scripts.Player;
+namespace Test.Entities.Player;
 
 public partial class PlayerController : CharacterBody3D {
 
@@ -17,22 +18,25 @@ public partial class PlayerController : CharacterBody3D {
     [Export] public float HorizontalAcceleration = 10;
     [Export] public EasingFunctions MoveEasing;
 
+    public float Gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
+
+    public Marker3D Marker3D;
+    public Gun Gun;
+
+    public PlayerInteractor Interactor;
+
+    public readonly Timer DashTimer = new();
+    public float DashTime = 5;
+    public bool CanDash = true;
+    public bool IsDashing = false;
+    private readonly Timer _dashCooldown = new();
+
     private Vector3 HorizontalVelocity = new();
     private Vector3 DashHorizontalVelocity = new();
 
-    public float DashTime = 5;
-    public bool CanDash = true;
-    private readonly Timer _dashCooldown = new();
-    public bool IsDashing = false;
-    private readonly Timer _dashing = new();
     private Vector3 _dashStart = new();
     private Vector3 _dashEnd = new();
     private Vector3 DashDirection = new();
-
-    public float Gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
-
-    public Marker3D _marker3D;
-    public Gun _gun;
 
     private Camera3D _camera3D;
     private readonly float _rayLen = 1000;
@@ -41,17 +45,18 @@ public partial class PlayerController : CharacterBody3D {
     public override void _Ready() {
         Globals.Instance.EmitSignal(Globals.SignalName.PlayerSpawned, this);
 
-        _marker3D = GetNode<Marker3D>("Marker3D");
-        _gun = GetNode<Gun>("Gun");
+        Interactor = GetNode<PlayerInteractor>("PlayerInteractor");
+        Marker3D = GetNode<Marker3D>("Marker3D");
+        Gun = GetNode<Gun>("Gun");
         AwaitCamera();
 
         _dashCooldown.OneShot = true;
         _dashCooldown.Timeout += () => CanDash = true;
         AddChild(_dashCooldown);
 
-        _dashing.OneShot = true;
-        _dashing.Timeout += () => IsDashing = true;
-        AddChild(_dashing);
+        DashTimer.OneShot = true;
+        DashTimer.Timeout += () => IsDashing = true;
+        AddChild(DashTimer);
     }
 
     public async void AwaitCamera() {
@@ -61,7 +66,7 @@ public partial class PlayerController : CharacterBody3D {
     }
 
     public override void _Process(double delta) {
-        _gun.GlobalPosition = _marker3D.GlobalPosition;
+        Gun.GlobalPosition = Marker3D.GlobalPosition;
 
         var mousePos = GetViewport().GetMousePosition();
         var from = _camera3D.ProjectRayOrigin(mousePos);
@@ -79,26 +84,12 @@ public partial class PlayerController : CharacterBody3D {
     }
 
     public override void _PhysicsProcess(double delta) {
-        if (Input.IsActionJustPressed("space") && CanDash /* && GetDirection() != Vector3.Zero */) {
-            DashHorizontalVelocity = HorizontalVelocity + Velocity;
-
-            DashDirection = GetDirection() == Vector3.Zero ? Vector3.Right : GetDirection();
-            _dashStart = GlobalPosition;
-            _dashEnd = GlobalPosition + (DashDirection * DashLength);
-
-            DashHorizontalVelocity = new();
-            _dashing.Start(DashTime);
-        }
-
-        if (!_dashing.IsStopped()) Dash((float)delta);
-        else Move((float)delta);
-
         MoveAndSlide();
         // if (!_dashing.IsStopped()) GD.PrintS("start:", _dashStart, "end:", _dashEnd, "current:", GlobalPosition);
     }
 
-    public void Move(float delta) {
-        var newVelocity = GetDirection() * Speed;
+    public void Move(float delta, Vector3 direction) {
+        var newVelocity = direction * Speed;
 
         System.Func<float, float> easingFunc = (MoveEasing) switch {
             EasingFunctions.Linear => Ease.Linear,
@@ -119,6 +110,15 @@ public partial class PlayerController : CharacterBody3D {
 
         };
     }
+    public void StartDash(Vector3 direction) {
+        DashHorizontalVelocity = HorizontalVelocity + Velocity;
+        DashDirection = direction == Vector3.Zero ? Vector3.Right : direction;
+        _dashStart = GlobalPosition;
+        _dashEnd = GlobalPosition + (DashDirection * DashLength);
+
+        DashHorizontalVelocity = new();
+        DashTimer.Start(DashTime);
+    }
 
     public void Dash(float delta) {
         CanDash = false;
@@ -136,7 +136,7 @@ public partial class PlayerController : CharacterBody3D {
             _ => Ease.Linear,
         };
         var ease = new Vector3();
-        var weight = _dashing.TimeLeft.MinMax(0, DashTime);
+        var weight = DashTimer.TimeLeft.MinMax(0, DashTime);
         var acceleration = RandomFloat + DashAcceleration * delta;
 
         if (progress <= 0)
@@ -150,7 +150,7 @@ public partial class PlayerController : CharacterBody3D {
             Velocity = Vector3.Zero;
             DashHorizontalVelocity = Vector3.Zero;
             HorizontalVelocity = Vector3.Zero;
-            _dashing.Stop();
+            DashTimer.Stop();
 
             // GD.PrintS("p: ", GlobalPosition.Progress(_dashStart, _dashEnd));
             // GD.PrintS("start:", _dashStart, "end:", _dashEnd, "current:", GlobalPosition);
@@ -163,30 +163,4 @@ public partial class PlayerController : CharacterBody3D {
         };
     }
 
-    public Vector3 GetDirection() {
-        var inputDir = Input.GetVector("left", "right", "forward", "backward");
-        var direction = new Vector3(0, 0, 0);
-
-        var upMarker = _camera3D.GetNode<Marker3D>("Marker3DUp");
-        var rightMarker = _camera3D.GetNode<Marker3D>("Marker3DRight");
-        var upDirection = _camera3D.GlobalPosition.DirectionTo(upMarker.GlobalPosition).Normalized();
-        var rightDirection = _camera3D.GlobalPosition.DirectionTo(rightMarker.GlobalPosition).Normalized();
-
-        if (inputDir != Vector2.Zero) {
-            if (inputDir.Y > 0) {
-                direction += -upDirection;
-            }
-            if (inputDir.Y < 0) {
-                direction += upDirection;
-            }
-            if (inputDir.X > 0) {
-                direction += rightDirection;
-            }
-            if (inputDir.X < 0) {
-                direction += -rightDirection;
-            }
-        }
-
-        return direction.Normalized();
-    }
 }

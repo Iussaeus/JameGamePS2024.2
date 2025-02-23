@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Test.Scripts.Components;
+namespace Test.Entities.Components;
 
 public partial class HpComponent : Node3D
 {

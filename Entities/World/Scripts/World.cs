@@ -1,5 +1,5 @@
 using Godot;
-using Test.Scripts.Components;
+using Test.Entities.Components;
 
 public partial class World : Node3D {
     public override void _Ready() {
