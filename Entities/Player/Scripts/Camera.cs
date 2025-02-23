@@ -1,7 +1,7 @@
 using Godot;
-using Test.Scripts.Components;
+using Test.Entities.Components;
 
-namespace Test.Scripts.Player;
+namespace Test.Entities.Player;
 
 public partial class Camera : Camera3D {
     private CharacterBody3D _player;
@@ -11,8 +11,6 @@ public partial class Camera : Camera3D {
         Globals.Instance.EmitSignal(Globals.SignalName.CameraSpawned, this);
 
         _player = Globals.Player;
-
-        GD.Print("Camera ready");
     }
 
     public override void _Process(double delta) {

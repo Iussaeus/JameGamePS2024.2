@@ -1,8 +1,7 @@
 using Godot;
-using System;
 using Godot.Collections;
 using System.Collections.Generic;
-using Test.Scripts.Components;
+using Test.Entities.Components;
 using static Godot.GD;
 
 namespace Test.Entities.Helpers;

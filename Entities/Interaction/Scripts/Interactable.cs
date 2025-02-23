@@ -1,15 +1,15 @@
 using Godot;
-using Test.Scripts.Interaction;
+
+namespace Test.Entities.Interaction;
 
 [GlobalClass]
-public partial class Interactable : Area3D
-{
-	[Signal]
-	public delegate void FocusedEventHandler(Interactor interactor);
+public partial class Interactable : Area3D {
+    [Signal]
+    public delegate void FocusedEventHandler(Interactor interactor);
 
-	[Signal]
-	public delegate void InteractedEventHandler(Interactor interactor);
+    [Signal]
+    public delegate void InteractedEventHandler(Interactor interactor);
 
-	[Signal]
-	public delegate void UnfocusedEventHandler(Interactor interactor);
+    [Signal]
+    public delegate void UnfocusedEventHandler(Interactor interactor);
 }

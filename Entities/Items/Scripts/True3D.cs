@@ -1,6 +1,6 @@
 using Godot;
-using Test.Scripts.Components;
-using Test.Scripts.Interaction;
+using Test.Entities.Components;
+using Test.Entities.Interaction;
 
 public partial class True3D : InventoryItem3D {
 }
