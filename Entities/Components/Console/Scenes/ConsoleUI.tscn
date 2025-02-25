@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3 uid="uid://b6dycbs1luheb"]
+
+[ext_resource type="Script" path="res://Entities/Components/Console/Scripts/Console.cs" id="1_es3i4"]
+
+[node name="ConsoleUi" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+focus_mode = 1
+script = ExtResource("1_es3i4")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+custom_minimum_size = Vector2(1024, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -756.0
+offset_top = -356.0
+offset_right = 756.0
+offset_bottom = 356.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(15, 15)
+
+[node name="CodeEdit" type="CodeEdit" parent="CenterContainer"]
+clip_contents = false
+custom_minimum_size = Vector2(1512, 35)
+layout_direction = 0
+layout_mode = 2
+caret_type = 1
+caret_blink = true
+caret_draw_when_editable_disabled = true

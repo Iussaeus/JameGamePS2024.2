@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bs5lss2iex8sv"]
 
-[ext_resource type="PackedScene" uid="uid://dmpj587f0puow" path="res://Scenes/Components/HpComponent.tscn" id="1_0765u"]
+[ext_resource type="PackedScene" uid="uid://dmpj587f0puow" path="res://Entities/Components/Components/Scenes/HpComponent.tscn" id="1_0765u"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cbmbx"]
 

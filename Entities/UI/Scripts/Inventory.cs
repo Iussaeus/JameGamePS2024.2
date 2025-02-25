@@ -1,6 +1,6 @@
 using Godot;
 using Godot.Collections;
-using Test.Entities.Helpers;
+using Test.Helpers.Extensions;
 using Test.Entities.Components;
 
 // WARNING: weird behaviour when adding an object whilst other one is selected
@@ -42,9 +42,11 @@ public partial class Inventory : Control {
 
     public override void _Ready() {
         Close();
+
         _dragTimer.OneShot = true;
-        _selectTimer.OneShot = true;
         AddChild(_dragTimer);
+
+        _selectTimer.OneShot = true;
         AddChild(_selectTimer);
 
         ChildEnteredTree += ConnectSignals;
@@ -158,6 +160,8 @@ public partial class Inventory : Control {
     public void Close() {
         Visible = false;
         IsOpen = false;
+        FocusMode = FocusModeEnum.All;
+        ReleaseFocus();
 
         if (SelectedItem != null && CanPlace(SelectedItem, SelectedItem.GlobalPosition.ToTileSpace())) {
             DeselectItem(); ;
@@ -169,6 +173,8 @@ public partial class Inventory : Control {
     public void Open() {
         Visible = true;
         IsOpen = true;
+        FocusMode = FocusModeEnum.All;
+        GrabFocus();
     }
 
     public void ConnectSignals(Node node) {
@@ -338,8 +344,8 @@ public partial class Inventory : Control {
 
     // NOTE: never used
     private void FillAllMatrixPositions() {
-        foreach (var pair in ItemsPositions) {
-            FillMatrixPosition(pair.Key, pair.Value);
+        foreach (var (key, value) in ItemsPositions) {
+            FillMatrixPosition(key, value);
         }
     }
 
@@ -538,13 +544,15 @@ public partial class Inventory : Control {
         if (ItemsPositions.ContainsKey(item)) {
             var position = ItemsPositions[item];
             RemoveItem(item, position);
+            return;
         }
-
-        var item3D = item.GetNode<InventoryItem3D>("InventoryItem3d");
-        item.Reparent(Globals.World);
-        item3D.Enable();
-        item3D.GlobalPosition = Globals.Player.GlobalPosition + (-Globals.Player.Transform.Basis.Z * 2);
-        item3D.ApplyImpulse(-Globals.Player.Transform.Basis.Z * 10);
+        else {
+            var item3D = item.GetNode<InventoryItem3D>("InventoryItem3d");
+            item.Reparent(Globals.World);
+            item3D.Enable();
+            item3D.GlobalPosition = Globals.Player.GlobalPosition + (-Globals.Player.Transform.Basis.Z * 2);
+            item3D.ApplyImpulse(-Globals.Player.Transform.Basis.Z * 5);
+        }
     }
 
     private void DeselectItem() {

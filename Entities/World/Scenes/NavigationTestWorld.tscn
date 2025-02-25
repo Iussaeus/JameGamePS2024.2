@@ -58,7 +58,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.44355, -6.31675)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.44067, 10.6612)
 
 [node name="NewItem" parent="." instance=ExtResource("5_krn1q")]
-pivot_offset = Vector2(286, 16)
 
 [node name="InventoryItem3d" parent="NewItem" index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.19289, 2.35427, 0)

@@ -1,10 +1,10 @@
 using Godot;
 using Godot.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Test.Entities.Components;
-using static Godot.GD;
 
-namespace Test.Entities.Helpers;
+namespace Test.Helpers.Extensions;
 
 public enum EasingFunctions {
     Linear,
@@ -138,7 +138,15 @@ public static class SysArrayExtensions {
 public static class NodeExtensions {
     public static void Assert(this Node node, bool truthy, string message) {
         if (!truthy) {
-            PushError($"{node.Name}: Assert Failed: {message}");
+            GD.PushError($"{node.Name}: Assert Failed: {message}");
+            node.GetTree().Paused = true;
+        }
+    }
+}
+public static class ControlExtensions {
+    public static void Assert(this Control node, bool truthy, string message) {
+        if (!truthy) {
+            GD.PushError($"{node.Name}: Assert Failed: {message}");
             node.GetTree().Paused = true;
         }
     }

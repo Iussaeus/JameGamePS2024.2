@@ -1,5 +1,5 @@
 using Godot;
-using Test.Entities.Helpers;
+using Test.Helpers.Extensions;
 using Test.Entities.Components;
 using Test.Entities.Interaction;
 
