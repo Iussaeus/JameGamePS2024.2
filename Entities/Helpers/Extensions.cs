@@ -1,6 +1,6 @@
 using Godot;
 using Godot.Collections;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using Test.Entities.Components;
 
@@ -135,6 +135,7 @@ public static class SysArrayExtensions {
     }
 }
 
+
 public static class NodeExtensions {
     public static void Assert(this Node node, bool truthy, string message) {
         if (!truthy) {
@@ -142,12 +143,16 @@ public static class NodeExtensions {
             node.GetTree().Paused = true;
         }
     }
-}
-public static class ControlExtensions {
-    public static void Assert(this Control node, bool truthy, string message) {
-        if (!truthy) {
-            GD.PushError($"{node.Name}: Assert Failed: {message}");
-            node.GetTree().Paused = true;
+
+    public static (bool Ok, object Result) Pcall(this Node node, System.Delegate function, params object[] args) {
+        object result = null;
+        try {
+            result = function.Method.Invoke(function.Target, args);
         }
+        catch (Exception e) {
+            result = e;
+            return (false, e);
+        };
+        return (true, result);
     }
 }

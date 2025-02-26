@@ -1,6 +1,7 @@
 using Godot;
 using Test.Helpers.Extensions;
 using System.Collections.Generic;
+using Test.Helpers;
 
 public partial class Console : Control {
     private List<string> _history = new();
@@ -15,8 +16,11 @@ public partial class Console : Control {
         _textBox.CaretBlink = true;
         this.Assert(_textBox != null, "Console doesn't have a CodeEdit");
 
+        AddFunction(AddHistoryItem, "Some Bullshit");
+
         Visible = false;
         _textBox.ReleaseFocus();
+        _textBox.GetCodeCompletionOptions();
     }
 
     public override void _Input(InputEvent @event) {
@@ -36,15 +40,7 @@ public partial class Console : Control {
             _textBox.Clear();
             if (noSelection.Length > 0) {
                 var text = noSelection.StripEscapes();
-                // GD.PrintS(text);
-                _history.Add(text);
-                _textBox.CodeCompletionPrefixes.Add(text);
-                _textBox.AddCodeCompletionOption(CodeEdit.CodeCompletionKind.Function,
-                                        displayText: text + " [history]",
-                                        insertText: text,
-                                        textColor: Colors.Blue);
-                _currentIdx = _history.Count - 1;
-                GD.PrintS("accept: ", _currentIdx);
+                AddHistoryItem(text);
             }
         }
         else {
@@ -90,5 +86,26 @@ public partial class Console : Control {
                 _textBox.Text = "";
             }
         }
+    }
+
+    public void AddHistoryItem(string text) {
+        _history.Add(text);
+        _textBox.CodeCompletionPrefixes.Add(text);
+        _textBox.AddCodeCompletionOption(CodeEdit.CodeCompletionKind.Function,
+                                displayText: text + " [history]",
+                                insertText: text,
+                                textColor: Colors.Blue);
+        _currentIdx = _history.Count - 1;
+        GD.PrintS("accept: ", _currentIdx);
+    }
+
+    public void AddFunction(System.Delegate function, params object[] args) {
+        var name = function.Method.Name;
+        var (ok, err) = Helpers.Pcall(function, args);
+
+        if (ok) {
+            GD.PrintS(name, args);
+        }
+        else GD.Print(err);
     }
 }
