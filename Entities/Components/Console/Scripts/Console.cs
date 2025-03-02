@@ -5,9 +5,10 @@ using Test.Helpers;
 
 public partial class Console : Control {
     private List<string> _history = new();
-    private Dictionary<StringName, System.Delegate> _commands = new();
+    private Dictionary<string, System.Delegate> _commands = new();
+    private List<Godot.Collections.Dictionary> _savedCommands = new();
     private CodeEdit _textBox;
-    private int _currentIdx = -1;
+    private int _currentIdx = 0;
     private bool _requesting;
 
     public override void _Ready() {
@@ -16,18 +17,10 @@ public partial class Console : Control {
         _textBox.CaretBlink = true;
         this.Assert(_textBox != null, "Console doesn't have a CodeEdit");
 
-        AddCommand(MinePrint);
-
         Visible = false;
         _textBox.ReleaseFocus();
         _textBox.GetCodeCompletionOptions();
-    }
-
-    public void MinePrint(params object[] args) {
-        GD.Print("print called");
-        foreach (var a in args) {
-            GD.Print(a);
-        }
+        // GD.PrintS(Name, "Up and running.");
     }
 
     public override void _Input(InputEvent @event) {
@@ -45,14 +38,14 @@ public partial class Console : Control {
 
         if (@event.IsActionReleased("enter") && !_requesting) {
             var text = _textBox.Text.StripEscapes();
-            _textBox.Clear();
-            if (text.Length > 0) {
-                AddHistoryItem(text);
-                var command = text.Split(" ")[0];
-                GD.PrintS(command, _commands.ContainsKey(command));
-                if (_commands.ContainsKey(command)) CallCommand(command, text.Split(" ")[1..]);
+            AddHistoryItem(text);
 
-            }
+            var (command, args) = ParseCommandAndArgs(text);
+            GD.Print(command);
+            CallCommand(command, args);
+
+            GD.PrintS(command, args);
+            _textBox.Clear();
         }
         else {
             _requesting = false;
@@ -62,8 +55,7 @@ public partial class Console : Control {
         // TODO: Make the CodeCompletionOptions persist
         if (@event.IsActionReleased("tab") && !_requesting) {
             _requesting = true;
-            _textBox.UpdateCodeCompletionOptions(true);
-            _textBox.RequestCodeCompletion();
+            RequestCompletion();
         }
         else {
             _requesting = false;
@@ -74,79 +66,138 @@ public partial class Console : Control {
     public override void _Process(double delta) {
         if (Visible && !_textBox.HasFocus()) _textBox.GrabFocus();
 
-        if (_currentIdx >= 0) {
-            if (Input.IsActionJustPressed("ui_up")) {
-                _currentIdx = _currentIdx - 1 >= 0 ? _currentIdx - 1 : _currentIdx;
-                this.Assert(_currentIdx < _history.Count, $"Current index too small:{_currentIdx}, should be >= than 0");
-                _textBox.Clear();
-                // GD.PrintS("up");
-                // GD.PrintS("idx: ", _currentIdx);
-                // GD.Print("elem: ", _history[_currentIdx]);
-                _textBox.InsertText(_history[_currentIdx], 0, 0, true);
-            }
-            if (Input.IsActionJustPressed("ui_down")) {
-                // _textBox.Clear();
-                _currentIdx = _currentIdx + 1 < _history.Count ? _currentIdx + 1 : _currentIdx;
-                this.Assert(_currentIdx < _history.Count, $"Current index too big:{_currentIdx}, should be smaller than {_history.Count}");
-                _textBox.Clear();
-                // GD.PrintS("down");
-                // GD.PrintS("idx: ", _currentIdx);
-                // GD.Print("elem: ", _history[_currentIdx]);
-                _textBox.InsertText(_history[_currentIdx], 0, 0);
-            }
-            if (Input.IsActionJustPressed("ui_down") && _currentIdx + 1 == _history.Count) {
-                _textBox.Text = "";
-            }
+        if (Input.IsActionJustPressed("ui_up")) {
+            _currentIdx = _currentIdx - 1 >= 0 ? _currentIdx - 1 : _currentIdx;
+
+            GD.PrintS(_history.Count, _currentIdx, _history[_currentIdx], _requesting);
+            this.Assert(_currentIdx < _history.Count, $"Current index too small:{_currentIdx}, should be >= than 0");
+
+            _textBox.Clear();
+            _textBox.Text = _history[_currentIdx];
+        }
+        if (Input.IsActionJustPressed("ui_down")) {
+            _currentIdx = _currentIdx + 1 <= _history.Count ? _currentIdx + 1 : _currentIdx;
+
+            GD.PrintS(_history.Count, _currentIdx, _currentIdx == _history.Count ? " " : _history[_currentIdx], _requesting);
+            this.Assert(_currentIdx <= _history.Count, $"Current index too big:{_currentIdx}, should be smaller than {_history.Count + 1}");
+
+            _textBox.Clear();
+            if (_currentIdx == _history.Count) _textBox.Text = "";
+            else _textBox.Text = _history[_currentIdx];
         }
     }
 
     public void AddHistoryItem(string text) {
+        AddCompletionItem(text, "history");
+
         _history.Add(text);
-        _textBox.CodeCompletionPrefixes.Add(text);
-        _textBox.AddCodeCompletionOption(CodeEdit.CodeCompletionKind.Function,
-                                displayText: text + " [history]",
-                                insertText: text,
-                                textColor: Colors.Blue);
-        _currentIdx = _history.Count - 1;
-        GD.PrintS("accept: ", _currentIdx);
+        _currentIdx = _history.Count;
     }
 
-    public void AddCompletionItem(string text) {
-        _history.Add(text);
-        _textBox.CodeCompletionPrefixes.Add(text);
-        _textBox.AddCodeCompletionOption(CodeEdit.CodeCompletionKind.Function,
-                                displayText: text + " [command]",
-                                insertText: text,
-                                textColor: Colors.Red);
-        _currentIdx = _history.Count - 1;
-        // GD.PrintS("accept: ", _currentIdx);
+    public void RequestCompletion() {
+        foreach (var com in _savedCommands) {
+            var disp = (string)(com["display_text"]);
+            var kind = disp.Contains("[history]") ? CodeEdit.CodeCompletionKind.Function : CodeEdit.CodeCompletionKind.PlainText;
+
+            _textBox.CodeCompletionPrefixes.Add((string)com["insert_text"]);
+            _textBox.AddCodeCompletionOption(
+                                kind,
+                                (string)com["display_text"],
+                                (string)com["insert_text"],
+                                (Color)com["text_color"]
+                                );
+        }
+
+        _textBox.UpdateCodeCompletionOptions(true);
+        _textBox.RequestCodeCompletion();
     }
 
-    // TODO: match the function to a dict or something 
-    // TODO: grab args from the in-game console , parse them correctly and pass them to their respective functions
+    public void AddCompletionItem(string text, string type) {
+        var item = new Godot.Collections.Dictionary();
+        item["display_text"] = text + " " + $"[{type}]";
+        item["insert_text"] = text;
+        item["text_color"] = Colors.White;
+
+        _savedCommands.Add(item);
+    }
+
     public void AddCommand(System.Delegate @delegate) {
         var name = @delegate.Method.Name;
 
-        GD.PrintS("func to add", @delegate, @delegate.Target, @delegate.Method.Name);
-
-        AddCompletionItem(name);
-        _commands.Add(name, @delegate);
+        AddCompletionItem(name.ToLower(), "command");
+        _commands.Add(name.ToLower(), @delegate);
     }
 
-    public void CallCommand(StringName name, params System.Object[] args) {
-        // GD.Print("call command");
-        var @delegate = _commands[name];
-        GD.PrintS("func to call", @delegate, @delegate.Target, @delegate.Method.Name);
-        // GD.PrintS(@delegate, @delegate.Method.Name, @delegate.Target.GetType().GetMethod(name), args.Length);
+    public void CallCommand(string name, params System.Object[] args) {
+        System.Delegate @delegate;
 
-        if (args.Length == 1 && args[0] is string s && s.Equals("")) {
-            GD.Print("No args:");
+        if (!_commands.TryGetValue(name, out @delegate)) {
+            GD.PushError("Command not found");
             return;
         }
 
-        var (ok, result) = Helpers.Pcall(@delegate, args);
+        if (args.Length == 1 && args[0] is string s && s.Equals("")) {
+            GD.PushError("No args:");
+            return;
+        }
+
+        var (ok, result) = Helpers.PCall(@delegate, args);
 
         GD.PrintS(ok, result);
-        // GD.Print("end call command");
+    }
+
+    public (string command, object[] args) ParseCommandAndArgs(string text) {
+        var strippedText = text.StripEscapes();
+        var splitText = text.Split(" ", System.StringSplitOptions.RemoveEmptyEntries);
+
+        // GD.Print("split");
+        // splitText.Print();
+
+        var command = splitText[0];
+        var strArgs = splitText[1..];
+
+        System.Delegate @delegate;
+
+        if (!_commands.TryGetValue(command, out @delegate)) {
+            GD.PushError("Command not found");
+            return (command, null);
+        }
+
+        var delArgs = @delegate.Method.GetParameters();
+        var objArgs = new object[delArgs.Length];
+
+        if (strArgs.Length > 0 && strArgs.Length >= delArgs.Length) {
+            // GD.PrintS(command, _commands.ContainsKey(command), splitText.Length);
+
+            for (int i = 0; i < delArgs.Length; i++) {
+                var type = delArgs[i].ParameterType;
+
+                if (type == typeof(int)) objArgs[i] = int.Parse(strArgs[i]);
+                if (type == typeof(float)) objArgs[i] = float.Parse(strArgs[i]);
+                if (type == typeof(double)) objArgs[i] = float.Parse(strArgs[i]);
+                if (type == typeof(bool)) objArgs[i] = bool.Parse(strArgs[i]);
+                if (type == typeof(string)) objArgs[i] = strArgs[i];
+
+                if (type.BaseType == typeof(System.Array)) {
+                    var varArgs = new object[strArgs.Length - i];
+                    for (int j = 0; j < varArgs.Length; j++) {
+                        varArgs[j] = strArgs[j + i];
+                    }
+                    objArgs[i] = varArgs;
+                    varArgs.Print();
+                    break;
+                }
+            }
+
+            if (delArgs.Length != objArgs.Length) GD.PushError($"Delegate args:({delArgs.Length}) length and parsed string args:({objArgs.Length})don match.");
+
+            // GD.PrintS("delArgs", delArgs.Length, "strArgs", strArgs.Length, "objArgs", objArgs.Length);
+            // delArgs.Print();
+            // strArgs.Print();
+            // objArgs.Print();
+
+            return (command, objArgs);
+        }
+        return (command, objArgs);
     }
 }

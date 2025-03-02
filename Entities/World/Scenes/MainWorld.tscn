@@ -18,12 +18,10 @@ offset_bottom = 1080.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="ConsoleUi" parent="." instance=ExtResource("1_tjitf")]
-top_level = true
-z_as_relative = false
+[node name="UI" parent="." instance=ExtResource("1_dlh8q")]
 layout_mode = 2
 
-[node name="UI" parent="." instance=ExtResource("1_dlh8q")]
+[node name="ConsoleUi" parent="." instance=ExtResource("1_tjitf")]
 layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="."]

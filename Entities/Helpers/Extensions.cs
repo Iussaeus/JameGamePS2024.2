@@ -1,6 +1,5 @@
 using Godot;
 using Godot.Collections;
-using System;
 using System.Collections.Generic;
 using Test.Entities.Components;
 
@@ -126,6 +125,33 @@ public static class SysArrayExtensions {
         return list;
     }
 
+    public static void Print<T>(this T[] a) {
+        var str = new System.Text.StringBuilder();
+
+        foreach (var e in a) {
+            str.Append(e + " ");
+        }
+
+        GD.Print(str.ToString());
+    }
+
+    public static T[] Initialize<T>(this T[] a, T thing) {
+        for (int i = 0; i < a.Length; i++) {
+            a[i] = thing;
+        }
+        return a;
+    }
+
+    public static void ForEach<T>(this T[] a, System.Action<T> action) {
+        for (int i = 0; i < a.Length; i++)
+            action(a[i]);
+    }
+
+    public static void ForEach<T>(this T[] a, System.Func<T, T> action) {
+        for (int i = 0; i < a.Length; i++)
+            a[i] = action(a[i]);
+    }
+
     public static void ClearMatrix(this int[,] m) {
         for (int i = 0; i < m.GetLength(0); i++) {
             for (int j = 0; j < m.GetLength(1); j++) {
@@ -133,8 +159,30 @@ public static class SysArrayExtensions {
             }
         }
     }
+
 }
 
+public static class ListExtensions {
+    public static void ForEach<T>(this List<T> a, System.Action<T> action) {
+        for (int i = 0; i < a.Count; i++)
+            action(a[i]);
+    }
+
+    public static void ForEach<T>(this List<T> a, System.Func<T, T> action) {
+        for (int i = 0; i < a.Count; i++)
+            a[i] = action(a[i]);
+    }
+
+    public static void Print<T>(this List<T> a) {
+        var str = new System.Text.StringBuilder();
+
+        foreach (var e in a) {
+            str.Append(e + " ");
+        }
+
+        GD.Print(str.ToString());
+    }
+}
 
 public static class NodeExtensions {
     public static void Assert(this Node node, bool truthy, string message) {
@@ -142,17 +190,5 @@ public static class NodeExtensions {
             GD.PushError($"{node.Name}: Assert Failed: {message}");
             node.GetTree().Paused = true;
         }
-    }
-
-    public static (bool Ok, object Result) Pcall(this Node node, System.Delegate function, params object[] args) {
-        object result = null;
-        try {
-            result = function.Method.Invoke(function.Target, args);
-        }
-        catch (Exception e) {
-            result = e;
-            return (false, e);
-        };
-        return (true, result);
     }
 }
