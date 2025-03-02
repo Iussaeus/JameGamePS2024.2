@@ -1,5 +1,5 @@
 using Godot;
-using Test.Entities.Components;
+using Test.Entities.Global;
 using Test.Entities.Interaction;
 
 [GlobalClass]

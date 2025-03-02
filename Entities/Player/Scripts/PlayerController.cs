@@ -1,7 +1,8 @@
 using Godot;
-using Test.Helpers.Extensions;
+using Test.Utils.Extensions;
 using Test.Entities.Components;
 using Test.Entities.Interaction;
+using Test.Entities.Global;
 
 namespace Test.Entities.Player;
 
@@ -38,17 +39,17 @@ public partial class PlayerController : CharacterBody3D {
     private Vector3 _dashEnd = new();
     private Vector3 DashDirection = new();
 
-    private Camera3D _camera3D;
+    private Camera _camera;
     private readonly float _rayLen = 1000;
 
-
-    public override void _Ready() {
-        Globals.Instance.EmitSignal(Globals.SignalName.PlayerSpawned, this);
+    public override  void _Ready() {
+        SignalBus.Instance.EmitSignal(SignalBus.SignalName.PlayerSpawned, this);
 
         Interactor = GetNode<PlayerInteractor>("PlayerInteractor");
         Marker3D = GetNode<Marker3D>("Marker3D");
         Gun = GetNode<Gun>("Gun");
-        AwaitCamera();
+
+        _camera = GetNode<Camera>("Camera3D");
 
         _dashCooldown.OneShot = true;
         _dashCooldown.Timeout += () => CanDash = true;
@@ -57,12 +58,6 @@ public partial class PlayerController : CharacterBody3D {
         DashTimer.OneShot = true;
         DashTimer.Timeout += () => IsDashing = true;
         AddChild(DashTimer);
-    }
-
-    public async void AwaitCamera() {
-        await ToSignal(Globals.Instance, Globals.SignalName.CameraSpawned);
-        _camera3D = Globals.Camera;
-        this.Assert(_camera3D != null, "Player has no camera");
     }
 
     public override void _Process(double delta) {
@@ -75,16 +70,15 @@ public partial class PlayerController : CharacterBody3D {
     }
     public void Rotate() {
         var mousePos = GetViewport().GetMousePosition();
-        var from = _camera3D.ProjectRayOrigin(mousePos);
-        var to = from + _camera3D.ProjectRayNormal(mousePos) * _rayLen;
+        var from = _camera.ProjectRayOrigin(mousePos);
+        var to = from + _camera.ProjectRayNormal(mousePos) * _rayLen;
         var query = PhysicsRayQueryParameters3D.Create(from, to);
         var directSpaceState = GetWorld3D().DirectSpaceState;
 
         var intersection = directSpaceState.IntersectRay(query);
 
-        if (!Globals.Inventory.IsOpen)
-            if (Input.GetLastMouseVelocity() != Vector2.Zero && intersection.TryGetValue("position", out var position))
-                LookAt((Vector3)position);
+        if (Input.GetLastMouseVelocity() != Vector2.Zero && intersection.TryGetValue("position", out var position))
+            LookAt((Vector3)position);
 
         GlobalRotation = GlobalRotation with { X = 0, Y = GlobalRotation.Y, Z = 0 };
     }

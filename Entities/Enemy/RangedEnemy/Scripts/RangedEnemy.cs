@@ -1,5 +1,7 @@
 using Godot;
+using Test.Entities.Global;
 using Test.Entities.Components;
+using Test.Entities.Player;
 
 public partial class RangedEnemy : CharacterBody3D {
     [Export] public float MovementSpeed = 20;
@@ -9,12 +11,13 @@ public partial class RangedEnemy : CharacterBody3D {
     private Area3D _dangerZone;
     private Area3D _safeZone;
     private Gun _gun;
+    private PlayerController _player;
 
     private bool _isPlayerVisible = false;
     private bool _isPlayerInDangerZone = false;
     private bool _isPlayerInSafeZone = false;
 
-    public override void _Ready() {
+    public override async void _Ready() {
         SetPhysicsProcess(false);
         CallDeferred(MethodName.SetMap);
 
@@ -22,6 +25,7 @@ public partial class RangedEnemy : CharacterBody3D {
         _dangerZone = GetNode<Area3D>("DangerArea3D");
         _safeZone = GetNode<Area3D>("SafeArea3D");
         _gun = GetNode<Gun>("Gun");
+        _player = await Globals.Instance.AwaitSignalSingle<PlayerController>(SignalBus.SignalName.PlayerSpawned);
 
         _navigationAgent.VelocityComputed += OnVelocityComputed;
 
@@ -90,8 +94,8 @@ public partial class RangedEnemy : CharacterBody3D {
     }
 
     private void OnVelocityComputed(Vector3 safeVelocity) {
-        SetMovementTarget(Globals.Player.GlobalPosition);
-        LookAt(Globals.Player.GlobalPosition);
+        SetMovementTarget(_player.GlobalPosition);
+        LookAt(_player.GlobalPosition);
 
         Velocity = safeVelocity;
         MoveAndSlide();

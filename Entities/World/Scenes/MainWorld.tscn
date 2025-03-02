@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://qy3qlfik0xw6"]
+[gd_scene load_steps=8 format=3 uid="uid://qy3qlfik0xw6"]
 
 [ext_resource type="PackedScene" uid="uid://b3do2hejwuvds" path="res://Entities/UI/Scenes/ui.tscn" id="1_dlh8q"]
-[ext_resource type="PackedScene" uid="uid://b6dycbs1luheb" path="res://Entities/Components/Console/Scenes/ConsoleUI.tscn" id="1_tjitf"]
+[ext_resource type="PackedScene" uid="uid://b6dycbs1luheb" path="res://Entities/Console/Scenes/ConsoleWindow.tscn" id="1_tjitf"]
 [ext_resource type="PackedScene" uid="uid://fqvflhc3nymf" path="res://Entities/Player/Scenes/PlayerBody.tscn" id="2_6fyja"]
 [ext_resource type="Script" path="res://Entities/World/Scripts/World.cs" id="2_a4x57"]
 [ext_resource type="Script" path="res://Entities/World/Scripts/Navigation.cs" id="2_ympxj"]
-[ext_resource type="PackedScene" uid="uid://btnredj8yyckn" path="res://Entities/Player/Scenes/TestCamera.tscn" id="3_e8bvu"]
 [ext_resource type="PackedScene" uid="uid://ci6bd1n5bh8ir" path="res://Entities/World/Scenes/NavigationTestWorld.tscn" id="4_7im7c"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_cpi6k"]
@@ -49,11 +48,3 @@ DashLength = 20.0
 DashEasing = 2
 Speed = 50.0
 HorizontalAcceleration = 20.0
-
-[node name="Camera3D" parent="SubViewport/World" instance=ExtResource("3_e8bvu")]
-transform = Transform3D(-0.95183, 0.172621, -0.253419, 0.115687, 0.967568, 0.224562, 0.283964, 0.184428, -0.940931, 60.7085, 8.54481, -9.37233)
-current = true
-fov = 60.0
-size = 100.0
-near = 0.001
-far = 1000.0

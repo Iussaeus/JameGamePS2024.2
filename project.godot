@@ -18,9 +18,9 @@ config/tile_size=Vector2i(32, 32)
 
 [autoload]
 
-Globals="*res://Entities/Components/Globals/Globals.cs"
-SignalBus="*res://Entities/Components/Globals/SignalBus.cs"
-GlobalInput="*res://Entities/Components/Globals/GlobalInput.cs"
+Globals="*res://Entities/Globals/Globals.cs"
+SignalBus="*res://Entities/Globals/SignalBus.cs"
+GlobalInput="*res://Entities/Globals/GlobalInput.cs"
 
 [debug]
 

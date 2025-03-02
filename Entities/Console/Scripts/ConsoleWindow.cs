@@ -1,10 +1,12 @@
 using Godot;
 using System.Collections.Generic;
-using Test.Helpers.Extensions;
-using Test.Helpers;
-using Test.Entities.Components;
+using Test.Entities.Global;
+using Test.Utils.Extensions;
+using Test.Utils;
 
-public partial class Console : Control {
+namespace Test.Entities.Console;
+
+public partial class ConsoleWindow : Control {
     public bool IsOpened;
 
     private List<string> _history = new();
@@ -15,7 +17,8 @@ public partial class Console : Control {
     private bool _requesting;
 
     public override void _Ready() {
-        Globals.Instance.EmitSignal(Globals.SignalName.ConsoleSpawned, this);
+        SignalBus.Instance.EmitSignal(SignalBus.SignalName.ConsoleSpawned, this);
+
         _textBox = GetNode<CodeEdit>("CenterContainer/CodeEdit");
         _textBox.Editable = true;
         _textBox.CaretBlink = true;
@@ -57,10 +60,8 @@ public partial class Console : Control {
             AddHistoryItem(text);
 
             var (command, args) = ParseCommandAndArgs(text);
-            GD.Print(command);
             CallCommand(command, args);
 
-            GD.PrintS(command, args);
             _textBox.Clear();
         }
 
@@ -85,7 +86,7 @@ public partial class Console : Control {
         if (Input.IsActionJustPressed("ui_up")) {
             _currentIdx = _currentIdx - 1 >= 0 ? _currentIdx - 1 : _currentIdx;
 
-            GD.PrintS(_history.Count, _currentIdx, _history[_currentIdx], _requesting);
+            // GD.PrintS(_history.Count, _currentIdx, _history[_currentIdx], _requesting);
             this.Assert(_currentIdx < _history.Count, $"Current index too small:{_currentIdx}, should be >= than 0");
 
             _textBox.Clear();
@@ -94,7 +95,7 @@ public partial class Console : Control {
         if (Input.IsActionJustPressed("ui_down")) {
             _currentIdx = _currentIdx + 1 <= _history.Count ? _currentIdx + 1 : _currentIdx;
 
-            GD.PrintS(_history.Count, _currentIdx, _currentIdx == _history.Count ? " " : _history[_currentIdx], _requesting);
+            // GD.PrintS(_history.Count, _currentIdx, _currentIdx == _history.Count ? " " : _history[_currentIdx], _requesting);
             this.Assert(_currentIdx <= _history.Count, $"Current index too big:{_currentIdx}, should be smaller than {_history.Count + 1}");
 
             _textBox.Clear();
@@ -123,8 +124,7 @@ public partial class Console : Control {
                                 kind,
                                 (string)com["display_text"],
                                 (string)com["insert_text"],
-                                (Color)com["text_color"]
-                                );
+                                (Color)com["text_color"]);
         }
 
         _textBox.UpdateCodeCompletionOptions(true);
@@ -143,14 +143,19 @@ public partial class Console : Control {
     public void AddCommand(System.Delegate @delegate) {
         var name = @delegate.Method.Name;
 
-        AddCompletionItem(name.ToLower(), "command");
-        _commands.Add(name.ToLower(), @delegate);
+        AddCompletionItem(name.ToSnakeCase(), "command");
+        _commands.Add(name.ToSnakeCase(), @delegate);
     }
 
-    public void CallCommand(string name, params System.Object[] args) {
+    public void CallCommand(string command, params System.Object[] args) {
         System.Delegate @delegate;
 
-        if (!_commands.TryGetValue(name, out @delegate)) {
+        if (command == null || args == null) {
+            GD.PushError("Command not found.");
+            return;
+        }
+
+        if (!_commands.TryGetValue(command, out @delegate)) {
             GD.PushError("Command not found.");
             return;
         }

@@ -1,5 +1,4 @@
-namespace Test.Helpers;
-
+namespace Test.Utils;
 
 public static class Helpers {
     /// <summary>

@@ -1,5 +1,4 @@
 using Godot;
-using static Godot.GD;
 
 namespace Test.Entities.Components;
 
@@ -24,13 +23,13 @@ public partial class Bullet : RigidBody3D {
     }
 
     private void OnBodyEntered(Node body) {
-        if (IsDebugOn) Print("Hit target", body);
+        if (IsDebugOn) GD.Print("Hit target", body);
         if (body.HasNode("%HpComponent")) {
-            var hpComponent = body.GetNode<HpComponent>("%HpComponent");
+            var hpComponent = body.GetNode<Hp>("%HpComponent");
             hpComponent.TakeDamage(Damage);
         }
         else if (body.GetParent().HasNode("HpComponent")) {
-            var hpComponent = body.GetParent().GetNode<HpComponent>("HpComponent");
+            var hpComponent = body.GetParent().GetNode<Hp>("HpComponent");
             hpComponent.TakeDamage(Damage);
         }
 

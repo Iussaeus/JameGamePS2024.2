@@ -1,32 +1,32 @@
 using Godot;
-using Test.Entities.Components;
 using Test.Entities.Player;
+using Test.Entities.Console;
+using Test.Utils.Extensions;
+
+namespace Test.Entities.Global;
 
 public partial class GlobalInput : Node {
     public static GlobalInput Instance;
 
-    private static Camera3D _camera;
     private static PlayerController _player;
     private static Inventory _inventory;
-    private static Console _console;
+    private static ConsoleWindow _console;
+    private static Camera3D _camera;
 
     public override void _EnterTree() {
         Instance = this;
     }
 
     public override async void _Ready() {
-        await ToSignal(Globals.Instance, Globals.SignalName.ConsoleSpawned);
-        _console = Globals.Console;
+        _console = (ConsoleWindow)(await Globals.Instance.AwaitSignal(SignalBus.SignalName.ConsoleSpawned))[0];
+        _inventory = (Inventory)(await Globals.Instance.AwaitSignal(SignalBus.SignalName.InventorySpawned))[0];
+        _player = (PlayerController)(await Globals.Instance.AwaitSignal(SignalBus.SignalName.PlayerSpawned))[0];
+        _camera = _player.GetNode<Camera>("Camera3D");
 
-        await ToSignal(Globals.Instance, Globals.SignalName.InventorySpawned);
-        _inventory = Globals.Inventory;
-
-        await ToSignal(Globals.Instance, Globals.SignalName.PlayerSpawned);
-        _player = Globals.Player;
-
-        await ToSignal(Globals.Instance, Globals.SignalName.CameraSpawned);
-        _camera = Globals.Camera;
-
+        this.Assert(_console != null, "Console is null");
+        this.Assert(_inventory != null, "Inventory is null");
+        this.Assert(_player != null, "Player is null");
+        this.Assert(_camera != null, "Camera is null");
     }
 
     public override void _Process(double delta) {
@@ -116,7 +116,8 @@ public partial class GlobalInput : Node {
         if (!_player.DashTimer.IsStopped()) _player.Dash((float)delta);
         else _player.Move((float)delta, direction);
 
-        _player.Rotate();
+        if (!_inventory.IsOpen)
+            _player.Rotate();
     }
 
     public void ProcessSingularPlayerInput() {

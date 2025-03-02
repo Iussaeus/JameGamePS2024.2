@@ -5,6 +5,7 @@ namespace Test.Entities.Components;
 // TODO: fix the gun
 [GlobalClass]
 public partial class Gun : RigidBody3D {
+
     private Marker3D _marker;
     private Node _grandParent;
 

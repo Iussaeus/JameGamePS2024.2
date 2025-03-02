@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b6dycbs1luheb"]
 
-[ext_resource type="Script" path="res://Entities/Components/Console/Scripts/Console.cs" id="1_es3i4"]
+[ext_resource type="Script" path="res://Entities/Console/Scripts/ConsoleWindow.cs" id="1_es3i4"]
 
 [node name="ConsoleUi" type="Control"]
 layout_mode = 3

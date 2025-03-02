@@ -1,7 +1,7 @@
 using Godot;
 using Godot.Collections;
-using Test.Helpers.Extensions;
-using Test.Entities.Components;
+using Test.Utils.Extensions;
+using Test.Entities.Global;
 
 // WARNING: weird behaviour when adding an object whilst other one is selected
 public partial class Inventory : Control {
@@ -50,7 +50,8 @@ public partial class Inventory : Control {
         AddChild(_selectTimer);
 
         ChildEnteredTree += ConnectSignals;
-        Globals.Instance.EmitSignal(Globals.SignalName.InventorySpawned, TileSize, InventorySize, this);
+        SignalBus.Instance.EmitSignal(SignalBus.SignalName.InventorySpawned, this);
+        GD.Print(Globals.Inventory);
 
         Backgroud = GetNode<ColorRect>("Background");
         Grid = GetNode<InventoryGrid>("InventoryGrid");
@@ -93,6 +94,7 @@ public partial class Inventory : Control {
         var testVecDownLeft = new Vector2I(_maxInventoryBounds.X, _maxInventoryBounds.Y);
 
         var testItem = DummyItem.Instantiate<InventoryItemUI>();
+        testItem.GlobalPosition = Vector2.Zero;
 
         // IsItemInsideBounds tests
         this.Assert(IsItemInsideBounds(testItem, testVecUpLeft), "isItemInsideBounds failed the upper left bound");

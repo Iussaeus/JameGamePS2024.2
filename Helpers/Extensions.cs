@@ -1,9 +1,9 @@
 using Godot;
 using Godot.Collections;
 using System.Collections.Generic;
-using Test.Entities.Components;
+using Test.Entities.Global;
 
-namespace Test.Helpers.Extensions;
+namespace Test.Utils.Extensions;
 
 public enum EasingFunctions {
     Linear,
@@ -83,28 +83,27 @@ public static class FloatExtension {
 
 public static class Vec2Extension {
     public static Vector2I ToGlobalSpaceSnapped(this Vector2I v) {
-        return (Vector2I)(((v - Vector2.One) * Globals.GridPadding) + (v * Globals.TileSize)).Snapped(Globals.TileSize + new Vector2I(4, 4));
+        return (Vector2I)(((v - Vector2.One) * Globals.GridPadding) + (v * Globals.Inventory.TileSize)).Snapped(Globals.Inventory.TileSize + new Vector2I(4, 4));
     }
 
     public static Vector2 ToGlobalSpaceSnapped(this Vector2 v) {
-        return (((v - Vector2.One) * Globals.GridPadding) + (v * Globals.TileSize)).Snapped(Globals.TileSize + new Vector2I(4, 4));
+        return (((v - Vector2.One) * Globals.GridPadding) + (v * Globals.Inventory.TileSize)).Snapped(Globals.Inventory.TileSize + new Vector2I(4, 4));
     }
 
     public static Vector2 ToGlobalSpace(this Vector2 v) {
-        return ((v - Vector2.One) * Globals.GridPadding) + (v * Globals.TileSize);
+        return ((v - Vector2.One) * Globals.GridPadding) + (v * Globals.Inventory.TileSize);
     }
 
     public static Vector2 ToGlobalSpace(this Vector2I v) {
-        return ((v - Vector2.One) * Globals.GridPadding) + (v * Globals.TileSize);
+        return ((v - Vector2.One) * Globals.GridPadding) + (v * Globals.Inventory.TileSize);
     }
 
     public static Vector2I ToTileSpace(this Vector2 v) {
-        return (Vector2I)(v / (Globals.TileSize + new Vector2I(4, 4))).Round();
+        return (Vector2I)(v / (Globals.Inventory.TileSize + new Vector2I(4, 4))).Round();
     }
 
     public static Vector2I ToTileSpace(this Vector2I v) {
-
-        return v / (Globals.TileSize + new Vector2I(4, 4));
+        return v / (Globals.Inventory.TileSize + new Vector2I(4, 4));
     }
 }
 
@@ -190,5 +189,11 @@ public static class NodeExtensions {
             GD.PushError($"{node.Name}: Assert Failed: {message}");
             node.GetTree().Paused = true;
         }
+    }
+}
+
+public static class Node3DExtentions {
+    public static Vector3 ForwardVector(this Node3D n) {
+        return -n.Transform.Basis.Z;
     }
 }

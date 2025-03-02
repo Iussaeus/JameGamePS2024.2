@@ -1,6 +1,6 @@
 using Godot;
 using Godot.Collections;
-using Test.Helpers.Extensions;
+using Test.Utils.Extensions;
 
 [Tool]
 public partial class GeneratedWorldSharply : Node3D {

@@ -1,5 +1,6 @@
 using Godot;
-using Test.Entities.Components;
+using Test.Entities.Global;
+using Test.Entities.Player;
 
 namespace Test.Entities.Enemy;
 
@@ -8,12 +9,14 @@ public partial class MeleeEnemy : CharacterBody3D {
 
     [Export] public bool IsDebugOn;
     [Export] public float MovementSpeed = 20;
+    private PlayerController _player;
 
-    public override void _Ready() {
+    public override async void _Ready() {
         _navigationAgent = GetNode<NavigationAgent3D>("NavigationAgent3D");
 
         SetPhysicsProcess(false);
         CallDeferred(MethodName.SetMap);
+        _player = await Globals.Instance.AwaitSignalSingle<PlayerController>(SignalBus.SignalName.PlayerSpawned);
 
         _navigationAgent.VelocityComputed += OnVelocityComputed;
     }
@@ -32,8 +35,8 @@ public partial class MeleeEnemy : CharacterBody3D {
     }
 
     private void OnVelocityComputed(Vector3 safeVelocity) {
-        SetMovementTarget(Globals.Player.GlobalPosition);
-        LookAt(Globals.Player.GlobalPosition);
+        SetMovementTarget(_player.GlobalPosition);
+        LookAt(_player.GlobalPosition);
         GlobalRotation = GlobalRotation with { X = 0, Y = GlobalRotation.Y, Z = 0 };
 
         Velocity = safeVelocity;
