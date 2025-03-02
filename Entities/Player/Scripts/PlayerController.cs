@@ -67,7 +67,13 @@ public partial class PlayerController : CharacterBody3D {
 
     public override void _Process(double delta) {
         Gun.GlobalPosition = Marker3D.GlobalPosition;
+    }
 
+    public override void _PhysicsProcess(double delta) {
+        MoveAndSlide();
+        // if (!_dashing.IsStopped()) GD.PrintS("start:", _dashStart, "end:", _dashEnd, "current:", GlobalPosition);
+    }
+    public void Rotate() {
         var mousePos = GetViewport().GetMousePosition();
         var from = _camera3D.ProjectRayOrigin(mousePos);
         var to = from + _camera3D.ProjectRayNormal(mousePos) * _rayLen;
@@ -81,11 +87,6 @@ public partial class PlayerController : CharacterBody3D {
                 LookAt((Vector3)position);
 
         GlobalRotation = GlobalRotation with { X = 0, Y = GlobalRotation.Y, Z = 0 };
-    }
-
-    public override void _PhysicsProcess(double delta) {
-        MoveAndSlide();
-        // if (!_dashing.IsStopped()) GD.PrintS("start:", _dashStart, "end:", _dashEnd, "current:", GlobalPosition);
     }
 
     public void Move(float delta, Vector3 direction) {

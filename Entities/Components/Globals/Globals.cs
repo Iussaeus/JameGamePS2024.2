@@ -17,6 +17,9 @@ public partial class Globals : Node {
     [Signal]
     public delegate void WorldSpawnedEventHandler(World world);
 
+    [Signal]
+    public delegate void ConsoleSpawnedEventHandler(Console console);
+
     public static Globals Instance;
 
     public static PlayerController Player;
@@ -25,6 +28,7 @@ public partial class Globals : Node {
     public static Vector2I InventorySize;
     public static Inventory Inventory;
     public static World World;
+    public static Console Console;
 
     public const int GridPadding = 4;
 
@@ -33,6 +37,7 @@ public partial class Globals : Node {
         WorldSpawned += world => World = world;
         PlayerSpawned += player => Player = player;
         CameraSpawned += camera => Camera = camera;
+        ConsoleSpawned += console => Console = console;
         InventorySpawned += (tileSize, inventorySize, inventory) => {
             var projectTileSize = (Vector2)ProjectSettings.GetSetting("application/config/tile_size");
             this.Assert(tileSize == projectTileSize, $"Script tileSize({tileSize}) dont match the project setting tileSize{projectTileSize}");
@@ -41,6 +46,4 @@ public partial class Globals : Node {
             Inventory = inventory;
         };
     }
-
-    public override void _Ready() { }
 }

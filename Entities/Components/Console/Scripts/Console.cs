@@ -1,17 +1,21 @@
 using Godot;
-using Test.Helpers.Extensions;
 using System.Collections.Generic;
+using Test.Helpers.Extensions;
 using Test.Helpers;
+using Test.Entities.Components;
 
 public partial class Console : Control {
+    public bool IsOpened;
+
     private List<string> _history = new();
     private Dictionary<string, System.Delegate> _commands = new();
-    private List<Godot.Collections.Dictionary> _savedCommands = new();
+    private List<Dictionary<object, object>> _savedCommands = new();
     private CodeEdit _textBox;
     private int _currentIdx = 0;
     private bool _requesting;
 
     public override void _Ready() {
+        Globals.Instance.EmitSignal(Globals.SignalName.ConsoleSpawned, this);
         _textBox = GetNode<CodeEdit>("CenterContainer/CodeEdit");
         _textBox.Editable = true;
         _textBox.CaretBlink = true;
@@ -28,11 +32,24 @@ public partial class Console : Control {
         if (Input.IsActionJustReleased("console")) {
             Visible = Visible ? false : true;
             if (Visible) {
+                IsOpened = true;
                 _textBox.GrabFocus();
+                BlockInput();
             }
             else {
+                IsOpened = false;
                 _textBox.ReleaseFocus();
+                UnblockInput();
             }
+            _textBox.Clear();
+        }
+
+        if (Input.IsActionJustReleased("cancel") && IsOpened) {
+            Visible = false;
+            IsOpened = false;
+            _textBox.ReleaseFocus();
+            UnblockInput();
+
             _textBox.Clear();
         }
 
@@ -47,12 +64,12 @@ public partial class Console : Control {
             GD.PrintS(command, args);
             _textBox.Clear();
         }
-        else {
+
+        if (@event.IsActionPressed("enter") && _requesting) {
             _requesting = false;
             _textBox.ConfirmCodeCompletion();
         }
 
-        // TODO: Make the CodeCompletionOptions persist
         if (@event.IsActionReleased("tab") && !_requesting) {
             _requesting = true;
             RequestCompletion();
@@ -113,7 +130,7 @@ public partial class Console : Control {
     }
 
     public void AddCompletionItem(string text, string type) {
-        var item = new Godot.Collections.Dictionary();
+        var item = new Dictionary<object, object>();
         item["display_text"] = text + " " + $"[{type}]";
         item["insert_text"] = text;
         item["text_color"] = Colors.White;
@@ -131,19 +148,20 @@ public partial class Console : Control {
     public void CallCommand(string name, params System.Object[] args) {
         System.Delegate @delegate;
 
-        if (!_commands.TryGetValue(name, out @delegate)) {
-            GD.PushError("Command not found");
+        if (args.Length < 0) {
+            GD.PushError("No arguments passed.");
             return;
         }
 
-        if (args.Length == 1 && args[0] is string s && s.Equals("")) {
-            GD.PushError("No args:");
+        if (!_commands.TryGetValue(name, out @delegate)) {
+            GD.PushError("Command not found.");
             return;
         }
 
         var (ok, result) = Helpers.PCall(@delegate, args);
 
-        GD.PrintS(ok, result);
+        if (result is System.Exception e)
+            GD.PushError(e.Message);
     }
 
     public (string command, object[] args) ParseCommandAndArgs(string text) {
@@ -199,5 +217,25 @@ public partial class Console : Control {
             return (command, objArgs);
         }
         return (command, objArgs);
+    }
+
+    public void BlockInput() {
+        var root = GetTree().Root;
+        foreach (var n in root.GetChildren()) {
+            if (n != this) {
+                n.SetProcessInput(false);
+                n.SetProcessUnhandledKeyInput(false);
+            }
+        }
+    }
+
+    public void UnblockInput() {
+        var root = GetTree().Root;
+        foreach (var n in root.GetChildren()) {
+            if (n != this) {
+                n.SetProcessInput(true);
+                n.SetProcessUnhandledKeyInput(true);
+            }
+        }
     }
 }
