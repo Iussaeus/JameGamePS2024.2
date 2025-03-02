@@ -24,7 +24,6 @@ public partial class Console : Control {
         Visible = false;
         _textBox.ReleaseFocus();
         _textBox.GetCodeCompletionOptions();
-        // GD.PrintS(Name, "Up and running.");
     }
 
     public override void _Input(InputEvent @event) {
@@ -105,6 +104,9 @@ public partial class Console : Control {
     }
 
     public void AddHistoryItem(string text) {
+        if (_history.Contains(text) || text == "" || text == " ")
+            return;
+
         AddCompletionItem(text, "history");
 
         _history.Add(text);
@@ -148,13 +150,13 @@ public partial class Console : Control {
     public void CallCommand(string name, params System.Object[] args) {
         System.Delegate @delegate;
 
-        if (args.Length < 0) {
-            GD.PushError("No arguments passed.");
+        if (!_commands.TryGetValue(name, out @delegate)) {
+            GD.PushError("Command not found.");
             return;
         }
 
-        if (!_commands.TryGetValue(name, out @delegate)) {
-            GD.PushError("Command not found.");
+        if (args.Length != @delegate.Method.GetParameters().Length) {
+            GD.PushError($"Arg count mismatch: {args.Length} passed, expected {@delegate.Method.GetParameters().Length}");
             return;
         }
 
@@ -165,6 +167,8 @@ public partial class Console : Control {
     }
 
     public (string command, object[] args) ParseCommandAndArgs(string text) {
+        if (text == "" || text == " ")
+            return (null, null);
         var strippedText = text.StripEscapes();
         var splitText = text.Split(" ", System.StringSplitOptions.RemoveEmptyEntries);
 
@@ -178,13 +182,15 @@ public partial class Console : Control {
 
         if (!_commands.TryGetValue(command, out @delegate)) {
             GD.PushError("Command not found");
-            return (command, null);
+            return (null, null);
         }
 
         var delArgs = @delegate.Method.GetParameters();
         var objArgs = new object[delArgs.Length];
+        if (strArgs.Length == 0 && delArgs.Length == 0)
+            return (command, new string[0]);
 
-        if (strArgs.Length > 0 && strArgs.Length >= delArgs.Length) {
+        if (strArgs.Length > 0) {
             // GD.PrintS(command, _commands.ContainsKey(command), splitText.Length);
 
             for (int i = 0; i < delArgs.Length; i++) {
@@ -198,8 +204,10 @@ public partial class Console : Control {
 
                 if (type.BaseType == typeof(System.Array)) {
                     var varArgs = new object[strArgs.Length - i];
-                    for (int j = 0; j < varArgs.Length; j++) {
-                        varArgs[j] = strArgs[j + i];
+                    if (strArgs.Length < delArgs.Length) {
+                        for (int j = 0; j < varArgs.Length; j++) {
+                            varArgs[j] = strArgs[j + i];
+                        }
                     }
                     objArgs[i] = varArgs;
                     varArgs.Print();
@@ -216,7 +224,8 @@ public partial class Console : Control {
 
             return (command, objArgs);
         }
-        return (command, objArgs);
+
+        return (command, null);
     }
 
     public void BlockInput() {
