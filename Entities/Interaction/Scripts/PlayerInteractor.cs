@@ -1,5 +1,4 @@
 using Godot;
-using static Godot.GD;
 
 namespace Test.Entities.Interaction;
 
@@ -32,21 +31,21 @@ public partial class PlayerInteractor : Area3D {
     }
 
     private void Focus(Interactable interactable) {
-        if (IsDebugOn) Print("Player: Focused");
+        if (IsDebugOn) GD.Print("Player: Focused");
 
         var interactor = new Interactor();
         interactable.EmitSignal(Interactable.SignalName.Focused, interactor);
     }
 
     private void Unfocus(Interactable interactable) {
-        if (IsDebugOn) Print("Player: Unfocused");
+        if (IsDebugOn) GD.Print("Player: Unfocused");
 
         var interactor = new Interactor();
         interactable.EmitSignal(Interactable.SignalName.Unfocused, interactor);
     }
 
     public void Interact(Interactable interactable) {
-        if (IsDebugOn) Print("Player: Interacted");
+        if (IsDebugOn) GD.Print("Player: Interacted");
 
         var interactor = new Interactor();
         interactable.EmitSignal(Interactable.SignalName.Interacted, interactor);

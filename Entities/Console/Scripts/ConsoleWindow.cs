@@ -13,7 +13,7 @@ public partial class ConsoleWindow : Control {
     private Dictionary<string, System.Delegate> _commands = new();
     private List<Dictionary<object, object>> _savedCommands = new();
     private CodeEdit _textBox;
-    private int _currentIdx = 0;
+    private int _currentIdx = -1;
     private bool _requesting;
 
     public override void _Ready() {
@@ -60,6 +60,9 @@ public partial class ConsoleWindow : Control {
             AddHistoryItem(text);
 
             var (command, args) = ParseCommandAndArgs(text);
+            if (command == null || args == null)
+                return;
+
             CallCommand(command, args);
 
             _textBox.Clear();
@@ -86,11 +89,12 @@ public partial class ConsoleWindow : Control {
         if (Input.IsActionJustPressed("ui_up")) {
             _currentIdx = _currentIdx - 1 >= 0 ? _currentIdx - 1 : _currentIdx;
 
-            // GD.PrintS(_history.Count, _currentIdx, _history[_currentIdx], _requesting);
-            this.Assert(_currentIdx < _history.Count, $"Current index too small:{_currentIdx}, should be >= than 0");
+            // GD.PrintS(_history.Count, _currentIdx, _currentIdx == -1 || _currentIdx == _history.Count ? " " : _history[_currentIdx], _requesting);
+            this.Assert(_currentIdx >= -1, $"Current index too small:{_currentIdx}, should be >= than 0");
 
             _textBox.Clear();
-            _textBox.Text = _history[_currentIdx];
+            if (_currentIdx == -1 || _currentIdx == _history.Count) _textBox.Text = "";
+            else _textBox.Text = _history[_currentIdx];
         }
         if (Input.IsActionJustPressed("ui_down")) {
             _currentIdx = _currentIdx + 1 <= _history.Count ? _currentIdx + 1 : _currentIdx;
@@ -105,7 +109,7 @@ public partial class ConsoleWindow : Control {
     }
 
     public void AddHistoryItem(string text) {
-        if (_history.Contains(text) || text == "" || text == " ")
+        if (_history.Contains(text) || text == "" || text == " " || _commands.ContainsKey(text))
             return;
 
         AddCompletionItem(text, "history");

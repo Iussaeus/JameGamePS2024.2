@@ -21,6 +21,7 @@ public partial class PlayerController : CharacterBody3D {
 
     public float Gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
 
+    public Camera Camera;
     public Marker3D Marker3D;
     public Gun Gun;
 
@@ -39,17 +40,16 @@ public partial class PlayerController : CharacterBody3D {
     private Vector3 _dashEnd = new();
     private Vector3 DashDirection = new();
 
-    private Camera _camera;
     private readonly float _rayLen = 1000;
 
-    public override  void _Ready() {
-        SignalBus.Instance.EmitSignal(SignalBus.SignalName.PlayerSpawned, this);
+    public override void _Ready() {
 
         Interactor = GetNode<PlayerInteractor>("PlayerInteractor");
         Marker3D = GetNode<Marker3D>("Marker3D");
         Gun = GetNode<Gun>("Gun");
+        Camera = GetNode<Camera>("Camera3D");
 
-        _camera = GetNode<Camera>("Camera3D");
+        SignalBus.Instance.EmitSignal(SignalBus.SignalName.PlayerSpawned, this);
 
         _dashCooldown.OneShot = true;
         _dashCooldown.Timeout += () => CanDash = true;
@@ -58,6 +58,7 @@ public partial class PlayerController : CharacterBody3D {
         DashTimer.OneShot = true;
         DashTimer.Timeout += () => IsDashing = true;
         AddChild(DashTimer);
+
     }
 
     public override void _Process(double delta) {
@@ -70,8 +71,8 @@ public partial class PlayerController : CharacterBody3D {
     }
     public void Rotate() {
         var mousePos = GetViewport().GetMousePosition();
-        var from = _camera.ProjectRayOrigin(mousePos);
-        var to = from + _camera.ProjectRayNormal(mousePos) * _rayLen;
+        var from = Camera.ProjectRayOrigin(mousePos);
+        var to = from + Camera.ProjectRayNormal(mousePos) * _rayLen;
         var query = PhysicsRayQueryParameters3D.Create(from, to);
         var directSpaceState = GetWorld3D().DirectSpaceState;
 

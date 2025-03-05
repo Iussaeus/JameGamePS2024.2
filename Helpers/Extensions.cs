@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Test.Entities.Global;
 
 namespace Test.Utils.Extensions;
@@ -189,6 +190,50 @@ public static class NodeExtensions {
             GD.PushError($"{node.Name}: Assert Failed: {message}");
             node.GetTree().Paused = true;
         }
+    }
+
+    public static async Task<T> AwaitSignalSingle<T>(this Node node, StringName signal) where T : Node {
+        // GD.Print($"Waiting for {signal}");
+
+        T result = default;
+        var s = await node.ToSignal(SignalBus.Instance, signal);
+        // GD.Print($"Done waiting for {signal}");
+        s.Print();
+        if (s.Length == 1) {
+            result = (T)s[0];
+        }
+
+        // GD.Print($"result of {signal}: ", result);
+
+        return result;
+    }
+
+    public static async Task<T[]> AwaitSignalArray<T>(this Node node, StringName signal) where T : Node {
+        // GD.Print($"Waiting for {signal}");
+
+        var s = await node.ToSignal(SignalBus.Instance, signal);
+
+        // GD.Print($"Done waiting for {signal}");
+        // s.Print();
+        T[] result = new T[s.Length];
+
+        for (int i = 0; i < result.Length; i++) {
+            result[i] = (T)s[i];
+        }
+
+        // GD.Print($"result of{signal}: ", result);
+        // result.Print();
+
+        return result;
+    }
+
+    public static async Task<Variant[]> AwaitSignal(this Node node, StringName signal) {
+        // GD.Print($"Waiting for {signal}");
+        var s = await node.ToSignal(SignalBus.Instance, signal);
+
+        // GD.Print($"Done waiting for {signal}");
+        // s.Print();
+        return s;
     }
 }
 

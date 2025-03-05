@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://88fawh7t22lb"]
 
-[ext_resource type="Script" path="res://Entities/UI/Scripts/Inventory.cs" id="1_bbxp6"]
-[ext_resource type="Script" path="res://Entities/UI/Scripts/InventoryGrid.cs" id="2_w8bj3"]
+[ext_resource type="Script" uid="uid://duvmxd2s3gic2" path="res://Entities/UI/Scripts/Inventory.cs" id="1_bbxp6"]
+[ext_resource type="Script" uid="uid://w3l23lk0srrf" path="res://Entities/UI/Scripts/InventoryGrid.cs" id="2_w8bj3"]
 [ext_resource type="PackedScene" uid="uid://dhvcmuxgx4pkt" path="res://Entities/UI/Scenes/Tile.tscn" id="3_d80qi"]
 [ext_resource type="PackedScene" uid="uid://1sq22wh4f02r" path="res://Entities/Items/Scenes/InventoryItem.tscn" id="4_nmhr2"]
 [ext_resource type="PackedScene" uid="uid://chcafvk7lx4ho" path="res://Entities/Items/Scenes/InventoryItem2.tscn" id="5_k2f2j"]

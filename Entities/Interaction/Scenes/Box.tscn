@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bwdwhvg2b2wn5"]
 
 [ext_resource type="PackedScene" uid="uid://bybc1w3bwha5j" path="res://Entities/Interaction/Scenes/Interactable.tscn" id="1_5p1gd"]
-[ext_resource type="Script" path="res://Entities/Interaction/Scripts/Box.cs" id="1_rnw8y"]
+[ext_resource type="Script" uid="uid://6udtk3ydq4oa" path="res://Entities/Interaction/Scripts/Box.cs" id="1_rnw8y"]
 [ext_resource type="PackedScene" uid="uid://dmpj587f0puow" path="res://Entities/Components/Hp/Scenes/Hp.tscn" id="3_iun0u"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_utikt"]
@@ -9,7 +9,6 @@
 [sub_resource type="BoxMesh" id="BoxMesh_a7htf"]
 
 [node name="Box" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_rnw8y")
 _isDebugOn = true
 

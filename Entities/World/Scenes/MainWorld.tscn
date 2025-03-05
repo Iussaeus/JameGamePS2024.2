@@ -1,26 +1,21 @@
 [gd_scene load_steps=8 format=3 uid="uid://qy3qlfik0xw6"]
 
 [ext_resource type="PackedScene" uid="uid://b3do2hejwuvds" path="res://Entities/UI/Scenes/ui.tscn" id="1_dlh8q"]
-[ext_resource type="PackedScene" uid="uid://b6dycbs1luheb" path="res://Entities/Console/Scenes/ConsoleWindow.tscn" id="1_tjitf"]
 [ext_resource type="PackedScene" uid="uid://fqvflhc3nymf" path="res://Entities/Player/Scenes/PlayerBody.tscn" id="2_6fyja"]
-[ext_resource type="Script" path="res://Entities/World/Scripts/World.cs" id="2_a4x57"]
-[ext_resource type="Script" path="res://Entities/World/Scripts/Navigation.cs" id="2_ympxj"]
+[ext_resource type="Script" uid="uid://diip8mcbwnm72" path="res://Entities/World/Scripts/World.cs" id="2_a4x57"]
+[ext_resource type="PackedScene" uid="uid://b6dycbs1luheb" path="res://Entities/Console/Scenes/ConsoleWindow.tscn" id="2_bvan8"]
+[ext_resource type="Script" uid="uid://doimrtrslb7pm" path="res://Entities/World/Scripts/Navigation.cs" id="2_ympxj"]
 [ext_resource type="PackedScene" uid="uid://ci6bd1n5bh8ir" path="res://Entities/World/Scenes/NavigationTestWorld.tscn" id="4_7im7c"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_cpi6k"]
 agent_max_climb = 0.5
 
 [node name="World" type="SubViewportContainer"]
-layout_direction = 2
-offset_right = 1920.0
-offset_bottom = 1080.0
-size_flags_horizontal = 0
-size_flags_vertical = 0
-
-[node name="ConsoleUi" parent="." instance=ExtResource("1_tjitf")]
-layout_mode = 2
 
 [node name="UI" parent="." instance=ExtResource("1_dlh8q")]
+layout_mode = 2
+
+[node name="ConsoleUi" parent="." instance=ExtResource("2_bvan8")]
 layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="."]

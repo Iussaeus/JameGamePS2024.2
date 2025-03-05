@@ -51,7 +51,6 @@ public partial class Inventory : Control {
 
         ChildEnteredTree += ConnectSignals;
         SignalBus.Instance.EmitSignal(SignalBus.SignalName.InventorySpawned, this);
-        GD.Print(Globals.Inventory);
 
         Backgroud = GetNode<ColorRect>("Background");
         Grid = GetNode<InventoryGrid>("InventoryGrid");

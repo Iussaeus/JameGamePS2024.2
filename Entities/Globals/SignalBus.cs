@@ -12,9 +12,6 @@ public partial class SignalBus : Node {
     public delegate void PlayerSpawnedEventHandler(PlayerController player);
 
     [Signal]
-    public delegate void CameraSpawnedEventHandler(Camera camera);
-
-    [Signal]
     public delegate void InventorySpawnedEventHandler(Inventory inventory);
 
     [Signal]
@@ -32,7 +29,6 @@ public partial class SignalBus : Node {
     public override void _Ready() {
         WorldSpawned += world => Globals.World = world;
         PlayerSpawned += player => Globals.Player = player;
-        CameraSpawned += camera => Globals.Camera = camera;
         InventorySpawned += inventory => Globals.Inventory = inventory;
         ConsoleSpawned += console => {
             console.AddCommand(SpawnBox);

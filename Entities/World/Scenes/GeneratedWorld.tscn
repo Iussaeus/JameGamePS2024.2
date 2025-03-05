@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b601nupwwifub"]
 
-[ext_resource type="Script" path="res://Entities/World/Scripts/GeneratedWorldSharply.cs" id="1_tubuo"]
+[ext_resource type="Script" uid="uid://j8bc12eo1s0k" path="res://Entities/World/Scripts/GeneratedWorldSharply.cs" id="1_tubuo"]
 [ext_resource type="MeshLibrary" uid="uid://bj514y87hffcy" path="res://Assets/World/MeshLibrary4.tres" id="2_x0ish"]
 
 [node name="World" type="Node3D"]

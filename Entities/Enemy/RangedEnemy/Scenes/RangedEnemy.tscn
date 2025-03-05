@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://dptga1c1w08x8"]
 
-[ext_resource type="Script" path="res://Entities/Enemy/RangedEnemy/Scripts/RangedEnemy.cs" id="1_falv1"]
+[ext_resource type="Script" uid="uid://dawi8by12fu3g" path="res://Entities/Enemy/RangedEnemy/Scripts/RangedEnemy.cs" id="1_falv1"]
 [ext_resource type="PackedScene" uid="uid://cdjsdledcwpj3" path="res://Entities/Components/Guns/Scenes/Gun.tscn" id="2_3d5so"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b2hq3"]

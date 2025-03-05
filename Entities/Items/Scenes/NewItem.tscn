@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bw4ippdi20xrg"]
 
-[ext_resource type="Script" path="res://Entities/Items/Scripts/InventoryItemUI.cs" id="1_dk535"]
+[ext_resource type="Script" uid="uid://b1ik3rnxgrdgk" path="res://Entities/Items/Scripts/InventoryItemUI.cs" id="1_dk535"]
 [ext_resource type="Texture2D" uid="uid://dwl0icnnqpdfa" path="res://icon.svg" id="2_3wwwh"]
 [ext_resource type="PackedScene" uid="uid://ddm6orrkbug6b" path="res://Entities/Items/Scenes/InventoryItem3D.tscn" id="3_fvjdb"]
 

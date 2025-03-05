@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://btnredj8yyckn"]
 
-[ext_resource type="Script" path="res://Entities/Player/Scripts/Camera.cs" id="1_usi54"]
+[ext_resource type="Script" uid="uid://d3yclkqsv4p74" path="res://Entities/Player/Scripts/Camera.cs" id="1_usi54"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_1bmi2"]
 

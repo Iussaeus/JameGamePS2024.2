@@ -1,5 +1,4 @@
 using Godot;
-using static Godot.GD;
 
 namespace Test.Entities.Interaction;
 
@@ -18,14 +17,14 @@ public partial class Box : Node3D {
     }
 
     private void OnInteractableInteracted(Interactor interactor) {
-        if (_isDebugOn) Print(Name, ": Interacted");
+        if (_isDebugOn) GD.Print(Name, ": Interacted");
     }
 
     private void OnInteractableUnfocused(Interactor interactor) {
-        if (_isDebugOn) Print(Name, ": Unfocused");
+        if (_isDebugOn) GD.Print(Name, ": Unfocused");
     }
 
     private void OnInteractableFocused(Interactor interactor) {
-        if (_isDebugOn) Print(Name, ": Focused");
+        if (_isDebugOn) GD.Print(Name, ": Focused");
     }
 }

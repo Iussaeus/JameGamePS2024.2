@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://fqvflhc3nymf"]
 
-[ext_resource type="Script" path="res://Entities/Player/Scripts/PlayerController.cs" id="1_512hh"]
+[ext_resource type="Script" uid="uid://dtv5d10vf3opv" path="res://Entities/Player/Scripts/PlayerController.cs" id="1_512hh"]
 [ext_resource type="PackedScene" uid="uid://btnredj8yyckn" path="res://Entities/Player/Scenes/TestCamera.tscn" id="2_pux4t"]
 [ext_resource type="PackedScene" uid="uid://cdjsdledcwpj3" path="res://Entities/Components/Guns/Scenes/Gun.tscn" id="2_sd1pr"]
 [ext_resource type="PackedScene" uid="uid://ch52pwl7x4b0p" path="res://Entities/Interaction/Scenes/PlayerInteractor.tscn" id="3_dxpcy"]
@@ -10,7 +10,6 @@
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_qyjp2"]
 
 [node name="Node3D" type="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_512hh")
 
 [node name="Camera3D" parent="." instance=ExtResource("2_pux4t")]

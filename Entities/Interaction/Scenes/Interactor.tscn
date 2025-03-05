@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bo3ocatklvvb3"]
 
-[ext_resource type="Script" path="res://Entities/Interaction/Scripts/Interactor.cs" id="1_1rve4"]
+[ext_resource type="Script" uid="uid://npprdcnhjyo0" path="res://Entities/Interaction/Scripts/Interactor.cs" id="1_1rve4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_adj5o"]
 

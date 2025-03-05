@@ -1,6 +1,7 @@
 using Godot;
 using Test.Entities.Global;
 using Test.Entities.Player;
+using Test.Utils.Extensions;
 
 namespace Test.Entities.Enemy;
 

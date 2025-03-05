@@ -2,6 +2,7 @@ using Godot;
 using Test.Entities.Global;
 using Test.Entities.Components;
 using Test.Entities.Player;
+using Test.Utils.Extensions;
 
 public partial class RangedEnemy : CharacterBody3D {
     [Export] public float MovementSpeed = 20;

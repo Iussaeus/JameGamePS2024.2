@@ -11,17 +11,17 @@ public partial class GlobalInput : Node {
     private static PlayerController _player;
     private static Inventory _inventory;
     private static ConsoleWindow _console;
-    private static Camera3D _camera;
+    private static Camera _camera;
 
     public override void _EnterTree() {
         Instance = this;
     }
 
     public override async void _Ready() {
-        _console = (ConsoleWindow)(await Globals.Instance.AwaitSignal(SignalBus.SignalName.ConsoleSpawned))[0];
-        _inventory = (Inventory)(await Globals.Instance.AwaitSignal(SignalBus.SignalName.InventorySpawned))[0];
-        _player = (PlayerController)(await Globals.Instance.AwaitSignal(SignalBus.SignalName.PlayerSpawned))[0];
-        _camera = _player.GetNode<Camera>("Camera3D");
+        _inventory = await SignalBus.Instance.AwaitSignalSingle<Inventory>(SignalBus.SignalName.InventorySpawned);
+        _console = await SignalBus.Instance.AwaitSignalSingle<ConsoleWindow>(SignalBus.SignalName.ConsoleSpawned);
+        _player = await SignalBus.Instance.AwaitSignalSingle<PlayerController>(SignalBus.SignalName.PlayerSpawned);
+        _camera = _player.Camera;
 
         this.Assert(_console != null, "Console is null");
         this.Assert(_inventory != null, "Inventory is null");
@@ -82,7 +82,7 @@ public partial class GlobalInput : Node {
     }
 
     public void ProcessSingularInventoryInput() {
-        // // TODO: make the selected item rotate around it's center (Optional)
+        // TODO: make the selected item rotate around it's center (Optional)
         // if (Input.IsActionJustPressed("interact") && _isItemSelected) {
         // 	var oldPivot = _selectedItem.PivotOffset;
         // 	_selectedItem.Rotation += Mathf.DegToRad(90);
@@ -111,7 +111,7 @@ public partial class GlobalInput : Node {
     }
 
     public void ProcessContinuousPlayerInput(double delta) {
-        var direction = GetDirection();
+        var direction = _camera.GetDirection();
 
         if (!_player.DashTimer.IsStopped()) _player.Dash((float)delta);
         else _player.Move((float)delta, direction);
@@ -121,7 +121,7 @@ public partial class GlobalInput : Node {
     }
 
     public void ProcessSingularPlayerInput() {
-        var direction = GetDirection();
+        var direction = _camera.GetDirection();
 
         if (Input.IsActionJustPressed("space") && _player.CanDash /* && GetDirection() != Vector3.Zero */) {
             _player.StartDash(direction);
@@ -134,30 +134,4 @@ public partial class GlobalInput : Node {
     }
 
 
-    public Vector3 GetDirection() {
-        var inputDir = Input.GetVector("left", "right", "forward", "backward");
-        var direction = new Vector3(0, 0, 0);
-
-        var upMarker = _camera.GetNode<Marker3D>("Marker3DUp");
-        var rightMarker = _camera.GetNode<Marker3D>("Marker3DRight");
-        var upDirection = _camera.GlobalPosition.DirectionTo(upMarker.GlobalPosition).Normalized();
-        var rightDirection = _camera.GlobalPosition.DirectionTo(rightMarker.GlobalPosition).Normalized();
-
-        if (inputDir != Vector2.Zero) {
-            if (inputDir.Y > 0) {
-                direction += -upDirection;
-            }
-            if (inputDir.Y < 0) {
-                direction += upDirection;
-            }
-            if (inputDir.X > 0) {
-                direction += rightDirection;
-            }
-            if (inputDir.X < 0) {
-                direction += -rightDirection;
-            }
-        }
-
-        return direction.Normalized();
-    }
 }
