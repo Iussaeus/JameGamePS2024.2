@@ -1,20 +1,30 @@
 using Godot;
 using System.Collections.Generic;
+using Test.Entities.Global;
+using Test.Utils.Extensions;
 
 [Tool]
 [GlobalClass]
 public partial class InventoryItemUI : Control {
     [Export] public Vector2I ItemSize = new(1, 1);
 
+    private Inventory _inventory;
+    public bool InInventory;
+
     private CollisionShape2D _collisionShape;
     private NinePatchRect _ninePatchRect;
     private Sprite2D _sprite;
+    private Area2D _area;
 
     private bool hasArea;
     private bool hasSprite;
     private bool hasNinePatch;
 
-    public override void _Ready() {
+    public static Color InvalidColor = new(1, 0.36f, 0.36f);
+    public static Color ValidColor = new(1, 1, 1);
+
+
+    public override async void _Ready() {
         PivotOffset = Size / 2;
         ChildOrderChanged += CheckChildren;
         CheckChildren();
@@ -22,9 +32,15 @@ public partial class InventoryItemUI : Control {
         _collisionShape = GetNode<CollisionShape2D>("Area2D/colision(-1pixel_all_margins)");
         _ninePatchRect = GetNode<NinePatchRect>("NinePatchRect");
         _sprite = GetNode<Sprite2D>("Sprite2D");
+        _area = GetNode<Area2D>("Area2D");
 
         if (!Engine.IsEditorHint()) {
             SetSize();
+
+            Visible = false;
+
+            _inventory = await SignalBus.Instance.AwaitSignalSingle<Inventory>(SignalBus.SignalName.InventorySpawned);
+
             EmitSignal(SignalName.Ready);
         }
     }
@@ -41,6 +57,69 @@ public partial class InventoryItemUI : Control {
             if (IsInstanceValid(_ninePatchRect))
                 SetSize();
             else _ninePatchRect = GetNode<NinePatchRect>("NinePatchRect");
+        }
+    }
+
+    public void OnCursorOnItem(InputEvent @event) {
+        // WARN: DRAGGING NOT WORKING
+
+        // if (@event is InputEventMouseMotion)
+        //     if (IsItemSelected)
+        //         IsDraggingItem = true;
+
+        if (GetParent() is Inventory i)
+            _inventory = i;
+
+        if (InInventory) {
+            if (Input.IsActionJustPressed("select_item")) {
+                GD.PrintRich($"[color=red]Clicked on: {this}, selected: {_inventory.SelectedItem}, isS:{_inventory.IsSelected()}, is3D:{this.HasNode("InventoryItem3d")}, can${_inventory.CanPlace(this)}");
+                if (!_inventory.IsSelected()) {
+                    _inventory.SelectItem(this);
+                }
+                else if (!_inventory.IsItemInsideBounds(this, this.GlobalPosition.ToTileSpace())) {
+                    GD.Print("throwing Item");
+
+                    if (this.HasNode("InventoryItem3D")) {
+                        _inventory.ThrowItemOutside(this);
+                        _inventory.DeselectItem();
+                        return;
+                    }
+                    _inventory.PlaceItem(this);
+                }
+                else if (_inventory.CanPlace(this)) {
+                    GD.PrintS("Adding Item:", _inventory.SelectedItem.GlobalPosition.ToTileSpace());
+
+                    _inventory.AddItem(this, this.GlobalPosition.ToTileSpace());
+                    _inventory.DeselectItem();
+                }
+            }
+        }
+    }
+
+    public void OnOverlapping(Area2D area) {
+        if (GetParent() is Inventory i)
+            _inventory = i;
+
+        if (area == _area || area == _inventory.InventoryArea)
+            return;
+
+
+        if (!_inventory.IsOutsideOtherItems(this)) {
+            _inventory.SelectedItem.GetNode<Sprite2D>("Sprite2D").Modulate = InventoryItemUI.InvalidColor;
+            _inventory.SelectedItem.GetNode<NinePatchRect>("NinePatchRect").Modulate = InventoryItemUI.InvalidColor;
+        }
+    }
+
+    public void OnNotOverlapping(Area2D area) {
+        if (GetParent() is Inventory i)
+            _inventory = i;
+
+        if (area == _area || area == _inventory.InventoryArea)
+            return;
+
+        if (_inventory.IsOutsideOtherItems(this)) {
+            _inventory.SelectedItem.GetNode<Sprite2D>("Sprite2D").Modulate = InventoryItemUI.ValidColor;
+            _inventory.SelectedItem.GetNode<NinePatchRect>("NinePatchRect").Modulate = InventoryItemUI.ValidColor;
         }
     }
 
