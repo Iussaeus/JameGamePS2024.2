@@ -24,7 +24,7 @@ public partial class Interactor : Area3D {
 
         foreach (var area3D in list)
             if (area3D is Interactable interactable) {
-                var distance = interactable.GlobalPosition.DistanceTo(GlobalPosition);
+                var distance = interactable.GlobalPosition.DistanceSquaredTo(GlobalPosition);
 
                 if (distance < closestDistance) {
                     closestInteractable = interactable;

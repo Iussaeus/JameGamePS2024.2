@@ -5,9 +5,6 @@ namespace Test.Entities.Interaction;
 public partial class Box : Node3D {
     private Interactable _interactable;
 
-    [Export] private bool _isDebugOn;
-    private bool _isOpen;
-
     public override void _Ready() {
         _interactable = GetNode<Interactable>("RigidBody3D/Interactable");
 
@@ -16,15 +13,9 @@ public partial class Box : Node3D {
         _interactable.Interacted += OnInteractableInteracted;
     }
 
-    private void OnInteractableInteracted(Interactor interactor) {
-        if (_isDebugOn) GD.Print(Name, ": Interacted");
-    }
+    private void OnInteractableInteracted(Interactor interactor) { }
 
-    private void OnInteractableUnfocused(Interactor interactor) {
-        if (_isDebugOn) GD.Print(Name, ": Unfocused");
-    }
+    private void OnInteractableUnfocused(Interactor interactor) { }
 
-    private void OnInteractableFocused(Interactor interactor) {
-        if (_isDebugOn) GD.Print(Name, ": Focused");
-    }
+    private void OnInteractableFocused(Interactor interactor) { }
 }
