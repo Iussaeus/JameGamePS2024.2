@@ -36,6 +36,7 @@ public partial class SignalBus : Node {
             Globals.Console = console;
         };
     }
+
     public void SpawnBox() {
         var x = GD.Load<PackedScene>("res://Entities/Interaction/Scenes/Box.tscn").Instantiate<Box>();
         Globals.World.AddChild(x);
@@ -48,5 +49,16 @@ public partial class SignalBus : Node {
         Globals.World.AddChild(x);
 
         x.GlobalPosition = Globals.Player.GlobalPosition + Globals.Player.ForwardVector() * 5 + new Vector3(0, 10, 0);
+    }
+
+    public override void _ExitTree() {
+        WorldSpawned -= world => Globals.World = world;
+        PlayerSpawned -= player => Globals.Player = player;
+        InventorySpawned -= inventory => Globals.Inventory = inventory;
+        ConsoleSpawned -= console => {
+            console.AddCommand(SpawnBox);
+            console.AddCommand(SpawnMelleeEnemy);
+            Globals.Console = console;
+        };
     }
 }

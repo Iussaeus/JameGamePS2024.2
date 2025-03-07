@@ -198,7 +198,7 @@ public static class NodeExtensions {
         T result = default;
         var s = await node.ToSignal(SignalBus.Instance, signal);
         // GD.Print($"Done waiting for {signal}");
-        s.Print();
+        // s.Print();
         if (s.Length == 1) {
             result = (T)s[0];
         }

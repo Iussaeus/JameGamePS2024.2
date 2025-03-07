@@ -76,7 +76,7 @@ public partial class GlobalInput : Node {
     }
 
     public void ProcessContinuousInvetoryInput() {
-        if (_inventory.IsItemSelected || _inventory.IsDraggingItem) {
+        if (_inventory.IsSelected()) {
             _inventory.MoveSelectedItem();
         }
     }
