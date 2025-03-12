@@ -72,7 +72,7 @@ public partial class InventoryItemUI : Control {
 
         if (InInventory) {
             if (Input.IsActionJustPressed("select_item")) {
-                GD.PrintRich($"[color=red]Clicked on: {this}, selected: {_inventory.SelectedItem}, isS:{_inventory.IsSelected()}, is3D:{this.HasNode("InventoryItem3d")}, can${_inventory.CanPlace(this)}");
+                // GD.PrintRich($"[color=red]Clicked on: {this}, selected: {_inventory.SelectedItem}, isS:{_inventory.IsSelected()}, is3D:{this.HasNode("InventoryItem3d")}, can${_inventory.CanPlace(this)}");
                 if (!_inventory.IsSelected()) {
                     _inventory.SelectItem(this);
                 }
@@ -100,7 +100,7 @@ public partial class InventoryItemUI : Control {
         if (GetParent() is Inventory i)
             _inventory = i;
 
-        if (area == _area || area == _inventory.InventoryArea)
+        if (area == _area || area == _inventory.InventoryArea || _inventory == null || area == null)
             return;
 
 
@@ -114,7 +114,7 @@ public partial class InventoryItemUI : Control {
         if (GetParent() is Inventory i)
             _inventory = i;
 
-        if (area == _area || area == _inventory.InventoryArea)
+        if (area == _area || area == _inventory.InventoryArea || _inventory == null)
             return;
 
         if (_inventory.IsOutsideOtherItems(this)) {

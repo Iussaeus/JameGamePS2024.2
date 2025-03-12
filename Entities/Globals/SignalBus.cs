@@ -27,14 +27,39 @@ public partial class SignalBus : Node {
     }
 
     public override void _Ready() {
-        WorldSpawned += world => Globals.World = world;
-        PlayerSpawned += player => Globals.Player = player;
-        InventorySpawned += inventory => Globals.Inventory = inventory;
-        ConsoleSpawned += console => {
-            console.AddCommand(SpawnBox);
-            console.AddCommand(SpawnMelleeEnemy);
-            Globals.Console = console;
-        };
+        WorldSpawned += OnWorldSpawned;
+        PlayerSpawned += OnPlayerSpawned;
+        InventorySpawned += OnInventorySpawned;
+        ConsoleSpawned += OnConsoleSpawned;
+    }
+
+    public override void _ExitTree() {
+        WorldSpawned -= OnWorldSpawned;
+        PlayerSpawned -= OnPlayerSpawned;
+        InventorySpawned -= OnInventorySpawned;
+        ConsoleSpawned -= OnConsoleSpawned;
+    }
+
+    public void OnWorldSpawned(World world) => Globals.World = world;
+    public void OnPlayerSpawned(PlayerController player) => Globals.Player = player;
+    public void OnInventorySpawned(Inventory inventory) => Globals.Inventory = inventory;
+
+    public void OnConsoleSpawned(ConsoleWindow console) {
+        console.AddCommand(SpawnBox);
+        console.AddCommand(SpawnMelleeEnemy);
+        console.AddCommand(SpawnNewItem);
+
+        Globals.Console = console;
+    }
+
+    public void SpawnNewItem(int x = 4, int y = 4) {
+        var item = GD.Load<PackedScene>("res://Entities/Items/Scenes/NewItem.tscn").Instantiate<InventoryItemUI>();
+        item.ItemSize = new(x, y);
+
+        Globals.World.AddChild(item);
+
+        var item3D = item.GetNode<InventoryItem3D>("InventoryItem3D");
+        item3D.GlobalPosition = Globals.Player.GlobalPosition + Globals.Player.ForwardVector() * 5 + new Vector3(0, 10, 0);
     }
 
     public void SpawnBox() {
@@ -49,16 +74,5 @@ public partial class SignalBus : Node {
         Globals.World.AddChild(x);
 
         x.GlobalPosition = Globals.Player.GlobalPosition + Globals.Player.ForwardVector() * 5 + new Vector3(0, 10, 0);
-    }
-
-    public override void _ExitTree() {
-        WorldSpawned -= world => Globals.World = world;
-        PlayerSpawned -= player => Globals.Player = player;
-        InventorySpawned -= inventory => Globals.Inventory = inventory;
-        ConsoleSpawned -= console => {
-            console.AddCommand(SpawnBox);
-            console.AddCommand(SpawnMelleeEnemy);
-            Globals.Console = console;
-        };
     }
 }

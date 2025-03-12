@@ -77,10 +77,10 @@ public partial class ConsoleWindow : Control {
             _requesting = true;
             RequestCompletion();
         }
-        else {
-            _requesting = false;
-            _textBox.ConfirmCodeCompletion();
-        }
+        // else {
+        //     _requesting = false;
+        //     _textBox.ConfirmCodeCompletion();
+        // }
     }
 
     public override void _Process(double delta) {

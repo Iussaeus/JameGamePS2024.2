@@ -1,13 +1,10 @@
 using Godot;
-using Test.Utils.Extensions;
 using Test.Entities.Player;
 using Test.Entities.Console;
-using System.Threading.Tasks;
 
 namespace Test.Entities.Global;
 
 public partial class Globals : Node {
-
     public static Globals Instance { get; private set; }
 
     public static PlayerController Player;
@@ -19,5 +16,4 @@ public partial class Globals : Node {
     public const int GridPadding = 4;
 
     public override void _EnterTree() => Instance = this;
-
 }

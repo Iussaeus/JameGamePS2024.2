@@ -367,8 +367,8 @@ public partial class Inventory : Control {
     }
 
     public bool IsOutsideOtherItems(InventoryItemUI item) {
-        var itemMinPosition = item.GlobalPosition.ToTileSpace() - _minInventoryBounds;
-        var itemMaxPosition = itemMinPosition + item.ItemSize;
+        var itemMinPosition = item.GlobalPosition.ToTileSpace() - _minInventoryBounds - Vector2I.Zero;
+        var itemMaxPosition = itemMinPosition + item.ItemSize - Vector2I.Zero;
 
         // GD.PrintRich($"[color=yellow]item:{item.Name}");
         // GD.PrintRich($"[color=yellow]minPos: {itemMinPosition}, maxPos: {itemMaxPosition}");
