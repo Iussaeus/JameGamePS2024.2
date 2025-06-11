@@ -22,7 +22,7 @@ offset_right = 71.0
 offset_bottom = 72.0
 grow_horizontal = 1
 grow_vertical = 1
-InventorySize = Vector2i(20, 25)
+InventorySize = Vector2i(12, 20)
 
 [node name="Placeholder" type="Panel" parent="."]
 layout_mode = 1

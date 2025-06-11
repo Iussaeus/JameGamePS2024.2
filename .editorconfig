@@ -1,3 +1,5 @@
 [*]
 csharp_brace_style = k&r
 csharp_new_line_before_open_brace = false
+indent_style = space 
+indent_size = 4

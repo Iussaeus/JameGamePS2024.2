@@ -23,7 +23,6 @@ public partial class InventoryItemUI : Control {
     public static Color InvalidColor = new(1, 0.36f, 0.36f);
     public static Color ValidColor = new(1, 1, 1);
 
-
     public override async void _Ready() {
         PivotOffset = Size / 2;
         ChildOrderChanged += CheckChildren;
@@ -103,6 +102,7 @@ public partial class InventoryItemUI : Control {
         if (area == _area || area == _inventory.InventoryArea || _inventory == null || area == null)
             return;
 
+        GD.PrintS("OnOverlapping", _inventory, this);
 
         if (!_inventory.IsOutsideOtherItems(this)) {
             _inventory.SelectedItem.GetNode<Sprite2D>("Sprite2D").Modulate = InventoryItemUI.InvalidColor;
@@ -116,6 +116,8 @@ public partial class InventoryItemUI : Control {
 
         if (area == _area || area == _inventory.InventoryArea || _inventory == null)
             return;
+
+        GD.PrintS("OnNotOverlapping", _inventory, this);
 
         if (_inventory.IsOutsideOtherItems(this)) {
             _inventory.SelectedItem.GetNode<Sprite2D>("Sprite2D").Modulate = InventoryItemUI.ValidColor;

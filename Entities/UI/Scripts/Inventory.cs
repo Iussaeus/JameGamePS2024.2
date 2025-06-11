@@ -3,7 +3,6 @@ using Godot.Collections;
 using Test.Utils.Extensions;
 using Test.Entities.Global;
 
-// WARNING: weird behaviour when adding an object whilst other one is selected
 public partial class Inventory : Control {
     [Export] public Vector2I TileSize = new(64, 64);
     [Export] public Vector2I InventorySize = new(8, 4);
@@ -155,6 +154,7 @@ public partial class Inventory : Control {
         var newInstance = DummyItem.Instantiate<InventoryItemUI>();
         AddChild(newInstance);
         PlaceItem(newInstance);
+        newInstance.Show();
     }
 
     public void Close() {
