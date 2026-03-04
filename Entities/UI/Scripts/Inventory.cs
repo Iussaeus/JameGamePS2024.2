@@ -2,9 +2,11 @@ using Godot;
 using Godot.Collections;
 using Test.Utils.Extensions;
 using Test.Entities.Global;
+using Test.Utils;
 
 // WARNING: weird behaviour when adding an object whilst other one is selected
-public partial class Inventory : Control {
+public partial class Inventory : Control
+{
     [Export] public Vector2I TileSize = new(64, 64);
     [Export] public Vector2I InventorySize = new(8, 4);
     [Export] public PackedScene DummyItem;
@@ -40,7 +42,8 @@ public partial class Inventory : Control {
     private Color _invalidColor = new(1, 0.36f, 0.36f);
     private Color _validColor = new(1, 1, 1);
 
-    public override void _Ready() {
+    public override void _Ready()
+    {
         Close();
 
         _dragTimer.OneShot = true;
@@ -75,7 +78,8 @@ public partial class Inventory : Control {
         InventoryArea.AreaEntered += OnItemInsideInventory;
         InventoryArea.AreaExited += OnItemOutsideInventory;
 
-        foreach (var node in GetTree().GetNodesInGroup("item")) {
+        foreach (var node in GetTree().GetNodesInGroup("item"))
+        {
             if (node is Control i) ConnectSignals(i);
         }
 
@@ -128,8 +132,10 @@ public partial class Inventory : Control {
         this.Assert(!IsTileInsideBounds(testVecDownRight with { X = _maxInventoryBounds.X + 1, Y = _maxInventoryBounds.Y / 2 }), "isTileInsideBounds failed the middle down bound");
 
         // ToGlobalSnapped and ToTileSpace tests
-        for (int i = 0; i < _maxInventoryBounds.X; i++) {
-            for (int j = 0; j < _maxInventoryBounds.Y; j++) {
+        for (int i = 0; i < _maxInventoryBounds.X; i++)
+        {
+            for (int j = 0; j < _maxInventoryBounds.Y; j++)
+            {
                 var position = new Vector2(i, j);
                 testItem.GlobalPosition = position.ToGlobalSpaceSnapped();
                 this.Assert(testItem.GlobalPosition.ToTileSpace() == position, $"them positions dont match tilePos: {position}, gloPos: {testItem.GlobalPosition.ToTileSpace()}");
@@ -138,8 +144,10 @@ public partial class Inventory : Control {
         }
 
         // FillMatrix and ClearMatrix tests
-        foreach (var node in GetChildren()) {
-            if (node is InventoryItemUI i) {
+        foreach (var node in GetChildren())
+        {
+            if (node is InventoryItemUI i)
+            {
                 i.GlobalPosition = i.GlobalPosition.Snapped(TileSize + new Vector2I(4, 4));
 
                 FillMatrixPosition(i, i.GlobalPosition.ToTileSpace());
@@ -152,41 +160,48 @@ public partial class Inventory : Control {
 #endif
     }
 
-    public void PlaceDummyItem() {
+    public void PlaceDummyItem()
+    {
         var newInstance = DummyItem.Instantiate<InventoryItemUI>();
         AddChild(newInstance);
         PlaceItem(newInstance);
     }
 
-    public void Close() {
+    public void Close()
+    {
         Visible = false;
         IsOpen = false;
         FocusMode = FocusModeEnum.All;
         ReleaseFocus();
 
-        if (SelectedItem != null && CanPlace(SelectedItem, SelectedItem.GlobalPosition.ToTileSpace())) {
+        if (SelectedItem != null && CanPlace(SelectedItem, SelectedItem.GlobalPosition.ToTileSpace()))
+        {
             DeselectItem(); ;
         }
         else if (SelectedItem != null && !CanPlace(SelectedItem, SelectedItem.GlobalPosition.ToTileSpace()))
             PlaceItem(SelectedItem);
     }
 
-    public void Open() {
+    public void Open()
+    {
         Visible = true;
         IsOpen = true;
         FocusMode = FocusModeEnum.All;
         GrabFocus();
     }
 
-    public void ConnectSignals(Node node) {
-        if (node is InventoryItemUI item) {
+    public void ConnectSignals(Node node)
+    {
+        if (node is InventoryItemUI item)
+        {
             item.GuiInput += @event => OnCursorOnItem(@event, item);
             item.GetNode<Area2D>("Area2D").AreaEntered += area => OnOverlapping(area, item);
             item.GetNode<Area2D>("Area2D").AreaExited += area => OnNotOverlapping(area, item);
         }
     }
 
-    public void DisconnectSignals(InventoryItemUI item) {
+    public void DisconnectSignals(InventoryItemUI item)
+    {
         if (item.IsConnected(Control.SignalName.GuiInput, new Callable(this, MethodName.OnCursorOnItem)))
             item.GuiInput -= @event => OnCursorOnItem(@event, item);
 
@@ -199,7 +214,8 @@ public partial class Inventory : Control {
             item.GetNode<Area2D>("Area2D").AreaExited -= area => OnNotOverlapping(area, item);
     }
 
-    private void OnOverlapping(Area2D area, InventoryItemUI item) {
+    private void OnOverlapping(Area2D area, InventoryItemUI item)
+    {
         // GD.Print("Overlap");
 
         if (area.GetParent().GetParent<Control>() == SelectedItem)
@@ -210,14 +226,16 @@ public partial class Inventory : Control {
 
         _overlappingItems.Add(item);
 
-        if (SelectedItem != null) {
+        if (SelectedItem != null)
+        {
             _isSelectedItemOverlapping = true;
             SelectedItem.GetNode<Sprite2D>("Sprite2D").Modulate = _invalidColor;
             SelectedItem.GetNode<NinePatchRect>("NinePatchRect").Modulate = _invalidColor;
         }
     }
 
-    private void OnNotOverlapping(Area2D area, InventoryItemUI item) {
+    private void OnNotOverlapping(Area2D area, InventoryItemUI item)
+    {
         // GD.Print("no ovelap");
 
         if (area.GetParent().GetParent<Control>() == SelectedItem)
@@ -228,19 +246,22 @@ public partial class Inventory : Control {
 
         _overlappingItems.Remove(item);
 
-        if (_overlappingItems.Count == 0 && IsItemSelected) {
+        if (_overlappingItems.Count == 0 && IsItemSelected)
+        {
             _isSelectedItemOverlapping = false;
             SelectedItem.GetNode<Sprite2D>("Sprite2D").Modulate = _validColor;
             SelectedItem.GetNode<NinePatchRect>("NinePatchRect").Modulate = _validColor;
         }
     }
 
-    public void OnCursorOnItem(InputEvent @event, InventoryItemUI item) {
+    public void OnCursorOnItem(InputEvent @event, InventoryItemUI item)
+    {
 
         if (!item.HasNode("InventoryItem3d"))
             _selectTimer.Stop();
 
-        if (@event.IsActionPressed("select_item") && !IsItemSelected && _selectTimer.IsStopped()) {
+        if (@event.IsActionPressed("select_item") && !IsItemSelected && _selectTimer.IsStopped())
+        {
             SelectItem(item);
 
             _dragTimer.Start(0.1);
@@ -250,12 +271,15 @@ public partial class Inventory : Control {
             if (IsItemSelected)
                 IsDraggingItem = true;
 
-        if (Input.IsActionJustPressed("select_item") && IsItemSelected && _dragTimer.IsStopped()) {
-            if (CanPlace(SelectedItem, SelectedItem.GlobalPosition.ToTileSpace())) {
+        if (Input.IsActionJustPressed("select_item") && IsItemSelected && _dragTimer.IsStopped())
+        {
+            if (CanPlace(SelectedItem, SelectedItem.GlobalPosition.ToTileSpace()))
+            {
                 GD.Print("Adding Item");
                 AddItem(SelectedItem, SelectedItem.GlobalPosition.ToTileSpace());
             }
-            else if (!IsSelectedItemInInventory) {
+            else if (!IsSelectedItemInInventory)
+            {
                 GD.Print("throwing Item");
                 ThrowItemOutside(SelectedItem);
             }
@@ -264,7 +288,8 @@ public partial class Inventory : Control {
 
     // NOTE:: timer is a weird thing in this func
     // TODO: fix the select thing
-    private void SelectItem(InventoryItemUI item) {
+    private void SelectItem(InventoryItemUI item)
+    {
         // GD.PrintRich("[color=magenta]SELECTED");
 
         if (item.HasNode("InventoryItem3d"))
@@ -280,7 +305,8 @@ public partial class Inventory : Control {
 
         ClearMatrixPosition(SelectedItem, SelectedItem.GlobalPosition.ToTileSpace());
 
-        if (_previousItem == SelectedItem) {
+        if (_previousItem == SelectedItem)
+        {
             ClearMatrixPosition(_previousItem, _previousItem.GlobalPosition.ToTileSpace());
         }
 
@@ -288,7 +314,8 @@ public partial class Inventory : Control {
         // GD.Print($"selected: {_selectedItem.Name}, onPrev: {_previousItemPosition.ToTileSpace()}, onCurr : {_selectedItem.GlobalPosition.ToTileSpace()}");
     }
 
-    private void AddItem(InventoryItemUI item, Vector2I position) {
+    private void AddItem(InventoryItemUI item, Vector2I position)
+    {
         // GD.PrintRich("[color=magenta]BEGIN ADD");
         if (!CanPlace(item, position)) return;
 
@@ -323,19 +350,23 @@ public partial class Inventory : Control {
     }
 
     // NOTE: never used 
-    private void UpdateMatrix() {
+    private void UpdateMatrix()
+    {
         _inventoryMatrix.ClearMatrix();
         FillAllMatrixPositions();
     }
 
-    private void FillMatrixPosition(InventoryItemUI item, Vector2I position) {
+    private void FillMatrixPosition(InventoryItemUI item, Vector2I position)
+    {
         var itemMinPosition = position - _minInventoryBounds;
         var itemMaxPosition = itemMinPosition + item.ItemSize;
 
         // GD.PrintRich($"[color=cyan] fill: minPos{itemMinPosition} maxPos{itemMaxPosition}");
 
-        for (var i = itemMinPosition.X; i < itemMaxPosition.X; i++) {
-            for (var j = itemMinPosition.Y; j < itemMaxPosition.Y; j++) {
+        for (var i = itemMinPosition.X; i < itemMaxPosition.X; i++)
+        {
+            for (var j = itemMinPosition.Y; j < itemMaxPosition.Y; j++)
+            {
                 // GD.PrintS("Fill idx", i, j, IsTileInsideBounds(new Vector2I(i, j) + _minInventoryBounds));
                 // GD.PrintRich($"[color=cyan]add mat idx:{i}, {j}");
                 if (IsTileInsideBounds(new Vector2I(i, j) + _minInventoryBounds)) _inventoryMatrix[j, i] = 1;
@@ -344,20 +375,25 @@ public partial class Inventory : Control {
     }
 
     // NOTE: never used
-    private void FillAllMatrixPositions() {
-        foreach (var (key, value) in ItemsPositions) {
+    private void FillAllMatrixPositions()
+    {
+        foreach (var (key, value) in ItemsPositions)
+        {
             FillMatrixPosition(key, value);
         }
     }
 
-    private void ClearMatrixPosition(InventoryItemUI item, Vector2I position) {
+    private void ClearMatrixPosition(InventoryItemUI item, Vector2I position)
+    {
         var itemMinPosition = position - _minInventoryBounds;
         var itemMaxPosition = itemMinPosition + item.ItemSize;
 
         // GD.PrintRich($"[color=cyan] clr: minPos{itemMinPosition} maxPos{itemMaxPosition}");
 
-        for (var i = itemMinPosition.X; i < itemMaxPosition.X; i++) {
-            for (var j = itemMinPosition.Y; j < itemMaxPosition.Y; j++) {
+        for (var i = itemMinPosition.X; i < itemMaxPosition.X; i++)
+        {
+            for (var j = itemMinPosition.Y; j < itemMaxPosition.Y; j++)
+            {
                 // GD.PrintS("Clear idx", i, j, IsTileInsideBounds(new Vector2I(i, j) + _minInventoryBounds));
                 // GD.PrintRich($"[color=cyan]clr mat idx:{i}, {j}");
                 if (IsTileInsideBounds(new Vector2I(i, j) + _minInventoryBounds))
@@ -367,7 +403,8 @@ public partial class Inventory : Control {
     }
 
 #if DEBUG
-    private void CheckMatrixPosition(InventoryItemUI item, Vector2I position, bool checkZero = false) {
+    private void CheckMatrixPosition(InventoryItemUI item, Vector2I position, bool checkZero = false)
+    {
         var itemMinPosition = position - _minInventoryBounds;
         var itemMaxPosition = itemMinPosition + item.ItemSize;
 
@@ -375,8 +412,10 @@ public partial class Inventory : Control {
         // GD.PrintRich($"itemMinPos: {itemMinPosition}");
         // GD.PrintRich($"itemMaxPos: {itemMaxPosition}");
 
-        for (var i = itemMinPosition.X; i < itemMaxPosition.X; i++) {
-            for (var j = itemMinPosition.Y; j < itemMaxPosition.Y; j++) {
+        for (var i = itemMinPosition.X; i < itemMaxPosition.X; i++)
+        {
+            for (var j = itemMinPosition.Y; j < itemMaxPosition.Y; j++)
+            {
                 // GD.PrintRich($"InvMat[{i}, {j}]: {_inventoryMatrix[j, i]}, isTileInside: {IsTileInsideBounds(new Vector2I(i, j) + _minInventoryBounds)}");
                 if (!checkZero)
                     this.Assert(_inventoryMatrix[j, i] == 1, $"invMat[{i}, {j}] is not 1 as it should");
@@ -387,19 +426,26 @@ public partial class Inventory : Control {
     }
 #endif
 
-    public void PrintMatrix(bool isRaw = true) {
-        if (isRaw) {
-            for (int i = 0; i < _inventoryMatrix.GetLength(0); i++) {
-                for (int j = 0; j < _inventoryMatrix.GetLength(1); j++) {
+    public void PrintMatrix(bool isRaw = true)
+    {
+        if (isRaw)
+        {
+            for (int i = 0; i < _inventoryMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < _inventoryMatrix.GetLength(1); j++)
+                {
                     GD.PrintRaw($"{_inventoryMatrix[i, j]} ");
                 }
                 GD.PrintRaw("\n");
             }
         }
-        else {
-            for (int i = 0; i < _inventoryMatrix.GetLength(0); i++) {
+        else
+        {
+            for (int i = 0; i < _inventoryMatrix.GetLength(0); i++)
+            {
                 var row = new Array<int>();
-                for (int j = 0; j < _inventoryMatrix.GetLength(1); j++) {
+                for (int j = 0; j < _inventoryMatrix.GetLength(1); j++)
+                {
                     row.Add(_inventoryMatrix[i, j]);
                 }
                 GD.Print(row);
@@ -407,25 +453,31 @@ public partial class Inventory : Control {
         }
     }
 
-    private void RemoveItem(InventoryItemUI item, Vector2I position) {
-        if (ItemsPositions.ContainsKey(item)) {
+    private void RemoveItem(InventoryItemUI item, Vector2I position)
+    {
+        if (ItemsPositions.ContainsKey(item))
+        {
             ClearMatrixPosition(item, position);
             ItemsPositions.Remove(item);
         }
         // GD.Print("Item Removed\n", PositionsItems);
     }
 
-    public void PlaceItem(InventoryItemUI item) {
+    public void PlaceItem(InventoryItemUI item)
+    {
         // GD.PrintRich("[color=magenta]BEGING PLACED");
 
         if (SelectedItem == null) SelectItem(item);
 
-        for (int j = _minInventoryBounds.Y; j < _maxInventoryBounds.Y + 1; j++) {
-            for (int i = _minInventoryBounds.X; i < _maxInventoryBounds.X + 1; i++) {
+        for (int j = _minInventoryBounds.Y; j < _maxInventoryBounds.Y + 1; j++)
+        {
+            for (int i = _minInventoryBounds.X; i < _maxInventoryBounds.X + 1; i++)
+            {
                 var newPosition = new Vector2I(i, j);
                 var newPositionSnapped = new Vector2I(i, j).ToGlobalSpaceSnapped();
 
-                if (SelectedItem != null && CanPlace(item, newPosition)) {
+                if (SelectedItem != null && CanPlace(item, newPosition))
+                {
                     // GD.Print($"inv idx: {i}, {j}, newPosTile: {newPosition}, newPosGlo: {newPositionSnapped}");
                     SelectedItem.GlobalPosition = newPositionSnapped;
                     AddItem(item, newPosition);
@@ -436,7 +488,8 @@ public partial class Inventory : Control {
         }
     }
 
-    private bool IsOutsideOtherItems(InventoryItemUI item, Vector2I position) {
+    private bool IsOutsideOtherItems(InventoryItemUI item, Vector2I position)
+    {
         var itemMinPosition = position - _minInventoryBounds;
         var itemMaxPosition = itemMinPosition + item.ItemSize;
 
@@ -444,10 +497,13 @@ public partial class Inventory : Control {
         // GD.PrintRich($"[color=yellow]minPos: {itemMinPosition}, maxPos: {itemMaxPosition}");
         // GD.PrintRich($"[color=yellow]minBounds: {_minInventoryBounds}, maxBounds: {_maxInventoryBounds}");
 
-        for (var i = itemMinPosition.X; i < itemMaxPosition.X; i++) {
-            for (var j = itemMinPosition.Y; j < itemMaxPosition.Y; j++) {
+        for (var i = itemMinPosition.X; i < itemMaxPosition.X; i++)
+        {
+            for (var j = itemMinPosition.Y; j < itemMaxPosition.Y; j++)
+            {
                 if (IsTileInsideBounds(new Vector2I(i, j) + _minInventoryBounds))
-                    if (_inventoryMatrix[j, i] == 1) {
+                    if (_inventoryMatrix[j, i] == 1)
+                    {
                         // GD.PrintRich($"[color=yellow]InvMat[{j}, {i}] = {_inventoryMatrix[j, i]}");
                         return false;
                     }
@@ -457,29 +513,34 @@ public partial class Inventory : Control {
         return true;
     }
 
-    private bool IsItemInsideBounds(InventoryItemUI item, Vector2I position) {
+    private bool IsItemInsideBounds(InventoryItemUI item, Vector2I position)
+    {
         var itemMinPosition = position;
         var itemMaxPosition = itemMinPosition + item.ItemSize - Vector2I.One;
 
-        if (itemMinPosition.X < _minInventoryBounds.X || itemMinPosition.Y < _minInventoryBounds.Y) {
+        if (itemMinPosition.X < _minInventoryBounds.X || itemMinPosition.Y < _minInventoryBounds.Y)
+        {
             // GD.PrintRich("[color=red]OUTSIDE");
             // GD.PrintRich($"[color=yellow]minPos: {itemMinPosition}");
             // GD.PrintRich($"[color=yellow]minBounds: {_minInventoryBounds}");
             return false;
         }
-        if (itemMinPosition.X > _maxInventoryBounds.X || itemMinPosition.Y > _maxInventoryBounds.Y) {
+        if (itemMinPosition.X > _maxInventoryBounds.X || itemMinPosition.Y > _maxInventoryBounds.Y)
+        {
             // GD.PrintRich("[color=red]OUTSIDE");
             // GD.PrintRich($"[color=yellow]minPos: {itemMinPosition}");
             // GD.PrintRich($"[color=yellow]maxBounds: {_maxInventoryBounds}");
             return false;
         }
-        if (itemMaxPosition.X < _minInventoryBounds.X || itemMaxPosition.Y < _minInventoryBounds.Y) {
+        if (itemMaxPosition.X < _minInventoryBounds.X || itemMaxPosition.Y < _minInventoryBounds.Y)
+        {
             // GD.PrintRich("[color=red]OUTSIDE");
             // GD.PrintRich($"[color=yellow]maxPos: {itemMaxPosition}");
             // GD.PrintRich($"[color=yellow]minBounds: {_minInventoryBounds}");
             return false;
         }
-        if (itemMaxPosition.X > _maxInventoryBounds.X || itemMaxPosition.Y > _maxInventoryBounds.Y) {
+        if (itemMaxPosition.X > _maxInventoryBounds.X || itemMaxPosition.Y > _maxInventoryBounds.Y)
+        {
             // GD.PrintRich("[color=red]OUTSIDE");
             // GD.PrintRich($"[color=yellow]maxPos: {itemMaxPosition}");
             // GD.PrintRich($"[color=yellow]maxBounds: {_maxInventoryBounds}");
@@ -492,23 +553,29 @@ public partial class Inventory : Control {
         return true;
     }
 
-    private bool IsTileInsideBounds(Vector2I position) {
-        if (position.X < _minInventoryBounds.X || position.Y < _minInventoryBounds.Y) {
+    private bool IsTileInsideBounds(Vector2I position)
+    {
+        if (position.X < _minInventoryBounds.X || position.Y < _minInventoryBounds.Y)
+        {
             return false;
         }
-        if (position.X > _maxInventoryBounds.X || position.Y > _maxInventoryBounds.Y) {
+        if (position.X > _maxInventoryBounds.X || position.Y > _maxInventoryBounds.Y)
+        {
             return false;
         }
 
         return true;
     }
 
-    private bool IsWholeItemInsideBounds(InventoryItemUI item, Vector2I position) {
+    private bool IsWholeItemInsideBounds(InventoryItemUI item, Vector2I position)
+    {
         var itemMinPosition = position;
         var itemMaxPosition = itemMinPosition + item.ItemSize - Vector2I.One;
 
-        for (var i = itemMinPosition.X; i < itemMaxPosition.X; i++) {
-            for (var j = itemMinPosition.Y; j < itemMaxPosition.Y; j++) {
+        for (var i = itemMinPosition.X; i < itemMaxPosition.X; i++)
+        {
+            for (var j = itemMinPosition.Y; j < itemMaxPosition.Y; j++)
+            {
                 if (IsTileInsideBounds(new Vector2I(i, j))) continue;
                 else return false;
             }
@@ -517,7 +584,8 @@ public partial class Inventory : Control {
         return true;
     }
 
-    public void MoveSelectedItem() {
+    public void MoveSelectedItem()
+    {
         var globalPos = new Vector2();
         if (IsSelectedItemInInventory)
             globalPos = (this.GetGlobalMousePosition() - (SelectedItem.Size / 2)).Snapped(TileSize + new Vector2I(4, 4));
@@ -527,7 +595,8 @@ public partial class Inventory : Control {
         SelectedItem.SetGlobalPosition(globalPos);
     }
 
-    private bool CanPlace(InventoryItemUI item, Vector2I position) {
+    private bool CanPlace(InventoryItemUI item, Vector2I position)
+    {
         // if (IsItemInsideBounds(item, position) && IsOutsideOtherItems(item, position))
         // 	GD.PrintRich("[color=red]CAN PLACE");
         // else GD.PrintRich("[color=red]CAN'T PLACE");
@@ -538,16 +607,19 @@ public partial class Inventory : Control {
     // FIX: after throwing an item one it is needed to click one time to be able to selecte other items
     // FIX: check if the entire item is outside of the inventory
     // FIX: cant place item added from outside
-    private void ThrowItemOutside(InventoryItemUI item) {
+    private void ThrowItemOutside(InventoryItemUI item)
+    {
         if (!item.HasNode("InventoryItem3d"))
             return;
 
-        if (ItemsPositions.ContainsKey(item)) {
+        if (ItemsPositions.ContainsKey(item))
+        {
             var position = ItemsPositions[item];
             RemoveItem(item, position);
             return;
         }
-        else {
+        else
+        {
             var item3D = item.GetNode<InventoryItem3D>("InventoryItem3d");
             item.Reparent(Globals.World);
             item3D.Enable();
@@ -556,22 +628,27 @@ public partial class Inventory : Control {
         }
     }
 
-    private void DeselectItem() {
+    private void DeselectItem()
+    {
         IsItemSelected = false;
         IsDraggingItem = false;
         SelectedItem = null;
     }
 
-    private void OnItemOutsideInventory(Area2D area) {
-        if (SelectedItem == area.GetParent()) {
+    private void OnItemOutsideInventory(Area2D area)
+    {
+        if (SelectedItem == area.GetParent())
+        {
             GD.Print(area.GetParent().Name, " Outside");
 
             IsSelectedItemInInventory = false;
         }
     }
 
-    private void OnItemInsideInventory(Area2D area) {
-        if (SelectedItem == area.GetParent()) {
+    private void OnItemInsideInventory(Area2D area)
+    {
+        if (SelectedItem == area.GetParent())
+        {
             GD.Print(area.GetParent().Name, " Inside");
 
             IsSelectedItemInInventory = true;

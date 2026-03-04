@@ -6,7 +6,8 @@ using Test.Utils;
 
 namespace Test.Entities.Console;
 
-public partial class ConsoleWindow : Control {
+public partial class ConsoleWindow : Control
+{
     public bool IsOpened;
 
     private List<string> _history = new();
@@ -16,7 +17,8 @@ public partial class ConsoleWindow : Control {
     private int _currentIdx = -1;
     private bool _requesting;
 
-    public override void _Ready() {
+    public override void _Ready()
+    {
         SignalBus.Instance.EmitSignal(SignalBus.SignalName.ConsoleSpawned, this);
 
         _textBox = GetNode<CodeEdit>("CenterContainer/CodeEdit");
@@ -29,16 +31,20 @@ public partial class ConsoleWindow : Control {
         _textBox.GetCodeCompletionOptions();
     }
 
-    public override void _Input(InputEvent @event) {
+    public override void _Input(InputEvent @event)
+    {
         // NOTE: the  `  is printed when exiting console
-        if (Input.IsActionJustReleased("console")) {
+        if (Input.IsActionJustReleased("console"))
+        {
             Visible = Visible ? false : true;
-            if (Visible) {
+            if (Visible)
+            {
                 IsOpened = true;
                 _textBox.GrabFocus();
                 BlockInput();
             }
-            else {
+            else
+            {
                 IsOpened = false;
                 _textBox.ReleaseFocus();
                 UnblockInput();
@@ -46,7 +52,8 @@ public partial class ConsoleWindow : Control {
             _textBox.Clear();
         }
 
-        if (Input.IsActionJustReleased("cancel") && IsOpened) {
+        if (Input.IsActionJustReleased("cancel") && IsOpened)
+        {
             Visible = false;
             IsOpened = false;
             _textBox.ReleaseFocus();
@@ -55,7 +62,8 @@ public partial class ConsoleWindow : Control {
             _textBox.Clear();
         }
 
-        if (@event.IsActionReleased("enter") && !_requesting) {
+        if (@event.IsActionReleased("enter") && !_requesting)
+        {
             var text = _textBox.Text.StripEscapes();
             AddHistoryItem(text);
 
@@ -68,25 +76,30 @@ public partial class ConsoleWindow : Control {
             _textBox.Clear();
         }
 
-        if (@event.IsActionPressed("enter") && _requesting) {
+        if (@event.IsActionPressed("enter") && _requesting)
+        {
             _requesting = false;
             _textBox.ConfirmCodeCompletion();
         }
 
-        if (@event.IsActionReleased("tab") && !_requesting) {
+        if (@event.IsActionReleased("tab") && !_requesting)
+        {
             _requesting = true;
             RequestCompletion();
         }
-        else {
+        else
+        {
             _requesting = false;
             _textBox.ConfirmCodeCompletion();
         }
     }
 
-    public override void _Process(double delta) {
+    public override void _Process(double delta)
+    {
         if (Visible && !_textBox.HasFocus()) _textBox.GrabFocus();
 
-        if (Input.IsActionJustPressed("ui_up")) {
+        if (Input.IsActionJustPressed("ui_up"))
+        {
             _currentIdx = _currentIdx - 1 >= 0 ? _currentIdx - 1 : _currentIdx;
 
             // GD.PrintS(_history.Count, _currentIdx, _currentIdx == -1 || _currentIdx == _history.Count ? " " : _history[_currentIdx], _requesting);
@@ -96,7 +109,8 @@ public partial class ConsoleWindow : Control {
             if (_currentIdx == -1 || _currentIdx == _history.Count) _textBox.Text = "";
             else _textBox.Text = _history[_currentIdx];
         }
-        if (Input.IsActionJustPressed("ui_down")) {
+        if (Input.IsActionJustPressed("ui_down"))
+        {
             _currentIdx = _currentIdx + 1 <= _history.Count ? _currentIdx + 1 : _currentIdx;
 
             // GD.PrintS(_history.Count, _currentIdx, _currentIdx == _history.Count ? " " : _history[_currentIdx], _requesting);
@@ -108,7 +122,8 @@ public partial class ConsoleWindow : Control {
         }
     }
 
-    public void AddHistoryItem(string text) {
+    public void AddHistoryItem(string text)
+    {
         if (_history.Contains(text) || text == "" || text == " " || _commands.ContainsKey(text))
             return;
 
@@ -118,24 +133,23 @@ public partial class ConsoleWindow : Control {
         _currentIdx = _history.Count;
     }
 
-    public void RequestCompletion() {
-        foreach (var com in _savedCommands) {
+    public void RequestCompletion()
+    {
+        foreach (var com in _savedCommands)
+        {
             var disp = (string)(com["display_text"]);
             var kind = disp.Contains("[history]") ? CodeEdit.CodeCompletionKind.Function : CodeEdit.CodeCompletionKind.PlainText;
 
             _textBox.CodeCompletionPrefixes.Add((string)com["insert_text"]);
-            _textBox.AddCodeCompletionOption(
-                                kind,
-                                (string)com["display_text"],
-                                (string)com["insert_text"],
-                                (Color)com["text_color"]);
+            _textBox.AddCodeCompletionOption(kind, (string)com["display_text"], (string)com["insert_text"], (Color)com["text_color"]);
         }
 
         _textBox.UpdateCodeCompletionOptions(true);
         _textBox.RequestCodeCompletion();
     }
 
-    public void AddCompletionItem(string text, string type) {
+    public void AddCompletionItem(string text, string type)
+    {
         var item = new Dictionary<object, object>();
         item["display_text"] = text + " " + $"[{type}]";
         item["insert_text"] = text;
@@ -144,38 +158,43 @@ public partial class ConsoleWindow : Control {
         _savedCommands.Add(item);
     }
 
-    public void AddCommand(System.Delegate @delegate) {
+    public void AddCommand(System.Delegate @delegate)
+    {
         var name = @delegate.Method.Name;
 
         AddCompletionItem(name.ToSnakeCase(), "command");
         _commands.Add(name.ToSnakeCase(), @delegate);
     }
 
-    public void CallCommand(string command, params System.Object[] args) {
+    public void CallCommand(string command, params System.Object[] args)
+    {
         System.Delegate @delegate;
 
-        if (command == null || args == null) {
+        if (command == null || args == null)
+        {
             GD.PushError("Command not found.");
             return;
         }
 
-        if (!_commands.TryGetValue(command, out @delegate)) {
+        if (!_commands.TryGetValue(command, out @delegate))
+        {
             GD.PushError("Command not found.");
             return;
         }
 
-        if (args.Length != @delegate.Method.GetParameters().Length) {
+        if (args.Length != @delegate.Method.GetParameters().Length)
+        {
             GD.PushError($"Arg count mismatch: {args.Length} passed, expected {@delegate.Method.GetParameters().Length}");
             return;
         }
 
         var (ok, result) = Helpers.PCall(@delegate, args);
 
-        if (result is System.Exception e)
-            GD.PushError(e.Message);
+        if (result is System.Exception e) GD.PushError(e.Message);
     }
 
-    public (string command, object[] args) ParseCommandAndArgs(string text) {
+    public (string command, object[] args) ParseCommandAndArgs(string text)
+    {
         if (text == "" || text == " ")
             return (null, null);
         var strippedText = text.StripEscapes();
@@ -189,17 +208,18 @@ public partial class ConsoleWindow : Control {
 
         System.Delegate @delegate;
 
-        if (!_commands.TryGetValue(command, out @delegate)) {
+        if (!_commands.TryGetValue(command, out @delegate))
+        {
             GD.PushError("Command not found");
             return (null, null);
         }
 
         var delArgs = @delegate.Method.GetParameters();
         var objArgs = new object[delArgs.Length];
-        if (strArgs.Length == 0 && delArgs.Length == 0)
-            return (command, new string[0]);
+        if (strArgs.Length == 0 && delArgs.Length == 0) return (command, new string[0]);
 
-        if (strArgs.Length > 0) {
+        if (strArgs.Length > 0)
+        {
             // GD.PrintS(command, _commands.ContainsKey(command), splitText.Length);
 
             for (int i = 0; i < delArgs.Length; i++) {
@@ -237,20 +257,26 @@ public partial class ConsoleWindow : Control {
         return (command, null);
     }
 
-    public void BlockInput() {
+    public void BlockInput()
+    {
         var root = GetTree().Root;
-        foreach (var n in root.GetChildren()) {
-            if (n != this) {
+        foreach (var n in root.GetChildren())
+        {
+            if (n != this)
+            {
                 n.SetProcessInput(false);
                 n.SetProcessUnhandledKeyInput(false);
             }
         }
     }
 
-    public void UnblockInput() {
+    public void UnblockInput()
+    {
         var root = GetTree().Root;
-        foreach (var n in root.GetChildren()) {
-            if (n != this) {
+        foreach (var n in root.GetChildren())
+        {
+            if (n != this)
+            {
                 n.SetProcessInput(true);
                 n.SetProcessUnhandledKeyInput(true);
             }

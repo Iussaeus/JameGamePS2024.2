@@ -2,3 +2,5 @@
 .godot/
 .idea/
 export_presets.cfg
+
+Test.csproj.old*

@@ -2,7 +2,7 @@ using Godot;
 
 namespace Test.Entities.Components;
 
-public partial class Hp : Node3D {
+public partial class Hp : Node {
     [Export] public float HitPoints = 100;
 
     public void TakeDamage(float damage) {

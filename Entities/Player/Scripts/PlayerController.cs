@@ -6,7 +6,8 @@ using Test.Entities.Global;
 
 namespace Test.Entities.Player;
 
-public partial class PlayerController : CharacterBody3D {
+public partial class PlayerController : CharacterBody3D
+{
 
     [ExportCategory("Dash")]
     [Export] public float DashCooldown = 2;
@@ -42,7 +43,8 @@ public partial class PlayerController : CharacterBody3D {
 
     private readonly float _rayLen = 1000;
 
-    public override void _Ready() {
+    public override void _Ready()
+    {
 
         Interactor = GetNode<PlayerInteractor>("PlayerInteractor");
         Marker3D = GetNode<Marker3D>("Marker3D");
@@ -61,15 +63,19 @@ public partial class PlayerController : CharacterBody3D {
 
     }
 
-    public override void _Process(double delta) {
+    public override void _Process(double delta)
+    {
         Gun.GlobalPosition = Marker3D.GlobalPosition;
     }
 
-    public override void _PhysicsProcess(double delta) {
+    public override void _PhysicsProcess(double delta)
+    {
         MoveAndSlide();
         // if (!_dashing.IsStopped()) GD.PrintS("start:", _dashStart, "end:", _dashEnd, "current:", GlobalPosition);
     }
-    public void Rotate() {
+
+    public void Rotate()
+    {
         var mousePos = GetViewport().GetMousePosition();
         var from = Camera.ProjectRayOrigin(mousePos);
         var to = from + Camera.ProjectRayNormal(mousePos) * _rayLen;
@@ -84,10 +90,12 @@ public partial class PlayerController : CharacterBody3D {
         GlobalRotation = GlobalRotation with { X = 0, Y = GlobalRotation.Y, Z = 0 };
     }
 
-    public void Move(float delta, Vector3 direction) {
+    public void Move(float delta, Vector3 direction)
+    {
         var newVelocity = direction * Speed;
 
-        System.Func<float, float> easingFunc = (MoveEasing) switch {
+        System.Func<float, float> easingFunc = (MoveEasing) switch
+        {
             EasingFunctions.Linear => Ease.Linear,
             EasingFunctions.OutExponential => Ease.OutExponential,
             EasingFunctions.InExponential => Ease.InExponential,
@@ -100,13 +108,15 @@ public partial class PlayerController : CharacterBody3D {
 
         if (!IsOnFloor()) Velocity = Velocity with { Y = Velocity.Y - Gravity * (float)delta };
 
-        Velocity = Velocity with {
+        Velocity = Velocity with
+        {
             Z = HorizontalVelocity.Z,
             X = HorizontalVelocity.X,
 
         };
     }
-    public void StartDash(Vector3 direction) {
+    public void StartDash(Vector3 direction)
+    {
         DashHorizontalVelocity = HorizontalVelocity + Velocity;
         DashDirection = direction == Vector3.Zero ? Vector3.Right : direction;
         _dashStart = GlobalPosition;
@@ -116,14 +126,16 @@ public partial class PlayerController : CharacterBody3D {
         DashTimer.Start(DashTime);
     }
 
-    public void Dash(float delta) {
+    public void Dash(float delta)
+    {
         CanDash = false;
         _dashCooldown.Start(DashCooldown);
 
         var progress = GlobalPosition.Progress(_dashStart, _dashEnd);
         var dashVector = _dashEnd - _dashStart;
 
-        System.Func<float, float> easingFunc = (DashEasing) switch {
+        System.Func<float, float> easingFunc = (DashEasing) switch
+        {
             EasingFunctions.Linear => Ease.Linear,
             EasingFunctions.OutExponential => Ease.OutExponential,
             EasingFunctions.InExponential => Ease.InExponential,
@@ -142,7 +154,8 @@ public partial class PlayerController : CharacterBody3D {
 
         DashHorizontalVelocity = ease;
 
-        if ((GlobalPosition - _dashStart).LengthSquared() >= dashVector.LengthSquared()) {
+        if ((GlobalPosition - _dashStart).LengthSquared() >= dashVector.LengthSquared())
+        {
             Velocity = Vector3.Zero;
             DashHorizontalVelocity = Vector3.Zero;
             HorizontalVelocity = Vector3.Zero;
@@ -153,7 +166,8 @@ public partial class PlayerController : CharacterBody3D {
         }
         // GD.PrintS("p: ", GlobalPosition.Progress(_dashStart, _dashEnd));
         // GD.PrintS("t:", easingFunc((float)weight), "v:", DashHorizontalVelocity, "ease:", ease, "newP:", newVelocity);
-        Velocity = Velocity with {
+        Velocity = Velocity with
+        {
             Z = DashHorizontalVelocity.Z,
             X = DashHorizontalVelocity.X,
         };
